@@ -16,6 +16,8 @@ class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
-        return new ViewModel();
+        $vr = $this->params()->fromQuery('id');
+    	$vr1 = $this->params()->fromQuery('statusmsg');
+        return new ViewModel(array('id'=>$vr,'statusmsg'=>$vr1));
     }
 }

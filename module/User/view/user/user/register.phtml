@@ -1,0 +1,158 @@
+<?php
+// $form->setAttribute('action', $this->url('user', array('action' => 'register')));
+$form->prepare();
+?>
+	<!-- <div class="alert alert-success" id="displaySuccess"  role="alert" hidden="hidden">
+	Registered successfully. Go To <a href='../'>Login</a>
+	</div> -->
+<?php
+echo $this->formHidden($form->get('id'));
+//echo $this->formRow($form->get('username'));
+echo "<span>Username</span>";
+echo $this->formElement($form->get('username'));?>
+<span class="formInfo"><a id="one" class="jTip" href="#" data-container="body" title="Username must follow these rules:"  
+data-content="<ol><li>Username must be of atleast 5 characters</li>
+                   <li>Username must be of maximum 20 characters</li>
+                   <li>Username can contain only underscore(_) as special character</li>
+                   <li>Username cannot be the same as the email</li></ol>">?</a></span>
+           <?php
+echo '<span class="err" id="errRegUserName"></span>'.'<p></p>';
+
+echo "<span>Firstname</span>";
+echo $this->formElement($form->get('firstname')); ?>
+<span class="formInfo"><a id="three" class="jTip" href="#" data-container="body" 
+              title="Name must follow these rules" 
+              data-content="
+                  <ol>
+                    <li>Name must contain at least one character</li>
+                  <li>Maximum length of name is upto 20 characters</li>
+                  <li>Name cannot contain any special characters(@, %,_ etc)</li>
+                  <li>Name cannot contain any special characters(@, %,_ etc)</li>
+                </ol>" >?</a></span>
+                <?php
+echo '<span class="err" id="errRegFirstname"></span>'.'<p></p>';
+
+echo "<span>Lastname</span>";
+echo $this->formElement($form->get('lastname')); ?>
+<span class="formInfo"><a id="three" class="jTip" href="#" data-container="body" 
+              title="Name must follow these rules" 
+              data-content="
+                  <ol>
+                    <li>Name must contain at least one character</li>
+                  <li>Maximum length of name is upto 20 characters</li>
+                  <li>Name cannot contain any special characters(@, %,_ etc)</li>
+                  <li>Name cannot contain any special characters(@, %,_ etc)</li>
+                </ol>" >?</a></span>
+                <?php
+echo '<span class="err" id="errRegLastname"></span>'.'<p></p>';
+
+
+
+
+
+echo "<span>Email</span>".'<br/>';
+echo $this->formElement($form->get('email')); ?>
+<span class="formInfo"><a id="two" class="jTip" href="#" data-container="body" title="Email must follow these rules:"
+                  data-content="<ol><li>Email cannot be left blank</li>
+                    <li>Maximum length can be upto 150 characters</li>
+                                  </ol>" >?</a></span>
+                                  <?php
+echo '<span class="err" id="errEmail"></span>'.'<p></p>';
+echo "<span>Password</span><br/>";
+echo $this->formElement($form->get('password')); ?>
+<span class="formInfo"><a id="two" class="jTip" href="#" data-container="body" title="Password must follow these rules:"
+                  data-content="<ol><li>Password cannot be left blank</li>
+                    <li>Maximum length can be upto 150 characters</li>
+                                  </ol>" >?</a></span>
+                                  <?php
+echo '<span class="err" id="errPass"></span>'.'<p></p>';
+echo "<span>Confirm Password</span><br/>";
+echo $this->formElement($form->get('confirmpassword'));
+echo '<span class="err" id="errconfirmPass"></span>'.'<p></p>';
+?>
+
+<div class="group">
+     <?php echo $this->formlabel($form->get('captcha')); ?>
+    
+     <div class="control-group">
+         <?php echo $this->formElementErrors($form->get('captcha')) ?>
+         <?php echo $this->formCaptcha($form->get('captcha')); echo '<span id="errCaptcha"></span>'.'<br/>';?>
+     </div>
+    
+ </div>
+ 
+<a href="#" id="refreshbutton">Refresh Code</a>
+<p></p>
+ <?php
+// echo $this->formSubmit($form->get('refreshcaptcha'));
+ echo $this->formSubmit($form->get('submit'));
+ ?>
+
+<!-- <a id="btnRegister" href="#" data-toggle="modal" data-target="#ModalReg1" class="btn float-left">Register</a>
+ -->
+
+<button type="reset" value="Reset" class = "btn float-left" id = "resetbtn" >Reset</button>
+
+<span>Please Wait..</span>
+<img id="loadingImageReg" src="<?php echo $this->basePath() . '/img/loading.gif'; ?>" hidden="hidden" >
+
+
+ <!-- <div class="modal fade" id="ModalReg2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="modalCloseButton">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Registered Successfully</h4>
+                  </div>
+                  <div id="modal-body" class="modal-body">
+             <Span id="lblName">Click ok button to login</Span>   
+
+<span class = "errorTxt" id="errEmailPassword"></span>
+ <input type="button" value="Submit"  class="btn margin-left50 margin-top10" id="forgotPassword" /> -->
+ <!-- <input type="button" value="OK"  class="btn margin-left50 margin-top10" id="goToLogin"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+ --> 
+<script>
+$(".jTip").popover({
+        placement: "right",
+        html: true,
+        trigger: "hover",
+        delay: {
+            show: "300",
+            hide: "100"
+        }
+    });
+
+$(document).ready(function(){
+  $("#txtRegUsername").on("keypress", function(e) {
+  if (e.which === 32 && !this.value.length)
+      e.preventDefault();
+  });
+
+  $("#txtRegFirstname").on("keypress", function(e) {
+  if (e.which === 32 && !this.value.length)
+      e.preventDefault();
+  });
+
+  $("#txtRegLastname").on("keypress", function(e) {
+  if (e.which === 32 && !this.value.length)
+      e.preventDefault();
+  });
+
+  $("#txtEmail").on("keypress", function(e) {
+    if (e.which === 32 && !this.value.length)
+        e.preventDefault();
+    });
+
+  $("#captchaimg_signup").on("keypress", function(e) {
+    if (e.which === 32 && !this.value.length)
+        e.preventDefault();
+    });
+
+});
+
+</script>
+

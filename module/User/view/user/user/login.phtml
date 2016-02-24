@@ -1,0 +1,139 @@
+
+<div id="login-window">
+
+	  	  <div id="login-top">
+	  	  	<div id="user-icon"></div>	<!-- user icon -->
+	  	  	<span id="login-text"><?php echo "LOGIN" ?></span>
+	  	  </div> <!-- end of lg-top -->
+	  	  <hr />
+	  	  <p id="login-text2"><?php 
+	  	  if(isset($status))
+	  	  {
+			if($status == 1)
+			{
+			echo "<span style='color:green'>Account Confirmed!</span>" ;
+			}
+			else
+			{
+			echo "<span style='color:green'>link has been expired!</span>" ;	
+			}
+ 		  }else{
+ 			echo "";
+		 }
+		 ?>
+
+	  	 
+	  	  <div id="lg-middle">
+
+	  	  <!--<form id="login" action="/dashboard" method="POST" >
+	  	    <input type = "text" id="txtUserName" name="txtUserName" tabindex=1  minlength=5 maxlength=150 
+	  	    placeholder="<?php echo $this->translate('UserName')?>" value="" />
+            <span class = "errorTxt" id="errUserName"></span>
+	  	    <input type="password"  id="txtPassword" minlength=8 tabindex=2  autocomplete="off"  name="txtPassword" 
+	  	    placeholder="<?php echo $this->translate('Password')?>" />
+	  	     <span class="errorTxt" id="errPassword"></span>
+	  	    <input type="submit" class="button-style" value="<?php echo $this->translate('Sign In')?>" tabindex=3 id="btnSubmit"/>
+	  	  </form>-->
+
+	  	  <?php
+
+
+	  	  	//$form->setAttribute('action', $this->url('user', array('action' => 'process')));
+
+			$this->form->prepare();
+
+			echo $this->form()->openTag($this->form);
+			
+			echo $this->formElement($this->form->get('username'));
+			echo "<span id='serverUserError' class=''>".$this->formElementErrors($this->form->get('username'))."</span>"; 
+			echo '</br>';
+		  ?>	
+			<span class = "errorTxt" id="errUserName"></span>
+
+		  <?php		  
+			echo $this->formElement($this->form->get('password')); echo '</br>';
+			echo "<span id='serverPassError' class=''>".$this->formElementErrors($this->form->get('password'))."</span>";
+		  ?>
+		    <span class="errorTxt" id="errPassword"></span>
+
+		  <?php   	
+			echo $this->formSubmit($this->form->get('login')); echo '</br>';
+			echo $this->formHidden($this->form->get('email')); echo '</br>';
+			echo $this->form()->closeTag();
+	  	  ?>
+
+	  	  </div> <!-- end of lg-middle -->
+          
+	  	  <div id="lg-bottom">
+         
+	  	    <div id="oss-logo"></div>
+	  	    
+	  	    <div id="login-links">
+	  	      <a id="ancrRegister" href="#"><span><?php echo $this->translate('Register')?></span></a>
+	  	      <a id="ancrForgetPassword" href="#" data-toggle="modal" data-target="#myModal" class="margin-left15 margin-right25"><span><?php echo $this->translate('Forgot Password')?></span></a>
+
+	  	     
+            </div>
+             
+	 
+            </div> <!-- end of lg-bottom -->
+        </div> <!-- end of login window -->
+
+
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="modalCloseButton">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Forgot Password</h4>
+                  </div>
+                  <div id="modal-body" class="modal-body">
+             <Span id="lblName">Please provide your registered Email</Span>   
+<input  type="text" class="form-control margin-left50" name="txtCategoryName" id="txtForgotPassword" maxlength="30" placeholder="Enter your E-mail"/>
+<img id="loadingImage" src="<?php echo $this->basePath() . '/img/loading.gif'; ?>"  hidden="hidden">
+
+<span class = "errorTxt margin-left50" id="errEmailPassword"></span>
+ <input type="button" value="Submit"  class="btn margin-left50 margin-top10" id="forgotPassword" />
+ <input type="button" value="OK"  class="btn margin-left50 margin-top10" id="goToLogin" hidden="hidden"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+<script>
+
+$(document).ready(function(){
+<?php if(isset($status1)&&($status1 == 4)){ ?>
+					$('.modal-title').html("Account Created");
+					$('#modal-body').html("<h4>Account Created!</h4><br><br><p><h5 class='margin-left15'>Please Confirm Account from link sent on your Email.</h5></p><br><a value='OK' id='modalCloseButton' href='/' class='btn margin-left50 margin-top10'>OK</a>");
+					$('#myModal').modal('show');
+			<?php 
+		} 
+
+			?>
+});
+
+$(document).ready(function(){
+  $("#txtUserName").on("keypress", function(e) {
+  if (e.which === 32 && !this.value.length)
+      e.preventDefault();
+  });
+});
+
+$(document).on('focus','#txtUserName',function(){
+
+$('#errPassword').html('');
+$('#serverPassError').html('');
+});
+
+	</script>
+
+
+
+
+
+
+
+
+
+           

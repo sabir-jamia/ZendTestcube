@@ -1,0 +1,1188 @@
+body
+{
+	margin: 0px;
+	
+}
+
+html {
+    height: 100%;
+    margin-bottom: 0.01em;
+    overflow-y:scroll;
+    overflow-x: hidden;
+}
+
+.row-large
+{
+	width:1084px;
+	margin:0 auto;
+}
+
+.row-midlarge
+{
+	width:900px;
+	margin: 0 auto;
+}
+.row-mid
+{
+
+	width:800px;
+	margin: 0 auto;
+}
+
+.row-updatesmidlarge {
+    margin: 0 auto;
+    width: 885px;
+}
+
+#table-content
+{
+	margin-top: -30px;
+    padding: 0;
+}
+#d-table-menu
+{
+	bottom: -104px;
+    display: block;
+    height: 50px;
+    position: relative;
+    top: 70px;
+	width: 563px;
+  clear: both;
+}
+.delete-btn {
+background-image: url(../img/close-btn.png);
+background-repeat: no-repeat;
+width: 23px;
+height: 23px;
+display: inline-block;
+padding-left: 2px;
+padding-right: 2px;
+cursor: pointer;
+}
+
+.edit-btn
+{
+	background-image:url(../img/edit.png);
+	background-repeat:no-repeat;
+	width:23px;
+	height:23px;
+display: inline-block;
+padding-left: 2px;
+padding-right: 2px;
+cursor: pointer;
+}
+
+
+
+.view-btn
+{
+	background-image:url(../img/view.png);
+	background-repeat:no-repeat;
+	width:23px;
+	height:23px;
+	display: inline-block;
+	padding-left: 2px;
+	padding-right: 2px;
+
+}
+
+#btnAddques
+{
+	padding: 5px 10px;
+
+}
+
+
+#categoryselect
+{
+   height: 30px;
+  display: inline-block;
+  width: 170px;
+  background: #f2f2f2;
+  border: 1px solid;
+  border-color: white #f7f7f7 #f5f5f5;
+  border-radius: 3px;
+  background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+  background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+  background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+  background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.06));
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+#testselect
+{
+	
+  height: 30px;
+  display: inline-block;
+  background: #f2f2f2;
+  border: 1px solid;
+  float:left;
+  margin-top:-10px;
+  margin-left:10px;
+  width: 170px;
+  border-color: white #f7f7f7 #f5f5f5;
+  border-radius: 3px;
+  background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+  background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+  background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+  background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.06));
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+    float: right;
+    min-width: 100px;
+}
+.add-btn
+{
+	background-image: url("../img/add.png");
+    background-repeat: no-repeat;
+    float: left;
+    height: 23px;
+    left: 590px;
+    position: relative;
+    top: -90px;
+
+}
+
+.add-btn span
+{
+	text-decoration: none;
+    font-size: 14px;
+    margin-left: 30px;
+    font-family: OpenSans;
+    color: #4690d1;
+}
+
+.hide-btn
+{
+	background-image:url(../img/hide.png);
+	background-repeat:no-repeat;
+	width:23px;
+	height:23px;
+	display: inline-block;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+.inpt-Search
+{
+	border-radius: none;
+	outline: none;
+	border: 1px solid #d6d6d6;
+	box-shadow: 0 0 0px #d6d6d6;
+	height: 29px;
+	padding: 3px;
+	width: 210px;
+	background-image: url(../img/search.png);
+	background-repeat: no-repeat;
+	background-position: right;
+}
+
+#space-top
+{
+	height:50px;
+	width:100%;
+	margin-top:0px;
+}
+.LStable{
+		width:100%; 
+		border-collapse:collapse;
+		font-family:OpenSans;
+		clear: both;
+	}
+	.LStable td{ 
+		padding:7px; border:#f1f1f1 1px solid; font-size:16px;
+	}
+	
+	.LStable th{ 
+		padding:7px; background-color:#3473a9; border:#f1f1f1 1px solid; color:#fff;
+		text-align:center;
+	}
+	
+	.Dfilter label
+	{
+		color:white;
+	}
+	
+	.Dfilter
+	{
+
+	    float: right;
+	    margin-bottom: 12px;
+	    margin-top: 5px;
+	    width: 200px;
+	}
+
+.Dfilter input[type=text]:focus {
+  		border-color: #66afe9;
+  		outline: 0;
+  		-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+	
+	table.LStable tr td:first-child
+	{
+		width:50px;
+		text-align:center;
+	}
+
+	table.LStable tr td:nth-child(2)
+	{
+		width:750px;
+	}
+
+	
+	table.LStable > tbody > tr:first-child > th:first-child
+	{
+		text-align:left;
+	}
+	
+	/* provide some minimal visual accomodation for IE8 and below */
+	.LStable tr{
+		background: #43a5b4;
+	}
+	/*  Define the background color for all the ODD background rows  */
+	.LStable tr:nth-child(odd){ 
+		background: #f1f1f1;
+				color:#666;
+	}
+	/*  Define the background color for all the EVEN background rows  */
+	.LStable tr:nth-child(even){
+		background: #FFF;
+		color:#666;
+}
+
+
+
+.Updatestable{
+		width:100%; 
+		border-collapse:collapse;
+		font-family:OpenSans;
+		clear: both;
+	}
+	.Updatestable td{ 
+		padding:7px; border:#f1f1f1 1px solid; font-size:16px;
+	}
+	
+	.Updatestable th{ 
+		padding:7px; background-color:#3473a9; border:#f1f1f1 1px solid; color:#fff;
+		text-align:center;
+	}
+	
+	.Dfilter label
+	{
+		color:white;
+	}
+	
+	.Dfilter
+	{
+
+	    float: right;
+	    margin-bottom: 12px;
+	    margin-top: 5px;
+	    width: 200px;
+	}
+
+.Dfilter input[type=text]:focus {
+  		border-color: #66afe9;
+  		outline: 0;
+  		-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+	
+	table.Updatestable tr td:first-child
+	{
+		width:200px;
+		text-align:center;
+	}
+
+	table.Updatestable tr td:nth-child(2)
+	{
+		width:50px;
+	}
+	
+	table.Updatestable tr td:nth-child(5)
+	{
+		width:170px;
+		text-align:center;
+	}
+
+	
+	table.Updatestable > tbody > tr:first-child > th:first-child
+	{
+		text-align:left;
+	}
+	
+	/* provide some minimal visual accomodation for IE8 and below */
+	.Updatestable tr{
+		background: #43a5b4;
+	}
+	/*  Define the background color for all the ODD background rows  */
+	.Updatestable tr:nth-child(odd){ 
+		background: #f1f1f1;
+				color:#666;
+	}
+	/*  Define the background color for all the EVEN background rows  */
+	.Updatestable tr:nth-child(even){
+		background: #FFF;
+		color:#666;
+}
+
+
+.CertificateTable{
+        width:100%; 
+        border-collapse:collapse;
+        font-family:OpenSans;
+        clear: both;
+    }
+    .CertificateTable td{ 
+        padding:7px; border:#f1f1f1 1px solid; font-size:16px;
+    }
+    
+    
+    
+    .Dfilter label
+    {
+        color:white;
+    }
+    
+    .Dfilter
+    {
+
+        float: right;
+        margin-bottom: 12px;
+        margin-top: 5px;
+        width: 200px;
+    }
+
+    .Dfilter input[type=text]
+    {
+        display: block;
+        float:right;
+        width: 100%;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+              box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+              transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        background-image:url(../img/search.png);
+        background-repeat:no-repeat;
+        background-position:right;
+}
+.Dfilter input[type=text]:focus {
+        border-color: #66afe9;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+    
+    table.CertificateTable tr td:first-child
+    {
+        width:50px;
+        text-align:center;
+    }
+
+    table.CertificateTable tr td:nth-child(2)
+    {
+        width:350px;
+    }
+    
+	table.CertificateTable tr td:nth-child(3)
+	    {
+	        width:200px;
+	    }
+	    
+	table.CertificateTable tr td:nth-child(4)
+	        {
+	            width:150px;
+	        	text-align:center;
+	        }
+
+    
+    table.CertificateTable > tbody > tr:first-child > th:first-child
+    {
+        text-align:left;
+    }
+    
+	table.CertificateTable tr td:nth-child(5)
+	    {
+	        text-align:center;
+	    }
+    
+    /* provide some minimal visual accomodation for IE8 and below */
+    .CertificateTable tr{
+        background: #43a5b4;
+    }
+    /*  Define the background color for all the ODD background rows  */
+    .CertificateTable tr:nth-child(odd){ 
+        background: #f1f1f1;
+                color:#666;
+    }
+    /*  Define the background color for all the EVEN background rows  */
+    .CertificateTable tr:nth-child(even){
+        background: #FFF;
+        color:#666;
+}
+
+
+.ResultTable{
+        width:100%; 
+        border-collapse:collapse;
+        font-family:OpenSans;
+        clear: both;
+    }
+    .ResultTable td{ 
+        padding:7px; border:#f1f1f1 1px solid; font-size:16px;
+    }
+    
+    .ResultTable th{ 
+        padding:7px; background-color:#3473a9; border:#f1f1f1 1px solid; color:#fff;
+        text-align:center;
+    }
+    
+    .Dfilter label
+    {
+        color:white;
+    }
+    
+    .Dfilter
+    {
+
+        float: right;
+        margin-bottom: 12px;
+        margin-top: 5px;
+        width: 200px;
+    }
+
+    .Dfilter input[type=text]
+    {
+        display: block;
+        float:right;
+        width: 100%;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+              box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+              transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        background-image:url(../img/search.png);
+        background-repeat:no-repeat;
+        background-position:right;
+}
+.Dfilter input[type=text]:focus {
+        border-color: #66afe9;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+    
+    table.ResultTable tr td:first-child
+    {
+        width:100px;
+        text-align:center;
+    }
+
+    table.ResultTable tr td:nth-child(2)
+    {
+        width:300px;
+    }
+    
+    table.ResultTable tr td:nth-child(3)
+        {
+            width:350px;
+        }
+        
+    table.ResultTable tr td:nth-child(4)
+            {
+                width:450px;
+                text-align:center;
+            }
+
+    
+    table.ResultTable > tbody > tr:first-child > th:first-child
+    {
+        text-align:left;
+    }
+    
+    table.ResultTable tr td:nth-child(5)
+        {
+        	
+            text-align:center;
+        }
+    table.ResultTable tr td:nth-child(6)
+        {
+            width:100px;
+            text-align:center;
+        }
+    
+    /* provide some minimal visual accomodation for IE8 and below */
+    .ResultTable tr{
+        background: #43a5b4;
+    }
+    /*  Define the background color for all the ODD background rows  */
+    .ResultTable tr:nth-child(odd){ 
+        background: #f1f1f1;
+                color:#666;
+    }
+    /*  Define the background color for all the EVEN background rows  */
+    .ResultTable tr:nth-child(even){
+        background: #FFF;
+        color:#666;
+}
+
+
+.LSQuestable{
+		width:100%; 
+		border-collapse:collapse;
+		font-family:OpenSans;
+		 clear: both;
+	}
+	.LSQuestable td{ 
+		padding:7px; border:#f1f1f1 1px solid; font-size:16px;
+	}
+	
+	.LSQuestable th{ 
+		padding:7px; background-color:#3473a9; border:#f1f1f1 1px solid; color:#fff;
+		text-align:center;
+	}
+	
+	table.LSQuestable tr td:first-child
+	{
+		width:50px;
+		text-align:center;
+	}
+	
+	table.LSQuestable tr td:nth-child(2)
+	{
+		width:50px;
+	}
+
+	table.LSQuestable tr td:nth-child(3)
+	{
+		width: 1570px;
+		color:#000;
+	}
+
+	table.LSQuestable tr td:nth-child(4)
+	{
+		width:50px;
+	}
+	
+	table.LSQuestable tr td:nth-child(5)
+	{
+		width:100px;
+		text-align: center;
+	}
+       
+	table.LSQuestable tr td:nth-child(7)
+    {
+        width:50px;
+        text-align: center;
+    }
+
+	.create-button
+	{
+		float: right;
+		margin-right: 2px;
+	}
+
+	#btnCreate
+	{
+
+	    float: right;
+    	margin-right: 10px;
+    	width:120px;
+	    text-align: center;
+    	padding: 5px 10px;
+	}
+
+	#btnTestCreate
+	{
+	    float: right;
+	    margin-right: -93px;
+	    min-width:100px;
+		border-radius:0px;
+	    text-align: center;
+    	padding: 7px 10px;
+		margin-top:-5px;
+		cursor: pointer;
+	}
+	
+    #btnCertificateCreate
+    {
+        float: right;
+        margin-right: -95px;
+        margin-top: -5px;
+        min-width:100px;
+        border-radius:0px;
+        text-align: center;
+        padding: 5px 10px;
+    }
+
+	table.LSQuestable > tbody > tr:first-child > th:first-child
+	{
+		text-align:left;
+	}
+	
+	/* provide some minimal visual accomodation for IE8 and below */
+	.LSQuestable tr{
+		background: #43a5b4;
+	}
+	/*  Define the background color for all the ODD background rows  */
+	.LSQuestable tr:nth-child(odd){ 
+		background: #f1f1f1;
+				color:#666;
+	}
+	/*  Define the background color for all the EVEN background rows  */
+	.LSQuestable tr:nth-child(even){
+		background: #FFF;
+		color:#666;
+}
+
+
+.LSTesttable{
+		width:100%; 
+		border-collapse:collapse;
+		font-family:OpenSans;
+		 clear: both;
+	}
+	.LSTesttable td{ 
+		padding:7px; border:#f1f1f1 1px solid; font-size:16px;
+	}
+	
+	.LSTesttable th{ 
+		padding:7px; background-color:#3473a9; border:#f1f1f1 1px solid; color:#fff;
+		text-align:center;
+	}
+	
+	table.LSTesttable tr td:first-child
+	{
+		width:30px;
+		text-align:center;
+	}
+	
+	table.LSTesttable tr td:nth-child(2)
+	{
+		width:130px;
+	}
+
+	table.LSTesttable tr td:nth-child(3)
+	{
+		width:440px;
+	}
+
+	table.LSTesttable tr td:nth-child(4)
+	{
+		width:100px;
+		text-align: center;
+		
+	}
+
+	table.LSTesttable > tbody > tr:first-child > th:first-child
+	{
+		text-align:left;
+	}
+	
+	/* provide some minimal visual accomodation for IE8 and below */
+	.LSTesttable tr{
+		background: #43a5b4;
+	}
+	/*  Define the background color for all the ODD background rows  */
+	.LSTesttable tr:nth-child(odd){ 
+		background: #f1f1f1;
+				color:#666;
+	}
+	/*  Define the background color for all the EVEN background rows  */
+	.LSTesttable tr:nth-child(even){
+		background: #FFF;
+		color:#666;
+}
+
+
+.addques-button
+	{
+		float:right;
+		margin-right: 10px;
+	}
+.assignques-button
+	{
+		float:left;
+		margin-right: 10px;
+	}
+
+
+.quesDisplayList
+{
+    float: right;
+    height: 35px;
+    margin-right: 10px;
+    margin-top: 0;
+    width: 180px;
+    }
+
+#wrapper #header
+{
+	 background-color: #373737;
+    height: 60px;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 501;
+}
+#dash-content
+{
+	min-height:670px;
+	width:100%;
+}
+
+#dash-content #dash-left-content
+{
+	-moz-box-sizing: border-box;
+    background-color: #F2F2EA;
+    min-height: 870px;
+    position: fixed;
+    top: 60px;
+	left:0px;
+    min-width: 240px;
+    z-index: 510;
+	float:left;
+	border-right: 1px solid #b5b4b4;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#dash-content #dash-left-content #nav-menu
+{
+	margin:0px;
+	padding:0px;
+}
+
+#dash-content #dash-left-content #nav-menu .icon
+{
+	text-decoration: none;
+	height: 60px;
+	width: 60px;
+	font-size: 24px;
+	float: left;
+	margin-top: -1px;
+	text-align: center;
+	line-height: 60px;
+	-webkit-box-shadow: 0 4px 6px -6px black;
+	-moz-box-shadow: 0 4px 6px -6px black;
+	box-shadow: 0 4px 6px -6px black;
+	color: #8e8e8e;
+}
+
+#dash-content #dash-left-content #nav-menu .current
+{
+	background-color:#4690d1;
+	color:white;
+}
+
+
+#dash-content #dash-left-content #nav-menu .page-current
+{
+	background-color:#3473a9;
+	color:#fff;
+}
+
+#dash-content #dash-left-content #nav-menu .link-current
+{
+	color:#3473a9;
+}
+#dash-content #dash-left-content #nav-menu .icon:hover
+{
+	background-color:#3473a9;
+	color:white;
+}
+
+#dash-content #dash-left-content #nav-menu li:hover + #dash-content #dash-left-content #nav-menu a .icon
+{
+	background-color:#3473a9;
+	color:white;
+}
+#dash-content #dash-left-content #nav-menu a
+{
+	text-decoration:none;
+}
+#dash-content #dash-left-content #nav-menu li
+{
+	list-style-type: none;
+	height: 60px;
+	font-family: OpenSans;
+	font-size: 14px;
+	font-weight: bold;
+	color: #757575;
+	padding: 19px 0px 0px 70px;
+	vertical-align: middle;
+	-webkit-box-sizing: border-box;
+	box-shadow: 0 4px 2px -5px black;
+	color: #8e8e8e;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#dash-content #dash-left-content #nav-menu li:hover
+{
+	color:#3473a9;
+}
+
+#dash-content #dash-right-content
+{
+	    float: left;
+    left: 225px;
+    min-height: 670px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+    top: 8px;
+    width: 83%;
+}
+
+.content
+{
+	margin: 0 auto;
+    width: 95%;
+	padding-left:-15px;	
+}
+
+
+#dash-content #dash-right-content #content-border
+{
+	 height: 8px;
+    position: fixed;
+    top: 60px;
+    width: 100%;
+    z-index: 55;
+}
+#dash-content #dash-right-content #content-header
+{
+	 background-color: #F7F6F2;
+    border-bottom: 1px solid #B5B4B4;
+    clear: both;
+    height: 60px;
+    top: 68px;
+    width: 100%;
+    z-index: 5002;
+}
+
+#foot{
+	text-align:center;
+	margin-left:-30px;
+}
+
+
+#content
+{
+	min-height: 670px;;
+}
+#footer
+{
+	vertical-align: bottom;
+	height: 30px;
+	text-align: center;
+	padding-top:40px;
+	font-family: "OpenSans";
+	font-size: 16px;
+	color: #888888;
+	clear:left;
+}
+
+#wrapper #links
+{
+	background-color:#f1f1f1;
+	height:60px;
+}
+
+#wrapper #header #header-logo
+{
+	width:250px;
+	float:left;
+	height:100%;
+}
+
+#logo-img
+{
+	margin:-5px 0px 0 50px;
+}
+#wrapper #header #header-menu
+{
+	float:right;
+    height: 60px;
+    width: 650px;
+}
+
+
+#login-top
+{
+	height: 45px;
+	width: 160px;
+	margin: 0 auto;
+	padding-top: 20px;
+}
+
+#lg-topr
+{
+	height: 45px;
+	width: 200px;
+	margin: 0 auto;
+	padding-top: 20px;
+}
+
+#lg-middle
+{
+	height: 200px;
+	margin-bottom:5px;
+}
+
+#lg-bottom
+{
+	height: 100px;
+}
+
+.none
+{
+	list-style-type: none;
+}
+
+/* ---------->>> question page css <<<---------------------------------------------------------------*/
+
+
+#content-head {
+	 margin-top: 10px;
+}
+
+.fieldbox
+		{
+			height: 400px;
+			border: 1px solid #000;
+			margin: 0 auto;
+			margin-top: 80px;
+			padding: 50px;
+			align:center;
+			padding-top: 10px;
+		}
+		
+		.testbox
+		{
+			
+			margin: 0 auto;
+			margin-top: 80px;
+			padding: 50px;
+			align:center;
+			padding-top: 10px;
+			padding-bottom:0px;
+		}
+		
+		.question-txtarea
+		{
+			  font-family: OpenSans;
+    		font-size: 14px;
+    		height: 180px;
+    		padding: 10px;
+    		resize: none;
+    		width:600px;
+		}
+
+
+
+		#frmMCQ p, #frmTF
+		{
+			font-size: 14px;
+		}
+		
+		.edit-question-txtarea
+		{
+			width:480px;
+			height:100px;
+			font-size: 16px;
+			padding: 10px;
+		}
+
+		#sbmtSaveQuestion
+		{
+			margin-left: 40px;
+		}
+
+		.olAnswers
+		{
+			line-height: 30px;
+    		list-style: upper-alpha outside none;
+		}
+		
+		.answer-txtarea
+		{
+			width:500px;
+			height:50px;
+		}
+		
+		.edit-answer-txtarea
+		{
+			width:480px;
+			height:30px;
+			color:#43a5b4;
+			font-size: 16px;
+			padding: 10px;
+		}
+		.question-field
+		{
+			background-color: #F1F1F1;
+    margin-left: 50px;
+    margin-top: 20px;
+    padding: 15px;
+    margin-bottom: 40px;
+    width: 759px;
+		}
+		
+		.tf-textarea
+		{
+			height: 23px;
+   			padding: 2px;
+    		width: 201px;
+		}
+		
+		#catspan
+		{
+		position: absolute;
+		margin-top: -650px;
+		margin-left: 50px;
+		}
+		
+		#catspantf
+		{
+		 margin-left: 555px;
+   		 margin-top: -407px;
+   		 position: absolute;
+		}
+
+
+		#ques-content-head {
+		    background-color: #3473A9;
+		    border-radius: 3px;
+		    height: 50px;
+		    margin-top: 50px;
+		}
+
+		.test-title {
+		    margin-bottom: 20px;
+		    width: 100%;
+		}
+
+
+		#content-head-left {
+		    margin-left: 10px;
+		    margin-top: 10px;
+		}
+		.float-left {
+		    float: left;
+		}
+
+		#content-head-left p {
+		    font-family: OpenSans;
+		    font-size: 18px;
+		}
+
+
+		#test-quescount {
+		    float: left;
+		    font-family: OpenSans;
+		    width: 400px;
+		}
+
+
+		#test-quescount h1, h4 {
+		    float: left;
+		    margin: 0 0 30px 15px;
+		}
+
+
+		#delete-row {
+		    clear: both;
+		    margin-bottom: 10px;
+		}
+
+		
+
+.QStable {
+	border-collapse: collapse;
+	font-family: OpenSans;
+	width: 100%;
+	clear:both;
+}
+
+.tbody{
+	margin-top: 20px;
+}
+.QStable td {
+    border: 1px solid #F1F1F1;
+    font-size: 16px;
+    height: 50px;
+    padding: 7px;
+}
+.QStable th {
+    background-color: #F7F7F7;
+    border: 1px solid #F1F1F1;
+    padding: 7px 7px 7px 20px;
+}
+.QStable tr {
+    background: none repeat scroll 0 0 #43A5B4;
+}
+.QStable tr:nth-child(2n+1) {
+    background: none repeat scroll 0 0 #F1F1F1;
+    color: #666666;
+}
+
+.QStable tr td:nth-child(2) {
+	text-align: center;
+}
+.QStable tr:nth-child(2n) {
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #666666;
+}
+
+table.LSQuestable tr td:nth-child(6) {
+	width:120px;
+	text-align:center;
+}
+
+.olAnswersTF {
+	line-height:30px;
+	list-style:upper-alpha outside none;
+}
+
+.olAnswersTF li p {
+	font-size:14px;
+}
+
+.deletebtn {
+	background-color:#FFFFFF;
+	background-image:url("../img/delete.png");
+	background-repeat:no-repeat;
+	border:medium none;
+	cursor:pointer;
+	display:block;
+	height:23px;
+	width:23px;
+}
+
+.div-details {
+	height:200px;
+	width:480px;
+	display:none;
+	padding-left:115px;
+	text-align:left;
+	font-family:OpenSans;
+	font-size:14px;
+}
+

@@ -1,0 +1,744 @@
+
+<?php 
+//$image = new \Zend\View\Renderer\PhpRenderer();
+//if(isset($userProfile[0]) && !empty($userProfile[0])){ 
+    $clientid = (isset($userProfile[0]['clientId']))?$userProfile[0]['clientId']:null;
+    $email = (isset($userProfile[0]['email']))?$userProfile[0]['email']:null;
+    $userName = (isset($userProfile[0]['username']))?$userProfile[0]['username']:null;
+    $regDate = (isset($userProfile[0]['regDate']))?$userProfile[0]['regDate']:null;
+    //$lastlogin = $arrData['lastlogin'];
+    $fname = (isset($userProfile[0]['firstName']))?$userProfile[0]['firstName']:null;
+    $lname = (isset($userProfile[0]['lastName']))?$userProfile[0]['lastName']:null;
+    $mytheme = (isset($userProfile[0]['theme']))?$userProfile[0]['theme']:null;
+    $name = (isset($userProfile[0]['name']))?$userProfile[0]['name']:null;
+    $contact = (isset($userProfile[0]['contact']))?$userProfile[0]['contact']:null;
+    $photo = (isset($userProfile[0]['photo']))?$userProfile[0]['photo']:null;
+    $language = (isset($userProfile[0]['lang']))?$userProfile[0]['lang']:null;
+//}
+
+
+/* echo("<pre>");
+var_dump($userProfile);*/
+//echo $this->basePath();
+// echo $this->basePath() . "/../module/User/config/pics/".$photo; 
+//<?php //echo $this->basePath() . "/profilePics/".$photo; //
+//echo $_SERVER['DOCUMENT_ROOT'];
+?>
+
+    <div id="content">
+    <body>
+        <div id="profile_wrapper">
+            <div id="left_pane">
+                <div id="left_top">
+                    <div id="user-pic"><img class="profilePicSetting" id="profilePic" 
+                        src="<?php echo  $this->basePath()."/profilePics/".$photo; ?>"></img></div>
+                </div>
+                <div id="left_bottom">
+                <div id="proText" class="proText"><?php echo ucfirst($fname)." ".ucfirst($lname);?></div>
+                    <div id="info">INFO
+                        <br><br>
+                        <p>Registration Date: <span class="usrProfileSmallText"><?php /*$date = date_create($regDate);*/ echo $regDate; ?></span></p>
+                        <p>Last Login: <span class="usrProfileSmallText"><?php 
+                        $date = date_create($last_login);
+                        $dated = date_format($date, 'g:ia \o\n l  jS F Y');
+                        echo $dated;
+                        ?></span></p>
+                        <p>Account Type: <span class="usrProfileSmallText">Admin</span></p>
+
+                    </div>
+                </div>
+            </div>
+            <div id="right_pane">
+                <div id="selectedTabBox"></div>
+                <div id="nav-tabs">
+                    <ul class="nav nav-tabs" >
+                        <li class="active"><a href="#home" data-toggle="tab" id = "generaltab">General</a></li>
+                        <li><a href="#profile" data-toggle="tab" id = "settingtab">Settings</a></li>
+                        <li><a href="#messages" data-toggle="tab" id = "passtab">Change Password</a></li>
+                        <li><a href="#userlist" data-toggle="tab" id = "usertab" >Users</a></li>
+
+                    </ul>
+
+<!-- Tab panes -->
+                        <div class="tab-content">
+                        <div class="tab-pane active" id="home">
+                            <div id="generalContent">
+                        <form id="updateProfileForm" enctype="multipart/form-data"  method="POST" > 
+                       
+                            <p><input id="clientId" type="hidden" class="form-control" value="<?php echo $clientid;?>"/></p>
+                            <p>Email <input type="text" class="form-control" value="<?php echo $email;?>" disabled="disable"/></p>
+                            <p>Username <input type="text" class="form-control" value="<?php echo $userName;?>" disabled="disable" /></p>
+                            <p>First Name <input type="text" name="profileFirstName" class="form-control" value="<?php echo ucfirst($fname); ?>" id="txtFname" required /></p>
+                            <div id="errFnameMsg" class="text-success" ></div>
+                            <p>Last Name <input type="text" name="profileLastName" class="form-control"  value="<?php echo ucfirst($lname); ?>" id="txtLname"/></p>
+                            <div id="errLnameMsg" class="text-success" ></div>
+                            <p>Phone <input type="text" name="profileContact" class="form-control" value="<?php if($contact) { echo $contact;} ?>" id="txtContact" max-length="10"/></p>
+                            <div id="errContactMsg"></div>
+
+
+
+                            <p>Upload <input type="file" class="form-control" value="" id="imageUpload" name="profilePic"  max-length="10" /></p>
+ 
+
+                            
+                            <input type="submit" class="btn proSave"  value="Save" id="btnProfileSave" />
+                        </form> 
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="profile">
+
+                            <span> language</span>
+                            <span>
+                                <select id="language" class="form-control">
+                                    <option value="en">English</option>
+                                    <option value="fr">French</option>
+                                    <option value="hn">Hindi</option>
+
+                                </select>
+                            </span>
+                            <p></p> 
+                            
+                            <span> Theme</span>
+                            <input type="button" class="bt btn-primary margin-left20" value="Blue" />
+                            <input type="button" class="bt btn-success" value="Green" />
+                            <input type="button" class="bt btn-warning"  value="Yellow" />
+                            <input type="button" class="bt btn-danger"  value="Red" />
+                            <input type="hidden" id="color" value="<?php echo $mytheme ?>">
+                            <input type="hidden" id="client" value="<?php echo ($userProfile[0]['clientId']);  ?>">
+                            <p></p>
+                             <div id=langMsg class="text-success"></div>
+
+                            <input type="submit" class="btn proSave"  value="Save" id="btnThemeLang"/>
+                           
+
+
+
+                        </div>
+                        <div class="tab-pane" id="messages">
+                        <h3>Set your new  Password here</h3>
+                            <div id="generalContent2">
+                            
+                            <p>Password <input type="password" class="form-control" id="oldPassword"></p> 
+                            <div id="errPassMsg1"></div>                           
+                            <p>New Password <input type="password" class="form-control" id="newPassword" disabled = "disabled" ></p>
+                                <div id="errPassMsg2"></div> 
+                            <p>Confirm Password <input type="password" class="form-control" id="confirmPassword" disabled = "disabled"></p>
+                            
+                            </div>
+                            <div id="errPassMsg" class="text-success"></div> 
+                            <input type="submit" class="btn proSave"  value="Save" id="btnSave" name="btnSave" />
+                        </div>
+
+<!-- Div for adding new user -->
+                    <div class = "tab-pane" id = "userlist">
+                      <table cellpadding="0" cellspacing="0" border="0"
+                    class="LSQuestable table-bordered dataTable" id="example">
+                          <thead>
+                            <tr>
+                    <th>S.No</th>
+                    <th>User Name</th>
+                    <th>Name</th>
+                    <th>Email Id</th>
+                    <th class="action">Actions</th>
+                         </tr>
+                     </thead>
+                    <tbody>
+                        <?php  
+                        $i=1;
+                        foreach ($userdata as $userdata): ?>
+
+                <tr>
+                     <td><?php  echo $i;?></td>
+                    <td><?php  echo $this->escapehtml($userdata->username);?></a></td>
+                   
+                    <td> <?php  echo $this->escapehtml($userdata->email);?></a></td>
+                    <td>
+                    <a href="#" data-toggle="modal" data-target="#myModal">
+                    <div class="delete-btn" id="deleteCat<?php  echo $this->escapehtml($category->id);?>" 
+                    data-name='<?php echo $this->escapehtml($category->name); ?>' 
+                    onclick="deleteCat(<?php echo $this->escapehtml($category->id); ?>)" ></div></a>
+
+                 <a href="#" data-toggle="modal" data-target="#myModal">
+                 <div class="edit-btn" id="editCat<?php  echo $this->escapehtml($category->id);?>" 
+                    onclick="editCat(<?php  echo $this->escapehtml($category->id);?>)"
+                    data-name="<?php  echo $this->escapehtml($category->name);?>"></div></a>
+                  <a href="#"><div class="view-btn"  id="<?php  echo $this->escapehtml($category->id);?>"></div></a>  
+
+               </td>
+           </tr>
+                  <div class="div-details" id="details<?php  echo $this->escapehtml($category->id);?>">
+                  <div class="Quesdetails-left">
+                                                          Created By : <strong><?php echo $this->escapehtml($category->createdBy); ?></strong><br>
+                                                          Created On : <strong><?php $date = date_create($category->created_on); echo date_format($date,'Y-m-d H:i:s'); ?></strong><br>
+                                  </div>
+                                  <div class="Quesdetails-right margin-top0 ">
+                                                                  Updated By : <strong><?php  echo $category->updated_by!=""?$this->escapehtml($category->updatedBy):'Not applicable'; ?></strong><br>
+                                                                  Updated On : <strong><?php $date = date_create($category->updated_on); echo $category->updated_by!=""?date_format($date,'Y-m-d H:i:s'):'Not applicable'; ?></strong><br>
+                                  </div>
+                </div> <!-- end of div-details -->
+
+                 <?php
+                        $i ++;
+                    endforeach;
+                    ?>    
+            </tbody>
+
+                   </table>
+                    </div>
+                   <!--  <div class="tab-pane" id="adduser">
+                        <h3>New user register here..!!</h3>
+                        <div id="generalContent2">
+                        <p>User Name <input type="text" class="form-control" id="user_name"></p>                     
+                        <p>First Name<input type="text" class="form-control" id="first_name"></p>
+                        <p>Last Name <input type="text" class="form-control" id="last_name"></p>
+                         <p>Email <input type="Email" class="form-control" id="email"></p>
+                         <p>Password <input type="password" class="form-control" id="password"></p>
+                         <p>Re-type password<input type="text" class="form-control" id="retypepasswrd"></p>
+                        </div>
+                        <div id="errPassMsg" class="text-success"></div> 
+                        <input type="submit" class="btn proSave"  value="Save" id="btnSave" name="btnSave" />
+                    </div>
+ -->                        <div class="tab-pane" id="settings">
+                            <a href = "addUser" > Add Users</a></div>
+                        </div>
+                
+            </div>
+        </div>
+    
+                </div>  <!-- end of content -->
+        
+        </div>  <!-- end of dash-right-content-->
+<?php
+//} 
+?>   
+
+    <script>
+    var files;
+$(function() {
+    // Add events
+    /*$('input[type=file]').on('change', function(event) {
+        files = event.target.files;
+        //alert(files);
+    });*/
+
+   
+        $("#updateProfileForm").submit(function(e) {
+
+/*
+           var profileFirstName=$('#txtFname').val();
+           var profileLastName=$('#txtLname').val();
+             var profileContact=$('#txtContact').val();
+             var profilePic=$('#imageUpload').val();
+             var profileData = new Array();
+               profileData[0]=profileFirstName;
+              profileData[1]=profileLastName;
+              profileData[2]=profileContact;
+              profileData[3]=profilePic;
+               var userData = profileData.join();*/
+               
+        /*var profileData = {
+                    'profileFirstName'  : $('#txtFname').val(),
+                    'profileLastName'   : $('#txtLname').val(),
+                    'profileContact'    : $('#txtContact').val(),
+                    'profilePic'        : $('#imageUpload').val()
+                  };*/
+        /*var formObj = $(this);
+        var formURL = formObj.attr("action");
+        var formData = new FormData(this);*/
+        var profilePic=$('#imageUpload').val();
+       var formData = new FormData(this);
+                 $.ajax({
+
+           url: '/user/generalProfileUpdate/',
+           type: 'POST',
+           data:  formData,
+           mimeType:"multipart/form-data",
+           contentType: false,
+           cache: false,
+           processData:false,
+           success: function(response, textStatus, jqXHR) {
+            window.location.assign("userProfile");
+                         // alert(response);
+               try {
+                   response = $.parseJSON(response);
+                   if(response.status == true) {  
+                     // $('#newfamilyconnectionform_div').modal('hide');
+                      
+                      // alert(response.message);
+                       familyConnectionList(); // calling function to list family connection
+                   } else {
+                       $('#newfamilyconnectionform_div').modal('hide');
+                      // alert(response.message);
+                     
+                   }
+
+               } catch (Exception) {
+                   $("#newfamilyconnectionform_div").html(response);
+
+               }
+               
+               
+           
+        },
+           error: function(jqXHR, textStatus, errorThrown) {  
+                alert(data);
+           }        
+        });
+        e.preventDefault(); //Prevent Default action.
+        });
+
+
+
+
+
+
+});
+
+
+/*         $("#btnSave").click(function(){
+
+           var oldPassword = $("#oldPassword").val();
+           var newPassword = $("#newPassword").val();
+           var confirmPassword = $("#confirmPassword").val()
+           //alert(passValue);
+           $.ajax({
+
+            type: "POST",
+            data: {oldPassword:oldPassword,newPassword:newPassword,confirmPassword:confirmPassword},
+            url: base_url +'index.php?controller=dashboard&function=profilePassword', 
+            dataType: 'json',
+
+             beforeSend: function() {
+    
+                },
+                success: function(response) {
+                        
+                        if(response.passFlag == 1 ) {
+                            $('#errPassMsg').html("Password cannot be blank").css("color","red");
+                            
+                                
+                        } else if(response.passFlag == 2 ){
+                            $('#errPassMsg').html("Password cannot be blank").css("color","red");
+
+                        } else if(response.passFlag == 3 ){
+                            $('#errPassMsg').html("Password cannot be blank").css("color","red");
+
+                        } else if(response.passFlag == 4 ){
+                            $('#errPassMsg').html("Invalid Password").css("color","red");
+
+                        } else if(response.passFlag == 5 ){
+                            $('#errPassMsg').html("Invalid Password").css("color","red");
+
+                        } else if(response.passFlag == 6 ){
+                            $('#errPassMsg').html("Invalid Password").css("color","red");
+
+                        } else if(response.val == "" ){
+                            $('#errPassMsg').html("Invalid Password");
+
+                        } else {
+                            $('#errCat').html("");
+                            if(response.val== 1 ) {
+                                $('#errPassMsg').html("Password Set!");
+                            }
+                        }
+               
+                },
+               
+                
+                complete: function() {
+    
+                },
+                error: function() {
+    
+                }
+
+           });
+        }) */
+$("#usertab").click(function(){
+
+});
+
+$("#btnProfileSave").click(function(){
+/*if(!$('#imageUpload').value){
+    $('#imageUpload').val("<?php echo $userProfile[0]['photo'];?>");
+}*/
+
+var profileData = {
+                    'profileFirstName'  : $('#txtFname').val(),
+                    'profileLastName'   : $('#txtLname').val(),
+                    'profileContact'    : $('#txtContact').val(),
+                    'profilePic'        : $('#imageUpload').val()
+                  };
+
+
+
+$('#passtab').click(function(){
+
+                $("#errPassMsg1").html("");
+                $("#oldPassword").val("");
+                $("#newPassword").attr('disabled',true);
+                $("#confirmPassword").attr('disabled',true);
+                $("#btnSave").attr('disabled',true);
+
+});
+
+$( "#oldPassword" ).blur(function() {
+    
+    $.ajax({
+
+        type: "POST",
+        data: {'oldPassword':$("#oldPassword").val()},
+        url: '/user/verifyOldPassword/'+$("#clientId").val(),
+        dataType: 'json',
+
+        beforeSend:function(){
+            //alert($("#clientId").val());
+        },
+
+        success:function(response){
+            //alert(response.flag);
+            if(response.flag == 0){
+                $("#errPassMsg1").html("Please Enter Valid Password !");
+                $("#newPassword").attr('disabled',true);
+                $("#confirmPassword").attr('disabled',true);
+                $("#btnSave").attr('disabled',true);
+            }else{
+                $("#errPassMsg1").html("");
+                $("#newPassword").attr('disabled',false);
+                $("#confirmPassword").attr('disabled',false);
+                $("#btnSave").attr('disabled',false);
+            }
+        }
+
+    });
+});
+
+$( "#oldPassword" ).focusin(function() {
+$("#errPassMsg1").html("");
+});
+});
+
+
+
+$("#btnSave").click(function(){
+    
+    var passwordData = {
+                        'oldPassword'   : $('#oldPassword').val(),
+                        'newPassword'   : $('#newPassword').val(),
+                        'confirmPassword'   : $('#confirmPassword').val()
+                      };
+      /* if(String($('#newPassword').val()) == String($('#confirmPassword').val()){ */
+            $.ajax({
+
+            type: "POST",
+            data: passwordData,
+            url: '/user/updateProfilePassword/'+$("#clientId").val(),
+            dataType: 'json',
+
+            beforeSend:function(){
+                //alert($("#clientId").val());
+            },
+
+            success:function(response){
+                //alert(response.flag);
+                if(response.flag == 1){
+                    window.location.reload();
+                }
+                /*
+                if(response.profileFlag == 1){
+                    $('#errContactMsg').html("");
+                     $('#errLnameMsg').html("");
+                    $('#errFnameMsg').html("Firstname cannot be blank").css("color","red");
+                } else if(response.profileFlag == 2){
+                    $('#errContactMsg').html("");
+                     $('#errLnameMsg').html("");
+                    $('#errFnameMsg').html("First name is invalid").css("color","red");
+                } else if(response.profileFlag == 3){
+                     $('#errContactMsg').html("");
+                     $('#errFnameMsg').html("");
+                    $('#errLnameMsg').html("Last name is invalid").css("color","red");
+                } else if(response.profileFlag == 4){
+                     $('#errLnameMsg').html("");
+                     $('#errContactMsg').html("");
+                    $('#errContactMsg').html("Contact is invalid").css("color","red");
+                } else if(response.val == ""){
+                    $('#errContactMsg').html("");
+                     $('#errLnameMsg').html("");
+                    $('#errFnameMsg').html("Server error").css("color","red");
+                } else if(response.val == 1){
+                    $('#errFnameMsg').html(" First Name Updated");
+                    $('#errLnameMsg').html(" Last Name Updated");
+                    $('#errContactMsg').html("");
+                } else {
+                    $('#errLnameMsg').html("");
+                    $('#errContactMsg').html("");
+                    $('#errFnameMsg').html("");
+                }
+                */
+            }
+
+        });
+      /* }else{
+          $("#errPassMsg2").html("New Pasword and Confirm Password Doesn't Match ?")
+      } */
+
+    });
+
+// $('#language').change(function(){
+//     // alert($(this).val());
+//     var lang = $(this).val();
+// });
+
+$('#btnThemeLang').click(function(){
+    var langCode = $('#language').val();
+    var Theme    = $('#color').val();
+    var clientId = $('#client').val();
+
+    if(Theme == "")
+    {
+        
+    }
+    else
+    {
+        
+
+    var lang = ((langCode == 'en')?'English':((langCode == 'fr')?'French':'Hindi'));
+
+    $.ajax({
+
+        type: "POST",
+        data: {profileLanguage:lang,profileTheme:Theme,clientid:clientId},
+        url: 'userSetting',
+        dataType: 'json',
+
+        success:function(response){
+            if(response.flag == 1) {
+                $('#langMsg').html("Changes Saved! ");
+                window.setTimeout(function() { $("#langMsg").css('visibility','hidden'); }, 2000);
+
+               // location.reload();
+            }
+            else
+            {
+                  $('#langMsg').html("Error: Could not able to save the changes! ");
+            }
+
+        }
+
+    });
+}
+
+});
+
+$('.bt').click(function(){
+    var theme = $(this).attr("value");
+
+    if(theme === "Red"){
+        $('#color').attr("value","1");
+        $('link[href^="/css/themes"]').attr("href","/css/themes/red.css");
+        //$('#theme').attr("href","http://local.testcube.com/css/themes/red.css");
+    }   
+    else if(theme === "Green"){
+        $('#color').attr("value","2");
+        $('link[href^="/css/themes"]').attr("href","/css/themes/green.css");
+    }
+    else if(theme === "Yellow"){
+        $('#color').attr("value","3");
+        $('link[href^="/css/themes"]').attr("href","/css/themes/yellow.css");
+
+    }
+    else {
+        $('#color').attr("value","0");
+        $('link[href^="/css/themes"]').attr("href","/css/themes/blue.css");
+
+        
+    }
+    
+});
+
+
+ function fnFormatDetails ( oTable, nTr, ele )
+        {
+            var elemnt = "#details"+ele;
+            var aData = oTable.fnGetData( nTr );
+            var sOut    =  $(elemnt).html();
+            return sOut;
+        }
+
+
+    
+    /* API method to get paging information */
+$.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
+{
+    return {
+        "iStart":         oSettings._iDisplayStart,
+        "iEnd":           oSettings.fnDisplayEnd(),
+        "iLength":        oSettings._iDisplayLength,
+        "iTotal":         oSettings.fnRecordsTotal(),
+        "iFilteredTotal": oSettings.fnRecordsDisplay(),
+        "iPage":          oSettings._iDisplayLength === -1 ?
+            0 : Math.ceil( oSettings._iDisplayStart / oSettings._iDisplayLength ),
+        "iTotalPages":    oSettings._iDisplayLength === -1 ?
+            0 : Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
+    };
+}
+ 
+/* Bootstrap style pagination control */
+$.extend( $.fn.dataTableExt.oPagination, {
+    "bootstrap": {
+        "fnInit": function( oSettings, nPaging, fnDraw ) {
+            var oLang = oSettings.oLanguage.oPaginate;
+            var fnClickHandler = function ( e ) {
+                e.preventDefault();
+                if ( oSettings.oApi._fnPageChange(oSettings, e.data.action) ) {
+                    fnDraw( oSettings );
+                }
+            };
+ 
+            $(nPaging).addClass('pagination').append(
+                '<ul>'+
+                    '<li class="prev disabled"><a href="#">&larr; '+oLang.sPrevious+'</a></li>'+
+                    '<li class="next disabled"><a href="#">'+oLang.sNext+' &rarr; </a></li>'+
+                '</ul>'
+            );
+            var els = $('a', nPaging);
+            $(els[0]).bind( 'click.DT', { action: "previous" }, fnClickHandler );
+            $(els[1]).bind( 'click.DT', { action: "next" }, fnClickHandler );
+        },
+ 
+        "fnUpdate": function ( oSettings, fnDraw ) {
+            var iListLength = 5;
+            var oPaging = oSettings.oInstance.fnPagingInfo();
+            var an = oSettings.aanFeatures.p;
+            var i, j, sClass, iStart, iEnd, iHalf=Math.floor(iListLength/2);
+ 
+            if ( oPaging.iTotalPages < iListLength) {
+                iStart = 1;
+                iEnd = oPaging.iTotalPages;
+            }
+            else if ( oPaging.iPage <= iHalf ) {
+                iStart = 1;
+                iEnd = iListLength;
+            } else if ( oPaging.iPage >= (oPaging.iTotalPages-iHalf) ) {
+                iStart = oPaging.iTotalPages - iListLength + 1;
+                iEnd = oPaging.iTotalPages;
+            } else {
+                iStart = oPaging.iPage - iHalf + 1;
+                iEnd = iStart + iListLength - 1;
+            }
+ 
+            for ( i=0, iLen=an.length ; i<iLen ; i++ ) {
+                // Remove the middle elements
+                $('li:gt(0)', an[i]).filter(':not(:last)').remove();
+ 
+                // Add the new list items and their event handlers
+                for ( j=iStart ; j<=iEnd ; j++ ) {
+                    sClass = (j==oPaging.iPage+1) ? 'class="active"' : '';
+                    $('<li '+sClass+'><a href="#">'+j+'</a></li>')
+                        .insertBefore( $('li:last', an[i])[0] )
+                        .bind('click', function (e) {
+                            e.preventDefault();
+                            oSettings._iDisplayStart = (parseInt($('a', this).text(),10)-1) * oPaging.iLength;
+                            fnDraw( oSettings );
+                        } );
+                }
+ 
+                // Add / remove disabled classes from the static elements
+                if ( oPaging.iPage === 0 ) {
+                    $('li:first', an[i]).addClass('disabled');
+                } else {
+                    $('li:first', an[i]).removeClass('disabled');
+                }
+ 
+                if ( oPaging.iPage === oPaging.iTotalPages-1 || oPaging.iTotalPages === 0 ) {
+                    $('li:last', an[i]).addClass('disabled');
+                } else {
+                    $('li:last', an[i]).removeClass('disabled');
+                }
+            }
+        }
+    }
+} );
+
+$(document).ready(function() {
+
+            
+    var oTable = $('#example').dataTable( {
+        "bLengthChange": false,
+        "bFilter": true,
+        "bInfo": true,
+        "bAutoWidth": false,
+        "sPaginationType": "bootstrap",
+        "aoColumnDefs": [   //Initialse DataTables, with no sorting on the 'checkbox' column
+            { "bSortable": false, "aTargets": [ -1 ] }
+        ],
+        "aaSorting": [[1, 'asc']]
+        } );
+    /* Add event listener for opening and closing details
+     * Note that the indicator for showing which row is open is not controlled by DataTables,
+     * rather it is done here
+     */
+
+
+
+    //used to send test id to the viewTest function in test controller
+     $(document).on('click','.view-btn, .hide-btn',
+        function() {
+
+         if ($(this).attr("class") == "view-btn") {
+
+                $(this).removeClass("view-btn");
+                $(this).addClass("hide-btn");
+ 
+        }
+        else{
+            $(this).removeClass("hide-btn");
+            $(this).addClass("view-btn");
+        }
+
+         var ele = $(this).attr('id');
+        var nTr = $(this).parents('tr')[0];
+        if ( oTable.fnIsOpen(nTr) )
+        {
+          
+            this.src = "../examples_support/details_open.png";
+            oTable.fnClose( nTr );
+        }
+        else
+        {
+          
+            this.src = "../examples_support/details_close.png";
+            oTable.fnOpen( nTr, fnFormatDetails(oTable, nTr,ele), 'details' );
+        }
+    });
+     
+});
+
+$.fn.dataTableExt.oStdClasses["sFilter"] = "Dfilter";
+$('#example_wrapper').css("margin-top","50px");
+
+
+function addClassCurrent(element)
+{
+    var el="#ico"+element;
+    $(el).addClass("current");
+}
+
+function removeClassCurrent(element)
+{
+    var el="#ico"+element;
+    $(el).removeClass("current");
+}
+$('#footer').css("padding-top","30px");
+
+
+    </script>
+ <style>
+.profilePicSetting
+{
+        height: 160px;
+    width: 160px;
+    border-radius: 80px;
+
+}
+</style>

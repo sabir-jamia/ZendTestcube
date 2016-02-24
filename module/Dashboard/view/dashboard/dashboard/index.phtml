@@ -1,0 +1,209 @@
+<?php
+// var_dump($arrData['updatesData'][9]);
+// die;
+
+ if(isset($arrData) && !empty($arrData)) {
+   $arrData = $arrData;
+ } else {
+    
+ }
+   $arrData['countData']['totalQuestion'] = 0;
+    $arrData['countData']['totalCategory'] = 0;
+    $arrData['countData']['totalTest'] = 0;
+?>
+            <div id="content">
+            	<div id="row">
+            		<div id="section1"></div>
+                	<div id="section2">
+                		<div id="divDate"><span class="glyphicon glyphicon-calendar margin-right15 lightBlue"></span>
+                    	<span id="text"><?php print(Date("F d, Y")); ?></span></div>	<!-- end of divDate-->
+                    
+                    	<div id="divGraph2"><div id="donutchart"></div></div>
+                	</div>	<!-- end of section2-->
+                </div> <!-- end of row -->
+                <div id="row">
+                  <div id="recentBox">
+                    <div id="recentHeader"><strong>RECENT</strong></div>
+                    <div id="recentContent">
+                      <div class="panel-group fontapply" id="accordion">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" id="accordion-heading">
+                              <h4 class="panel-title">
+                               <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" id="ancrTest">
+                          <span class="glyphicon glyphicon-file margin-right10"></span>RECENT TESTS
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapseOne" class="panel-collapse collapse in">
+                                  <div class="panel-body">
+                                  <?php 
+                                       foreach ($arrData['testData'] as $key => $value) {
+                                        echo '<ul>';
+                                        echo '<li>TESTCube <a href="';
+                                        echo $this->escapeHtml($this->basePath().
+                                          '/test/viewTest/'.$value['id']).'" >';
+                                        echo $this->escapeHtml(ucfirst($value['name']));
+                                        echo  '</a></li></ul>';
+                                      } 
+                                      ?>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="panel panel-default">
+                                <div class="panel-heading" id="accordion-heading">
+                                  <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                      <span class="glyphicon glyphicon-link margin-right10"></span>RECENT LINKS
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapseTwo" class="panel-collapse collapse">
+                                  <div class="panel-body">
+                                  <?php 
+                                   //krsort($arrData['linkData']);
+                                  //\Zend\Debug\Debug::dump($arrData['linkData']);
+                                    foreach ($arrData['linkData'] as $key => $value) {
+                                      echo "<ul>";
+                                        echo "<li>".$value['linkUrl'];
+     
+                                        if($value['showuntill'] > Date('Y-m-d H:i:s')){
+                                        	?>
+                                        	<span class="label label-success dashlbl">Active</span>
+                                        	<?php
+                                        	}else{ 
+                                        	?>
+                                        	<span class="label label-warning dashlbl">Inactive</span>
+                                        <?php	
+                                        echo "</li>";}
+                                      echo "</ul>";
+                                      }
+                   
+                                  ?>
+                                        
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="panel panel-default">
+                                <div class="panel-heading" id="accordion-heading">
+                                  <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                     <span class="glyphicon glyphicon-check margin-right10"></span> RECENT RESULTS
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapseThree" class="panel-collapse collapse">
+                                  <div class="panel-body">
+                                   	 <?php 
+                                   	
+                                       foreach ($this->resultDataTemp as $key => $value) {
+
+                                        echo '<ul>';
+                                        echo '<li>TESTCube <a href="'.$this->escapeHtml($this->basePath().
+                                            '/result?testname='.$value).'" >';
+                                        echo $this->escapeHtml(ucfirst($value));
+                                        echo  '</a></li></ul>';
+                                      } 
+                                      ?>
+                                  </div>
+                                </div>
+                              </div>
+                        </div>	<!-- end of accordin -->
+                       </div> <!-- end of recentContent-->
+                    </div> <!-- end of recentBox-->
+                    
+                    <div id="updatesBox">
+                    	<div id="updatesHeader"><strong>UPDATES</strong></div>
+                        <div id="updatesContent">
+                            	<ul id="vertical-ticker" style="overflow: hidden;">
+                            
+                              <?php  
+                              
+                                  $updatesDataCount = count($arrData['updatesData']); 
+
+                                  for($i=0; $i<$updatesDataCount; $i++) {  
+									
+                                    $updateString = $arrData['updatesData'][$i]['created_by']." ".
+                                      				$arrData['updatesData'][$i]['activity_performed']." ".
+                                    				$arrData['updatesData'][$i]['entity_created']." ";
+                                    $createdWhat = ucfirst(strtolower($arrData['updatesData'][$i]['created_what']));
+                              		$fullString = $updateString." ".$createdWhat;
+                              		$createdspace = (40 - strlen($updateString));
+                              		
+                                    $strCount = strlen($createdWhat);
+                                    if(strlen($fullString) > 39){
+										
+	                              		if(strlen($createdWhat) > $createdspace){
+											$trimmer = (strlen($createdWhat) - $createdspace);
+											$createdWhat = substr($createdWhat,0,$trimmer-1);
+											$createdWhat .= "..";
+										}
+									}
+	 						?>
+                            <li  class="ticker-odd" style="margin-top: 0px;"><span class="glyphicon glyphicon-user margin-left5 margin-right5"></span><?php echo $updateString ?><strong><?php echo $createdWhat ?></strong><span style="color: #a9a9a9;text-align: right; display:block;"><small><?php echo($arrData['updatesData'][$i]['created_when']);?></small></span></li>
+                            <?php
+                                } 
+                              ?>                           
+                              </ul>
+                       <a id="showAllUpdates" href="/dashboard/showAllUpdates" class="fontapply">Show All Updates</a>
+                       </div> <!-- end of updatesContent-->
+                    </div> <!-- end of updatesBox-->
+                </div>	<!-- end of row-->
+                </div>	<!-- end of content -->
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+
+       function drawChart() {
+		    var data = google.visualization.arrayToDataTable([
+          ['Task', 'TestCube Stats'],
+          ['Questions',     <?php echo $countData[0]['totalQuestion'];?>],
+          ['Categories',      <?php echo $countData[0]['totalCategory'];?>],
+          ['Tests',  <?php echo $countData[0]['totalTest'];?>],
+          ['Certificates', 0],
+          ['Results',  0]
+        ]);
+
+        var options = {
+          title: 'TESTCUBE STATISTICS',
+          pieHole: 0.4,
+          colors: ['#4D5360', '#FDB45C', '#46BFBD', '#949FB1', '#F7464A']
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
+        
+        var data2 = google.visualization.arrayToDataTable([
+          ['Weekday', 'Test', 'Results'],
+          ['MON',  		10,		8],
+          ['TUE',  		5,		5],
+          ['WED',  		20,		17],
+          ['THU',  		21,		5],
+          ['FRI',  		15,		10],
+          ['SAT',  		25,		25],
+          ['SUN',  		30,		10],
+        ]);
+
+        var options2 = {
+          title: 'ACTIVE DAILY TEST (24 - 31 March)',
+          colors:['#4D5360','#F7464A'],
+          pointSize: 7,
+
+        };
+
+        var chart2 = new google.visualization.LineChart(document.getElementById('section1'));
+        chart2.draw(data2, options2);
+      }
+  $('#vertical-ticker').totemticker({
+  row_height  : '37px',
+  next    : '#ticker-next',
+  previous  : '#ticker-previous',
+  stop    : '#stop',
+  start   : '#start',
+    });
+
+    </script>
+<script>
+$('#footer').css("padding-top","30px");
+</script>

@@ -1,0 +1,142 @@
+/* Light Green :   #27AE60 
+   Dark Green  :   #1E8449
+ */
+
+
+
+#dash-content #dash-right-content #content #section2 #divDate {
+	background-color: #1E8449;
+	border-bottom: 7px solid #27AE60 ;
+}
+
+#proText { color: #27AE60; }
+
+.lightBlue { color:  #27AE60 ; }
+
+.blue-background { background-color: #1E8449 ; }
+
+.blue { color:  #27AE60 ; }
+
+
+#dash-content #dash-right-content #content #updatesBox #updatesHeader { background-color: #1E8449; }
+
+
+#dash-content #dash-right-content #content #recentBox #recentHeader { background-color: #1E8449; }
+
+#dash-content #dash-left-content #nav-menu .page-current { background-color: #1E8449; }
+
+
+#dash-content #dash-left-content #nav-menu .link-current { color: #27AE60; }
+
+
+
+#dash-content #dash-left-content #nav-menu li:hover { color: #27AE60; }
+
+#dash-content #dash-left-content #nav-menu .icon:hover {
+    background-color: #1E8449;
+    color: #FFFFFF;
+}
+
+#dash-content #dash-left-content #nav-menu li:hover + #dash-content #dash-left-content #nav-menu a .icon {
+    background-color:  #1E8449;
+    color: #FFFFFF;
+}
+
+#dash-content #dash-left-content #nav-menu .current {
+    background-color: #27AE60;
+    color: #FFFFFF;
+}
+
+.LStable th { background-color:  #1E8449; }
+
+.btn { background: none repeat scroll 0 0 #27AE60; }
+
+
+.btn:hover { background: none repeat scroll 0 0  #1E8449; }
+
+.pagination a { color: #1E8449; }
+
+
+#tstName { color: #27AE60; }
+
+#ques-content-head { background-color: #1E8449; }
+
+
+.ancrQuestion {
+    color: #27AE60;
+    text-decoration: none;
+}
+
+.nav a { color: #1E8449; }
+
+
+.modal-header { background-color:  #27AE60; }
+
+
+.add-btn span { color: #1E8449; }
+
+.LSQuestable th { background-color: #1E8449; }
+
+.LSTesttable th { background-color: #1E8449; }
+
+
+
+.Quesdetails-left strong , .Quesdetails-right strong { color:#1E8449; }
+
+
+.details-left strong , .details-right strong, .Resultdetails-right strong {
+    color: #1E8449;
+}
+
+.button-style { background-color: #E63D4B; }
+
+
+.bg-info {
+    background-color: #EAE6E8;
+}
+
+.linksList li {
+    color: #1E8449;
+}
+
+.linkbtn {
+    color: #1E8449;
+    }
+
+
+.newLinktxt {
+    color: #1E8449;
+}
+
+.head-btn {
+    background: none repeat scroll 0 0 #1E8449;
+}
+
+.breadcrumb li a
+{
+    text-decoration: none;
+    color:#1E8449;
+}
+
+/*changes */
+
+.CategoryTable th{ 
+        padding:7px; background-color:#27AE60; border:#f1f1f1 1px solid; color:#fff;
+        text-align:center;
+    }
+
+    .viewQuestion
+{
+    text-decoration: none;
+    color: #27AE60;
+}
+
+.CertificateTable th{ 
+        padding:7px; background-color:#27AE60; border:#f1f1f1 1px solid; color:#fff;
+        text-align:center;
+    }
+
+.ResultTable th{ 
+        padding:7px; background-color:#27AE60; border:#f1f1f1 1px solid; color:#fff;
+        text-align:center;
+    }
