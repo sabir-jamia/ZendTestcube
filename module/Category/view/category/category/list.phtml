@@ -1,0 +1,24 @@
+<p>
+    <a id = "addCat" data-toggle="modal" data-target="#myModal"> Add new Category</a>
+</p>
+<table class="table">
+<tr>
+	<th>S.No.</th>
+    <th>Category Name</th>
+    <th>Actions</th>
+    <th>&nbsp;</th>
+</tr>
+
+
+
+
+<?php foreach ($categories as $category) : ?>
+<tr>
+    <td><?php  echo $this->escapehtml($category->id);?></td>
+    <td><?php  echo $this->escapehtml($category->name);?></td>
+    <td>
+        <a class = "EditCat" data-toggle="modal" data-target="#myModal" name="<?php echo $this->escapehtml($category->id); ?>">Edit</a>
+        <a id = "DeleteCat" data-toggle="modal" data-target="#myModal">Delete</a>
+    </td>
+<?php endforeach;?>        				
+</table>

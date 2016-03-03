@@ -38,7 +38,6 @@ class UserTable
             'username' => 'root', // 'client0'.$this->clientId,
             'password' => 'tolexo'
         ); // 'client0'.$this->clientId,
-
         
         $this->dbAdapter12 = new Adapter($dbAdapterConfig);
     }

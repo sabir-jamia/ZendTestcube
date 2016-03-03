@@ -6,32 +6,7 @@
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
-return array(
-    'router' => array(
-        'routes' => array(
-            'home' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route' => '/',
-                    'defaults' => array(
-                        'controller' => 'Application\Controller\Index',
-                        'action' => 'index'
-                    )
-                )
-            ),
-            
-            /*'student' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route' => '/',
-                    'defaults' => array(
-                        'controller' => 'Student\Controller\Student',
-                        'action' => 'index'
-                    )
-                )
-            )*/
-        )
-    ),
+return array(    
     'service_manager' => array(
         'abstract_factories' => array(
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
@@ -41,6 +16,7 @@ return array(
             'translator' => 'MvcTranslator'
         )
     ),
+    
     'translator' => array(
         'locale' => 'en_US',
         'translation_file_patterns' => array(
@@ -51,6 +27,7 @@ return array(
             )
         )
     ),
+    
     'asset_manager' => array(
         'resolver_configs' => array(
             'paths' => array(
@@ -58,11 +35,13 @@ return array(
             )
         )
     ),
+    
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController'
         )
     ),
+    
     'view_manager' => array(
         'display_not_found_reason' => true,
         'display_exceptions' => true,
@@ -79,10 +58,17 @@ return array(
             __DIR__ . '/../view'
         )
     ),
+    
     // Placeholder for console routes
     'console' => array(
         'router' => array(
             'routes' => array()
+        )
+    ),
+    
+    'controller_plugins' => array(
+        'invokables' => array(
+            'HeadPlugin' => 'Application\Controller\Plugin\HeadPlugin'
         )
     )
 );

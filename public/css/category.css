@@ -1,0 +1,113 @@
+
+#btnCategoryCreate
+	{
+    border-radius: 0;
+    float: right;
+    margin-top: 6px;
+    min-width: 100px;
+    padding: 5px 10px;
+    text-align: center;
+
+	}
+
+.CategoryTable{
+        width:100%; 
+        border-collapse:collapse;
+        font-family:OpenSans;
+        clear: both;
+    }
+    .CategoryTable td{ 
+        padding:7px; border:#f1f1f1 1px solid; font-size:16px;
+    }
+    
+    .CategoryTable th{ 
+        padding:7px; background-color:#3473a9; border:#f1f1f1 1px solid; color:#fff;
+        text-align:center;
+    }
+    
+    .Dfilter label
+    {
+        color:white;
+    }
+    
+    .Dfilter
+    {
+
+        float: right;
+        margin-bottom: 12px;
+        margin-top: 5px;
+        width: 200px;
+    }
+
+    .Dfilter input[type=text]
+    {
+        display: block;
+        float:right;
+        width: 100%;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+              box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+              transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        background-image:url(../img/search.png);
+        background-repeat:no-repeat;
+        background-position:right;
+}
+.Dfilter input[type=text]:focus {
+        border-color: #66afe9;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+    
+    table.CategoryTable tr td:first-child
+    {
+        width:50px;
+        text-align:center;
+    }
+
+    table.CategoryTable tr td:nth-child(2)
+    {
+        width:550px;
+    }
+    
+	table.CategoryTable tr td:nth-child(3)
+	    {
+	        width:50px;
+            text-align:center;
+	    }
+	    
+
+    
+    table.CategoryTable > tbody > tr:first-child > th:first-child
+    {
+        text-align:left;
+    }
+    
+	table.CategoryTable tr td:nth-child(5)
+	    {
+	        text-align:center;
+	    }
+    
+    /* provide some minimal visual accomodation for IE8 and below */
+    .CategoryTable tr{
+        background: #43a5b4;
+    }
+    /*  Define the background color for all the ODD background rows  */
+    .CategoryTable tr:nth-child(odd){ 
+        background: #f1f1f1;
+                color:#666;
+    }
+    /*  Define the background color for all the EVEN background rows  */
+    .CategoryTable tr:nth-child(even){
+        background: #FFF;
+        color:#666;
+}
+

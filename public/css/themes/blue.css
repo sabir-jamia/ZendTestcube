@@ -46,9 +46,6 @@
 
 .LStable th { background-color: #3473A9; }
 
-.btn { background: none repeat scroll 0 0 #4690D1; }
-
-
 .btn:hover { background: none repeat scroll 0 0 #3473A9; }
 
 .pagination a { color: #4690D1; }
@@ -67,9 +64,12 @@
 .nav a { color: #3473A9; }
 
 
-.modal-header { background-color: #4690D1; }
+.modal-header { 
+	background-color: #4690D1; 
+	border-radius : 5px 5px 0px 0px !important;
+}
 
-
+/* 
 .add-btn span { color: #4690D1; }
 
 .LSQuestable th { background-color: #3473A9; }
@@ -99,7 +99,7 @@
     color:#3473A9;
 }
 
-/*changes */
+changes
 
 .CategoryTable th{ 
         padding:7px; background-color:#3473a9; border:#f1f1f1 1px solid; color:#fff;
@@ -121,3 +121,4 @@
         padding:7px; background-color:#3473a9; border:#f1f1f1 1px solid; color:#fff;
         text-align:center;
     }
+ */

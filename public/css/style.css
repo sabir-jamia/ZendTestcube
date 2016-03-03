@@ -13,20 +13,6 @@
          url('../fonts/OpenSans-Regular.ttf') format('truetype');
 }
 
-*, #txtUserName:before, #txtUserName:after {
-    -moz-box-sizing:inherit;
-}
-
-/* login textboxes placeholder style */
-#txtUserName ::-webkit-input-placeholder {
-    color: #3473A9;
-    text-align: center;
-}
-
-.err{
-	display: block;
-}
-
 #test-info{
 	width: 430px;
 }
@@ -95,61 +81,6 @@
     color: #999999;
     cursor: not-allowed;
 }
-#txtUserName  :-moz-placeholder { /* Firefox 18- */
-   color: #3473A9;
-   text-align: center;
-}
-#btnRegister{
-    border-radius:0px;
-}
-#btnRegister:hover{
-    color:white;
-}
-
-#captchaimg_signup-image{
-    float:left;
-}
-#captchaimg_signup{
-    float: left;
-    height: 30px;
-    margin-top: 13px;
-    width: 100px;
-    border: 1px solid #d6d6d6;
-    box-shadow: 0 0 0 #d6d6d6;
-    color: #787878;
-    outline: medium none;
-    padding: 3px;
-}
-
-#refreshbutton{
-    clear: both;
-    color: #000;
-    display: block;
-}
-#errPassMsg ,#errFnameMsg
-{
-    display: block;
-    height: 30px;
-    min-width: 140px
-}
-#errPassMsg1 
-{
-    display: block;
-    height: 30px;
-    min-width: 140px;
-	margin-left: 165px;
-	color: maroon;
-}
-#errPassMsg
-{
-margin-top:230px;
-}
-#errFnameMsg
-{
-     font-size: 13px;
-    margin-left: 92px;
-    padding-top: 80px;
-}
 
 #btnOk
 {
@@ -188,49 +119,15 @@ margin-top:230px;
 {
     display: none;
 }
-#errLnameMsg
-{
-         font-size: 13px;
-    margin-left: 92px;
-    padding-top: 80px;
-}
 #lgbtn
 {
         margin-left: 129px;
     margin-top: 25px;
     width: 168px;
 }
-#txtUserName  ::-moz-placeholder {  /* Firefox 19+ */
-   color: #3473A9;
-   text-align: center;
-}
-
-#tstName
-{
-    color: #3473A9;
-}
-#txtUserName  :-ms-input-placeholder {  
-   color: #3473A9;
-   text-align: center;
-}
 
 #logo-image{
 margin: -5px 0 0 50px;
-}
-
-#btnSubmit:focus
-{
-background-color:#3473A9;
-}
-
-#btnRegister:focus
-{
-background-color:#3473A9;
-}
-
-a{
-outline: 0;
-text-decoration: none;
 }
 
 .width10
@@ -296,11 +193,6 @@ text-decoration: none;
 #delete-text
 {
     font-family:OpenSans;
-}
-.nav
-{
-    
-    
 }
 
 #div-language
@@ -445,18 +337,6 @@ text-decoration: none;
     color:#ffffff;
 }
 
-.btn {
-  color: #ffffff;
-  font-size: 14px;
-  background: #4690D1;
-  padding: 7px 20px 9px 20px;
-  text-decoration: none;
-  border:none;
-  cursor:pointer;
-  outline: 0;
-}
-
-
 #row-details
 {
     display:none;
@@ -593,13 +473,6 @@ text-decoration: none;
     margin: -10px 0 0;
     padding: 0 0 15px 62px;
     width: 855px;
-}
-.btn:hover {
-  background:#3473A9 ;
-  text-decoration: none;
-  border:none;
-  cursor:pointer;
-outline: 0;
 }
 
 .float-right
@@ -778,7 +651,6 @@ font-size: 15px;
     font-family: OpenSans;
     font-size: 13px;
     height: 100%;
-    margin: 0 0 0 36px;
     width: 300px;
 }
 .errorTxt ul{
@@ -1473,7 +1345,6 @@ margin:3px 0;
 /* ----- add selectors here for font sizing ----- */
 #JT_close_left, #JT_close_right{font-size: 12px;}
 #JT_copy p, #JT_copy ol{font-size: 12px;}
-p, label{font-size: 12px;}
 
 /*------------------>profile css <---------------------------*/
 
@@ -2153,11 +2024,7 @@ label[for="assignedTo"],label[for="title"],label[for="testName"]{
 
 #loadingImage
 {
-    float: right;
-    height: 60px;
-    margin-right: 40px;
-    margin-top: 10px;
-    width: 60px;
+    width: 8%;
 }
 
 #loadingImageReg
@@ -2201,4 +2068,38 @@ label[for="assignedTo"],label[for="title"],label[for="testName"]{
     color: #3473a9;
     display: block;
     font-weight: 800;
+}
+
+.txt-message{
+	font-weight: normal;
+}
+
+
+
+
+
+
+
+
+
+
+/*NEW*/
+
+.captcha{
+    width: 55% !important;
+}
+
+#captcha-image{
+    float:left;
+}
+
+#refreshbutton{
+    display: block;
+}
+
+label.error {
+    height:17px;
+    padding:1px 5px 0px 5px;
+    font-size:small;
+    font-weight: normal;
 }

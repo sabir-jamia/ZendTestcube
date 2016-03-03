@@ -13,6 +13,10 @@ class RegisterForm extends Form
     {
         parent::__construct('register');
         $this->url = $name;
+        $this->setAttribute('class', 'form-horizontal');
+        $this->setAttribute('id', 'register');
+        $this->setAttribute('name', 'register');
+        $this->setAttribute('role', 'form');
         
         $this->add(array(
             'name' => 'id',
@@ -20,54 +24,67 @@ class RegisterForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'email',
+            'name' => 'user-name',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Email'
+                'label' => 'User Name',
+                'label_attributes' => array(
+                    'class' => 'col-md-3 control-label'
+                )
             ),
             'attributes' => array(
-                'class' => 'light-box-content-textbox',
-                'id' => 'txtEmail',
-                'placeholder' => 'Enter Email'
-            )
-        ));
-        
-        $this->add(array(
-            'name' => 'username',
-            'type' => 'Text',
-            'options' => array(
-                'label' => 'User Name'
-            ),
-            'attributes' => array(
-                'class' => 'light-box-content-textbox',
-                'id' => 'txtRegUsername',
+                'class' => 'form-control',
+                'id' => 'user-name',
                 'placeholder' => 'Enter Username'
             )
         ));
         
         $this->add(array(
-            'name' => 'firstname',
+            'name' => 'first-name',
             'type' => 'Text',
             'options' => array(
-                'label' => 'First Name'
+                'label' => 'First Name',
+                
+                'label_attributes' => array(
+                    'class' => 'col-md-3 control-label'
+                )
             ),
             'attributes' => array(
-                'class' => 'light-box-content-textbox',
-                'id' => 'txtRegFirstname',
+                'class' => 'form-control',
+                'id' => 'first-name',
                 'placeholder' => 'Enter Firstname'
             )
         ));
         
         $this->add(array(
-            'name' => 'lastname',
+            'name' => 'last-name',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Last Name'
+                'label' => 'Last Name',
+                'label_attributes' => array(
+                    'class' => 'col-md-3 control-label'
+                )
             ),
             'attributes' => array(
-                'class' => 'light-box-content-textbox',
-                'id' => 'txtRegLastname',
+                'class' => 'form-control',
+                'id' => 'last-name',
                 'placeholder' => 'Enter Lastname'
+            )
+        ));
+        
+        $this->add(array(
+            'name' => 'email',
+            'type' => 'Text',
+            'options' => array(
+                'label' => 'Email',
+                'label_attributes' => array(
+                    'class' => 'col-md-3 control-label'
+                )
+            ),
+            'attributes' => array(
+                'class' => 'form-control',
+                'id' => 'email',
+                'placeholder' => 'Enter Email'
             )
         ));
         
@@ -75,25 +92,30 @@ class RegisterForm extends Form
             'name' => 'password',
             'type' => 'password',
             'options' => array(
-                'label' => 'Create Password'
+                'label' => 'Create Password',
+                'label_attributes' => array(
+                    'class' => 'col-md-3 control-label'
+                )
             ),
             'attributes' => array(
-                'class' => 'light-box-content-textbox',
-                'id' => 'txtPass',
+                'class' => 'form-control',
+                'id' => 'password',
                 'placeholder' => 'Enter Password'
             )
         ));
         
         $this->add(array(
-            'name' => 'confirmpassword',
+            'name' => 'confirm-password',
             'type' => 'password',
             'options' => array(
-                'label' => 'Confirm Password'
+                'label' => 'Confirm Password',
+                'label_attributes' => array(
+                    'class' => 'col-md-3 control-label'
+                )
             ),
-            
             'attributes' => array(
-                'class' => 'light-box-content-textbox',
-                'id' => 'txtconfirmPass',
+                'class' => 'form-control',
+                'id' => 'confirm-password',
                 'placeholder' => 'Confirm Password'
             )
         ));
@@ -114,11 +136,14 @@ class RegisterForm extends Form
             'type' => 'Zend\Form\Element\Captcha',
             'options' => array(
                 'label' => 'Please verify you are human.',
+                'label_attributes' => array(
+                    'class' => 'col-md-3 control-label'
+                ),
                 'captcha' => $this->captcha
             ),
             'attributes' => array(
-                'class' => 'capt',
-                'id' => 'captchaimg_signup'
+                'class' => 'captcha form-control',
+                'id' => 'captcha'
             )
         ));
         
@@ -132,15 +157,12 @@ class RegisterForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'submit',
+            'name' => 'register-submit',
             'type' => 'submit',
             'attributes' => array(
-                'value' => 'Register'
-            ),
-            
-            'attributes' => array(
-                'id' => 'btnRegister',
-                'class' => 'btn float-left'
+                'value' => 'Sign Up',
+                'id' => 'register-submit',
+                'class' => 'btn btn-info'
             )
         ));
     }

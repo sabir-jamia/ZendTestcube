@@ -1,16 +1,15 @@
 <?php
-
 return array(
-'mail_setting' => array(
-		'host' => 'smtp.gmail.com',
-		'connection_class' => 'login',
-		'connection_config' => array(
-			'ssl' => 'tls',
-			'username' => 'testcube2014@gmail.com',
-			'password' => 'testcube123'
-			),
-		'port' => 587,
-		)
+    'mail_setting' => array(
+        'host' => 'smtp.gmail.com',
+        'connection_class' => 'login',
+        'connection_config' => array(
+            'ssl' => 'tls',
+            'username' => 'dev.sabir.jmi11@gmail.com',
+            'password' => 'sabir@oss@3113'
+        ),
+        'port' => 587
+    )
 );
 
 
@@ -55,7 +54,4 @@ public function inviteAction()
         }
     }
 
-}
-
-
-*/
+}*/

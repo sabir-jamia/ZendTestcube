@@ -1,0 +1,23 @@
+          <?php
+          
+
+            $form = $this->form;  
+            $form->setAttribute('onsubmit', 'return false');          
+            $form->prepare();
+            echo $this->form()->openTag($form);
+            echo $this->formhidden($form->get('id'));
+                
+          ?>
+
+<div id="divCreate">
+  <Span id="lblName">Category Name</Span>
+  <?php echo $this->formElement($form->get('name')); ?>
+    <p></p>
+    <div id="errCatEdit" style="margin-left:50px;"></div>
+        <button type="button" class="btn btn-primary btn margin-left50 margin-top10" id="savechanges">Update</button>
+    
+   <?php 
+      echo $this->form()->closeTag();
+      ?>
+  <p></p>
+</div>

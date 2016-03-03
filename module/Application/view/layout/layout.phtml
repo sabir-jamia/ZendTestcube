@@ -29,7 +29,7 @@ use Zend\Session\Container;
                         ->prependStylesheet($this->basePath() . '/css/themes/'.$theme.'.css')
                         //->prependStylesheet($this->basePath() . '/css/certificate.css')
         				->prependStylesheet($this->basePath() . '/css/bootstrap_datetimepicker.css')
-                        //->prependStylesheet($this->basePath() . '/css/category.css')
+                        ->prependStylesheet($this->basePath() . '/css/category.css')
                         ->prependStylesheet($this->basePath() . '/css/style.css')
                         //->prependStylesheet($this->basePath() . '/css/question.css')
                         ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
@@ -45,9 +45,10 @@ use Zend\Session\Container;
         	//->prependFile($this->basePath() . '/js/certificate.js')
         	->prependFile($this->basePath() . '/js/bootstrap-datetimepicker.js')
         	->prependFile($this->basePath() . '/js/moment.min.js')
-            //->prependFile($this->basePath() . '/js/category.js')
+            ->prependFile($this->basePath() . '/js/category.js')
             ->prependFile($this->basePath() . '/js/mainscript.js')
-            ->prependFile($this->basePath() . '/js/validationcode.js')      
+            ->prependFile($this->basePath() . '/js/validationcode.js') 
+            ->prependFile($this->basePath() . '/js/jquery.validate.js')
         	->prependFile($this->basePath() . '/js/script.js')
             //->prependFile($this->basePath() . '/js/question.js')
             //->prependFile($this->basePath() . '/js/result.js')
@@ -65,7 +66,7 @@ use Zend\Session\Container;
 <?php
 
 $link = isset($this->layout()->modulenamespace)?$this->layout()->modulenamespace:"Error";
-if($link == "Application" || $link == "Error" ){
+if($link == "Application" || $link == "Error" || $link = "NotLoggedIn"){
 
 echo $this->headLink();
 echo $this->headScript();

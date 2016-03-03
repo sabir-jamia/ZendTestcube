@@ -11,6 +11,7 @@ return array(
         'User',
         'Email',
         'Dashboard',
+        'Category',
     ),
     
     'module_listener_options' => array(
@@ -19,7 +20,7 @@ return array(
             './vendor',
         ),
         'config_glob_paths' => array(
-            'config/autoload/{{,*.}global,{,*.}local}.php',
+            'config/autoload/{{,*.}global,local,email}.php',
         ),
     ),
 );

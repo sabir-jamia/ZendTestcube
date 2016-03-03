@@ -3,11 +3,12 @@ namespace User\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 use User\Form\LoginForm;
 use User\Form\RegisterForm;
 use Zend\Json\Json;
 use User\Model\User;
-use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
+use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthAdapter;
 use Zend\Authentication\AuthenticationService;
 use Zend\Session\Container;
 use Zend\Form\Element\File;
@@ -24,88 +25,85 @@ class UserController extends AbstractActionController
 
     private $authservice = null;
 
+    function attachScriptsAndStyleSheet()
+    {
+        $this->HeadPlugin()
+            ->javaScript()
+            ->appendFile('/user/user.js');
+    }
+
     public function loginAction()
     {
-        $statusmsg = $this->params()->fromQuery('statusmsg');
-        // echo $statusmsg;
-        // die();
-        $id = $this->params()->fromQuery('id');
+        $this->attachScriptsAndStyleSheet();
         $request = $this->getRequest();
         $form = new LoginForm();
+        $view = new ViewModel();
         
-        if ($statusmsg == 1) {
-            $view = new ViewModel(array(
-                'form' => $form,
-                'status1' => 4
-            ));
-            $view->setTerminal($request->isXMLHttpRequest());
+        if (! $request->isXmlHttpRequest()) {
+            $view->setVariable('form', $form);
             return $view;
+        } else {
+            $user = new User();
+            $form->setInputFilter($user->getInputFilter());
+            $form->setValidationGroup('username', 'password');
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                return new JsonModel($this->authenticate($form, $view));
+            } else {
+                $view->setTemplate('/user/user/login.phtml')
+                    ->setTerminal(true)
+                    ->setVariables(array(
+                    'form' => $form
+                ));
+            }
         }
         
-        if ($id) {
-            $id = $this->params()->fromQuery('id');
-            $id = $this->mntdecodeAlgo($id);
-            $confirmStatus = $this->getusersTable()->updatestatus($id);
-            
-            $view = new ViewModel(array(
-                'form' => $form,
-                'status' => $confirmStatus
-            ));
-            $view->setTerminal($request->isXMLHttpRequest());
-            return $view;
-        }
-        
-        $view = new ViewModel(array(
-            'form' => $form
-        ));
-        $view->setTerminal($request->isXMLHttpRequest());
         return $view;
     }
 
-    public function forgotpasswordAction()
+    public function forgotPasswordAction()
     {
+        $this->attachScriptsAndStyleSheet();
         $request = $this->getRequest();
         $response = $this->getResponse();
-        $forgotPass = $request->getPost('emailTxt');
         
-        $validEmailvalue = $this->checkVal($forgotPass);
-        if ($validEmailvalue == 1) {
-            $response->setContent(Json::encode(array(
-                'status' => 1
-            )));
-            return $response;
-        } 
-
-        else 
-            if ($validEmailvalue == 2) {
-                $viewmodel = new ViewModel(array(
-                    'password' => $this->getusersTable()->getPasswordByEmail($forgotPass)
-                ));
-                $var = $this->getusersTable()->getPasswordByEmail($forgotPass);
-                
-                $serviceManager = $this->getServiceLocator();
-                $mailTemplate = $serviceManager->get('Email\Model\EmailTemplate');
-                $mailTemplateData = $mailTemplate->getMailTemplate('ForgotPassword');
-                
-                $messageBody = "Password : " . $var;
-                $emailIds[] = $forgotPass;
-                
-                $mailData['mailTemplateData'] = $mailTemplateData;
-                $mailData['messageBody'] = $messageBody;
-                $mailData['emailIds'] = $emailIds;
-                
-                $serviceManager = $this->getServiceLocator();
-                $mailer = $serviceManager->get('EmailService');
-                
-                $mailer->sendMail($mailData);
-                
-                $viewmodel->setTerminal(true);
-                $response->setContent(Json::encode(array(
-                    'status' => 2
-                )));
-                
-                return $response;
+        if ($request->isXmlHttpRequest()) { // If it's ajax call
+            $emailId = $request->getPost('emailTxt');
+            if (! empty($emailId)) {
+                $validEmailvalue = $this->checkValue($emailId);
+                $jsonModel = new JsonModel();
+                if ($validEmailvalue == 1) { // password does not exists
+                    $jsonModel->setVariable(status, 1);
+                } elseif ($validEmailvalue == 2) {
+                    $var = $this->getusersTable()->getPasswordByEmail($emailId);
+                    $serviceManager = $this->getServiceLocator();
+                    $mailTemplate = $serviceManager->get('Email\Model\EmailTemplate');
+                    $mailTemplateData = $mailTemplate->getMailTemplate('ForgotPassword');
+                    $messageBody = "Password : " . $var;
+                    $emailIds[] = $emailId;
+                    $mailData['mailTemplateData'] = $mailTemplateData;
+                    $mailData['messageBody'] = $messageBody;
+                    $mailData['emailIds'] = $emailIds;
+                    $serviceManager = $this->getServiceLocator();
+                    $mailer = $serviceManager->get('EmailService');
+                    $mailer->sendMail($mailData);
+                    
+                    $htmlViewPart = new ViewModel();
+                    $htmlViewPart->setTerminal(true)->setTemplate('/user/user/forgot-password-success.phtml');
+                    $html = $this->getServiceLocator()
+                        ->get('ViewRenderer')
+                        ->render($htmlViewPart);
+                    
+                    $jsonModel = new JsonModel();
+                    $jsonModel->setVariables(array(
+                        'html' => $html,
+                        'status' => 2
+                    ));
+                }
+                return $jsonModel;
             }
+        }
+        return new ViewModel();
     }
 
     public function getBaseUrl()
@@ -115,13 +113,12 @@ class UserController extends AbstractActionController
         return $config['applicationSettings']['appLink'];
     }
 
-    public function checkVal($name)
+    public function checkValue($name)
     {
         $txtVal = $name;
-        
         $checkVal = $this->getusersTable()->isEmailexist($txtVal);
+        
         if (! $checkVal) {
-            
             return 1;
         } else {
             return 2;
@@ -138,86 +135,18 @@ class UserController extends AbstractActionController
     {
         if (! $this->authservice) {
             $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-            $dbTableAuthAdapter = new DbTableAuthAdapter($dbAdapter, 'users', $usernameType, 'password', 'MD5(?)');
+            $authAdapter = new AuthAdapter($dbAdapter, 'users', $usernameType, 'password', 'MD5(?)');
             $authService = new AuthenticationService();
-            $authService->setAdapter($dbTableAuthAdapter);
+            $authService->setAdapter($authAdapter);
             $this->authservice = $authService;
         }
         return $this->authservice;
     }
 
-    public function processAction()
-    {
-        $view = new ViewModel();
-        $request = $this->getRequest();
-        $response = $this->getresponse();
-        $form = new LoginForm();
-        $user = new User();
-        
-        if ($request->isPost()) {
-            $form->setInputFilter($user->getInputFilter());
-            $str = trim($request->getPost('username'), " ");
-            $pos = strpos($str, '@');
-            
-            if ($pos !== false) {
-                $usernameType = 'email';
-                $form->setValidationGroup('username', 'password');
-            } else {
-                $usernameType = 'username';
-                $form->setValidationGroup('username', 'password');
-            }
-            
-            $form->setData($request->getPost());
-            
-            if ($form->isValid()) {
-                $s = trim($this->request->getPost('username'), ' ');
-                $this->getAuthService($usernameType)
-                    ->getAdapter()
-                    ->setIdentity($s);
-                $this->getAuthService($usernameType)
-                    ->getAdapter()
-                    ->setCredential($this->request->getPost('password'));
-                $result = $this->getAuthService($usernameType)->authenticate();
-                
-                if ($result->isValid()) {
-                    $userData = $this->getusersTable()->getUserByUserName($s, $usernameType);    
-                    if ($userData == 'notconfirmed') {
-                        $response->setContent(JSON::encode(array(
-                            'flag' => 'notconfirmed'
-                        )));
-                    } else { 
-                        $userSession = new Container('users');
-                        $userSession->clientId = $userData->getClientId();
-                        $userSession->usernameType = $usernameType;
-                        $userSession->username = $userData->getUserName();
-                        $userSession->email = $userData->getEmail();
-                        
-                        $response->setContent(JSON::encode(array(
-                            'flag' => 'loginsuccess'
-                        )));
-                    }
-                    return $response;
-                } else {
-                    $response->setContent(JSON::encode(array(
-                        'flag' => 'loginFail'
-                    )));
-                    return $response;
-                }
-            } else {
-                $view->setVariables(array(
-                    'form' => $form
-                ));
-                $view->setTemplate('/user/user/login.phtml');
-                $view->setTerminal(true);
-                return $view;
-            }
-        }
-    }
-
     public function registerAction()
     {
-        $form = new RegisterForm();   
-        $form->get('submit')->setValue('Register');
+        $form = new RegisterForm();
+        $form->get('register-submit')->setValue('Sign Up');
         $request = $this->getRequest();
         $response = $this->getResponse();
         
@@ -229,7 +158,7 @@ class UserController extends AbstractActionController
             $form->setInputFilter($register->getInputFilter());
             $form->setData($request->getPost()); // setting requested data to form object
             
-            if ($form->isValid()) { 
+            if ($form->isValid()) {
                 $register->exchangeArray($form->getData());
                 $msg = $this->getusersTable()->saveUser($register);
                 $str = $this->mntencodeAlgo($msg);
@@ -246,7 +175,8 @@ class UserController extends AbstractActionController
                 $mailData['messageBody'] = $messageBody;
                 $mailData['emailIds'] = $emailIds;
                 
-                var_dump($mailData);die;
+                var_dump($mailData);
+                die();
                 
                 $serviceManager = $this->getServiceLocator();
                 $mailer = $serviceManager->get('EmailService');
@@ -278,7 +208,6 @@ class UserController extends AbstractActionController
     {
         if (! $this->usersTable) {
             $serviceManager = $this->getServiceLocator();
-            
             $this->usersTable = $serviceManager->get('User\Model\UserTable');
         }
         return $this->usersTable;
@@ -288,7 +217,6 @@ class UserController extends AbstractActionController
     {
         if (! $this->clientUsersTable) {
             $serviceManager = $this->getServiceLocator();
-            
             $this->clientUsersTable = $serviceManager->get('User\Model\ClientUserTable');
         }
         
@@ -387,10 +315,10 @@ class UserController extends AbstractActionController
         );
         $filter = new \Zend\Filter\File\RenameUpload(array(
             "target" => $uploadFile . '/' . $fileName
-        )
+        ));
         // "randomize" =>'true',
         // "target" => $uploadFile,
-        );
+        
         $fileData = $filter->filter($files['profilePic']);
         
         $result = $this->getClientusersTable()->clientGeneralProfileUpdate($profileData);
@@ -400,8 +328,7 @@ class UserController extends AbstractActionController
                 $response->setContent(JSON::encode(array(
                     'flag' => 1,
                     'profilePic' => $profileData['profilePic']
-                )
-                ));
+                )));
                 return $response;
             } else {
                 $response->setContent(JSON::encode(array(
@@ -580,5 +507,43 @@ class UserController extends AbstractActionController
             )));
             return $response;
         }
+    }
+
+    public function authenticate($form, $viewModel)
+    {
+        $request = $this->getRequest();
+        $username = trim($request->getPost('username'), " ");
+        $password = $this->request->getPost('password');
+        $response = array();
+        
+        if (strpos($username, '@')) {
+            $usernameType = 'email';
+        } else {
+            $usernameType = 'username';
+        }
+        
+        $this->getAuthService($usernameType)
+            ->getAdapter()
+            ->setIdentity($username)
+            ->setCredential($password);
+        $result = $this->authservice->authenticate();
+        
+        if ($result->isValid()) {
+            $userData = $this->getusersTable()->getUserByUserName($username, $usernameType);
+            if ($userData == 'notconfirmed') {
+                $response['flag'] = 'notconfirmed';
+            } else {
+                $userSession = new Container('users');
+                $userSession->clientId = $userData->getClientId();
+                $userSession->usernameType = $usernameType;
+                $userSession->username = $userData->getUserName();
+                $userSession->email = $userData->getEmail();
+                $response['flag'] = 'loginsuccess';
+            }
+        } else {
+            $response['flag'] = 'loginFail';
+        }
+        
+        return $response;
     }
 }

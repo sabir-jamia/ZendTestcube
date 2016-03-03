@@ -79,10 +79,6 @@ $('#errRegLastname').html("");
 }
  });
 
-
-
-
-
 $(document).on('blur','#txtEmail',function(){	
 	var filter = /^([a-zA-Z0-9_\.\-\+0-9])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})$/;
 var regEmailId = $(this).attr('id');
@@ -285,19 +281,8 @@ $.ajax({
 		},
 
 	});
-
-
-
-
 }
 */
-
-
-
-
-
-
-
 
 $(document).on('click','#refreshbutton',function() { 
 $('#captchaimg_signup').val("");
@@ -331,29 +316,14 @@ $('#errCaptcha').html('Invalid captcha').css('color','red');
 $('#errCaptcha').val("");
 });
 
-$(document).on('click',"#ancrRegister",function(){
+/*$(document).on('click',"#ancrRegister",function(){
 
        $("#frmRegister")[0].reset();
        $(".regiser-errorTxt").html("");
        $("#fade").fadeIn();
        $("#light").show();
    });
-
-$(document).on('click','#ancrRegister',function(){
-
-                    $.ajax({
-
-                        type: 'Get',
-                        dataType: 'html',
-                        url: '/user/register',
-                        data: '',
-
-                        success: function(data){
-
-                            $('#frmRegister').html(data);
-                        }
-                    });
-                });
+*/
 	// login page username textbox onfocus function to remove username error
 	$(document).on('focus','#txtUserName',function(){
 		$('#errUserName').html("");
@@ -404,142 +374,12 @@ $(document).on('click','#ancrRegister',function(){
 				$('#errPassword').html('');
 		  });*/
 
-
-    $(document).on('click','#btnSubmit',function (event) {
-        var t = 1;
-        $("#login :text , #login :password").each(function () {
-            var n = $(this).attr("id");
-
-            if (isNull(n) === 0) {
-                if (t === 1) {
-                	$('#serverUserError').css("display", "none");
-                	$('#serverPassError').css("display", "none");
-                    $("#errUserName").html("Please enter UserName/Email.").css("color", "red");
-                } else if (t === 2) {
-                    $("#errPassword").html("Please enter password").css("color", "red");
-                }
-                event.preventDefault();
-            } else {
-				event.preventDefault();
-				var formData = $('#login').serialize();
-
-				$.ajax({
-
-					type: 'POST',
-					url: '/user/process',
-					data: formData,
-					/*dataType: 'json',*/
-
-					success:function(data){
-						
-						try {
-							data = $.parseJSON(data);
-						
-							if(data.flag=='loginsuccess') {
-								  window.location.href = "/dashboard";
-							} else if(data.flag=='loginFail') {
-									$('#login-text2').html('Wrong Credentials');
-									$('#txtPassword').val('');
-							}
-							else if(data.flag=='notconfirmed') {
-
-									$('#login-text2').html('Account Not Active!');
-									$('#txtPassword').val('');
-							}
-						}
-						catch(e){
-							$('#content').html(data);
-							if ($('#serverUserError ul li').text() !== ""){
-								$('#serverUserError').css("display","block");
-							}
-							if ($('#serverPassError ul li').text() !== ""){
-							$('#serverPassError').css("display","block");
-							}
-						}
-					}		
-				});
-				return false;
-			}
-            t++;
-        })
-    });
-	
-
 	/*$(document).on('blur','#txtUserName',function(){
 
 		var value = $(this).val();
 		$('[name="email"]').val(value);
 
-	});	*/
-
-
-
-	$(document).on('click','#forgotPassword',function(){
-	
-		var txtVal = $('#txtForgotPassword').val().trim();
-			if(txtVal.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})$/)){
-				$('#errEmailPassword').html('');
-				$('#loadingImage').show();
-				$.ajax({
-					type: 'POST',
-					url: '/user/forgotpassword',
-					data: {emailTxt:txtVal},
-
-					dataType: 'json',
-
-					success:function(result){
-						if(result.status==1)
-						{
-							$('#errEmailPassword').show();
-							$('#loadingImage').hide();
-							$('#errEmailPassword').html('Email id doesnt exist');
-							$('#txtForgotPassword').val('');
-					
-						}
-						else if(result.status==2)
-							{	
-								$('#errEmailPassword').show();
-							$('#errEmailPassword').html('Your password has been sent to email');
-							$('#forgotPassword').hide();
-							$('#loadingImage').hide();
-							$('#goToLogin').show();
-								$("#goToLogin").click(function(){
-											$('#txtForgotPassword').val('');
-											$('#errEmailPassword').hide();
-											$('#forgotPassword').show();
-											$('#goToLogin').hide();
-  									$('#myModal').modal('hide');
-							 // window.location.href = "/user/login";
-											}); 
-
-
-							  
-									//$('#myModal').modal('hide');
-							  //window.location.href = "/user/login";
-							}
-					}		
-				});
-
-
-
-		
-	} else {
-		$('#errEmailPassword').html('Invalid email id');
-		$('#errEmailPassword').show();
-		$("#modalCloseButton").click(function(){
-											$('#txtForgotPassword').val('');
-											$('#errEmailPassword').hide();
-  											$('#myModal').modal('hide');
-
-							 				 //window.location.href = "/user/login";
-									}); 
-
-	}
-
-
-
-
-});
+	});	*/     
 });
 
 $(document).on('click','#resetbtn',function (event) {
@@ -553,11 +393,7 @@ $(document).on('click','#resetbtn',function (event) {
 
 });
 
-
-$(document).on('focus','#captchaimg_signup',function () {
-	
-	
+$(document).on('focus','#captchaimg_signup',function () {	
 	$('#errCaptcha').html('	');
-	
 	$('#captchaimg_signup').val("");
 });

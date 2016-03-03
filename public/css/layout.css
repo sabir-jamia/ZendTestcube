@@ -1101,7 +1101,7 @@ cursor: pointer;
 		}
 
 
-		#test-quescount h1, h4 {
+		#test-quescount {//h1, h4 {
 		    float: left;
 		    margin: 0 0 30px 15px;
 		}
