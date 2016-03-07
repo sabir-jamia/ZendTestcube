@@ -57,11 +57,11 @@ $form->prepare();
 							<?php echo $this->formElement($form->get('confirm-password'));?>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group">						
 						<?php echo $this->formLabel($form->get('captcha'));?>
+						<a href="#" id="refreshbutton">Refresh Code</a>
 						<div class="col-md-9">
-							<?php echo $this->formElement($form->get('captcha'));?>
-								<a href="#" id="refreshbutton">Refresh Code</a>
+							<?php echo $this->formElement($form->get('captcha'));?>								
 						</div>
 					</div>					
 					<div class="form-group">

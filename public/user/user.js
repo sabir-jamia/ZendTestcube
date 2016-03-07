@@ -53,6 +53,18 @@ $(document).ready(function(){
     	}
 	});
 	
+	$(document).on('click','#refreshbutton',function() {
+		$.ajax({
+			url: '/user/refresh',
+			data: '',
+			dataType: 'json',
+			success:function(data){
+				$('#captcha-image').attr('src', '/captcha/' + data.src); 
+		        $('#captcha-hidden').val(data.id);
+			}
+		});
+	});
+	
     $(document).on('click','#forgot-password',function () {
     	loaderWait('show');
     	$('#txt-email-error').remove();

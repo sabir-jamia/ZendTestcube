@@ -15,6 +15,7 @@ use Zend\Form\Element\File;
 use Zend\InputFilter\FileInput;
 use Zend\File\Transfer\Adapter\Http;
 use Zend\Filter\File\RenameUpload;
+use Zend\Session\AbstractContainer;
 // use Zend\File\Transfer\Adapter\Http;
 class UserController extends AbstractActionController
 {
@@ -150,6 +151,23 @@ class UserController extends AbstractActionController
         }
     }
     
+    public function checkCaptchaAction()
+    {
+        $captchaHiddenId = $this->params()->fromPost('captcha-hidden');
+        $captcha = $this->params()->fromPost('captcha');
+        $captchaInput = $captcha['input'];
+        $captchaSession = new Container('Zend_Form_Captcha_'.trim($captchaHiddenId));
+        $captchaSession->setExpirationHops(100);
+        $captchaIterator = $captchaSession->getIterator();
+        $captchaWord = $captchaIterator['word'];
+        if($captchaWord == $captchaInput) {
+            echo "true";
+        } else {
+            echo "false";
+        }
+        return $this->getResponse();
+    }
+    
     public function getBaseUrl()
     {
         $config = $this->serviceLocator->get('config');
@@ -202,19 +220,16 @@ class UserController extends AbstractActionController
         return $this->_clientUsersTable;
     }
 
-    public function referAction()
+    public function refreshAction()
     {
         $form = new RegisterForm();
         $captcha = $form->get('captcha')->getCaptcha();
-        
         $id = $captcha->generate();
         $src = $captcha->getId() . $captcha->getSuffix();
-        
-        $response = $this->getResponse();
-        $response->setContent(JSON::encode(array(
+        return new JsonModel(array(
             'id' => $id,
             'src' => $src
-        )));
+        ));
         return $response;
     }
 
@@ -233,15 +248,14 @@ class UserController extends AbstractActionController
 
     public function checkUserExistsAction()
     {
-        $jsonModel = new JsonModel();
-        $user = $this->getRequest()->getPost('user');
+        $user = $this->params()->fromPost('user');
         $userExists = $this->getusersTable()->checkUserExists($user);
         if (! $userExists) {
-            $jsonModel->setVariable('status', 0);
+            echo "true";
         } else {
-            $jsonModel->setVariable('status', 1);
+            echo "false";
         }
-        return $jsonModel;
+        return $this->getResponse();
     }
 
     public function userProfileAction()

@@ -129,7 +129,8 @@ class RegisterForm extends Form
             'fontSize' => '20',
             'imgDir' => getcwd() . '/public/captcha',
             'imgUrl' => '/captcha'
-        ));
+        ));        
+        $this->captcha->setKeepSession(true);
         
         $this->add(array(
             'name' => 'captcha',

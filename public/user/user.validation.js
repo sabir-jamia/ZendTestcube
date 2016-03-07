@@ -1,16 +1,33 @@
 $(document).ready(function(){
+	var errorSpanAdd = function(elementId, message){
+		var error = '<span class="text-danger" style="display: inline;">'+
+					'<label id="'+elementId+'-error" class="error" style="display: inline;" for='+
+					elementId+'>'+message+ 
+					'</label></span>';
+		$('#'+elementId).parent('div').append(error);
+	}
+	
+	var errorSpanRemove = function(elementId) {
+		$('#'+elementId+'-error').parent('span').remove();
+	}
+
 	$.validator.addMethod("validName", function(value, element, regexp) {
 		var re = new RegExp(regexp);
 		return re.test(value);
 	}, "Enter valid Name");
 	
-	var validator = $('#register').validate({
+	$('#register').validate({
 		rules: {
 			'user-name':{
 				required : true,
             	validName : /^[a-zA-Z0-9_]*$/,
             	minlength : 5,
-            	maxlength :20
+            	maxlength :20,
+            	remote : {
+            			url : '/user/checkUserExists',
+            			type : 'post',
+            			data : {user :function() {return $('#user-name').val();}}
+            	}
        	 	},
         	'first-name':{
         		required: true,
@@ -28,7 +45,12 @@ $(document).ready(function(){
             	required: true,
             	minlength :7,
             	email: true,
-            	maxlength :150
+            	maxlength :150,
+            	remote : {
+        			url : '/user/checkUserExists',
+        			type : 'post',
+        			data : {user :function() {return $('#email').val();}}
+            	}
          	},
          	'password':{
             	required: true,
@@ -40,7 +62,26 @@ $(document).ready(function(){
             	minlength :5,
             	maxlength :150,
             	equalTo : '#password'
+          	},
+          	'captcha[input]' : {
+          		required : true,
+          		remote : {
+        			url : '/user/checkCaptcha',
+        			type : 'post',
+        			data : {'captcha-hidden':function() {return $('#captcha-hidden').val();}}
+            	}
           	}
+    	},
+    	messages: {
+    		'user-name' : {
+    			remote : "Username already taken"
+    		},
+    		'email' : {
+    			remote : "Email already taken"
+    		},
+    		'captcha[input]' : {
+    			remote : "Captcha is invalid"
+    		}
     	},
         errorPlacement: function(label, element) {
             label.addClass('text-danger');
@@ -51,52 +92,11 @@ $(document).ready(function(){
 	        $(element).parent('div').addClass('has-error has-feedback');
 	    },
 	    unhighlight: function(element) {
-	    	if()
 	    	$(element).parent('div').removeClass('has-error has-feedback');
 	    },
     	submitHandler: function (form) {
     		return false;
     	}
-	});
-	
-	var user = '';
-	var prevUser = '';
-	var errorSpan = function(elementId,value){
-		var error = '<span class="text-danger" style="display: inline;">'+
-					'<label id="'+elementId+'-error" class="error" style="display: inline;" for='+
-					elementId+'>'+value+' is already taken'+ 
-					'</label></span>';
-		$('#'+elementId).parent('div').append(error);
-		$('#'+elementId).attr('data-checkuser', 1);
-	}
-	function checkUserExists(elementId, value) {
-		if(validator.element('#'+elementId)) {
-			user = $('#'+elementId).val();
-			if(prevUser != user) {
-				$.ajax ({
-					type: 'post',
-					dataType: 'json',
-					url: '/user/checkUserExists',
-					data: {'user' : $('#'+elementId).val()},
-					success: function(data){
-						$('#'+elementId+'-error').parent('span').remove();
-						$('#'+elementId).attr('data-checkuser', 0);
-						if(data.status) {
-							errorSpan(elementId, value);
-						}
-					}
-				});
-				prevUser = user;
-			}
-		}
-	}
-	
-	$('#user-name').focusout(function () {
-		checkUserExists('user-name', 'Username');
-	});
-	
-	$('#email').focusout(function () {
-		checkUserExists('email', 'Email');
 	});
 	
 	$('#login').validate({ // initialize the plugin
