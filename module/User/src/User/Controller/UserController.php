@@ -19,11 +19,11 @@ use Zend\Filter\File\RenameUpload;
 class UserController extends AbstractActionController
 {
 
-    private $usersTable = null;
+    private $_usersTable = null;
 
-    private $clientUsersTable = null;
+    private $_clientUsersTable = null;
 
-    private $authservice = null;
+    private $_authservice = null; 
 
     function attachScriptsAndStyleSheet()
     {
@@ -67,25 +67,27 @@ class UserController extends AbstractActionController
         $request = $this->getRequest();
         $response = $this->getResponse();
         
-        if ($request->isXmlHttpRequest()) { // If it's ajax call
-            $emailId = $request->getPost('emailTxt');
-            if (! empty($emailId)) {
+        if ($request->isXmlHttpRequest()) {
+            if ($request->getMethod() == 'GET') {
+                $viewModel = new ViewModel();
+                $viewModel->setTerminal(true);
+                return $viewModel;
+            } else {
+                $emailId = $request->getPost('emailTxt');
                 $validEmailvalue = $this->checkValue($emailId);
                 $jsonModel = new JsonModel();
                 if ($validEmailvalue == 1) { // password does not exists
-                    $jsonModel->setVariable(status, 1);
+                    $jsonModel->setVariable('status', 1);
                 } elseif ($validEmailvalue == 2) {
                     $var = $this->getusersTable()->getPasswordByEmail($emailId);
-                    $serviceManager = $this->getServiceLocator();
-                    $mailTemplate = $serviceManager->get('Email\Model\EmailTemplate');
+                    $mailTemplate = $this->serviceLocator->get('Email\Model\EmailTemplate');
                     $mailTemplateData = $mailTemplate->getMailTemplate('ForgotPassword');
                     $messageBody = "Password : " . $var;
                     $emailIds[] = $emailId;
                     $mailData['mailTemplateData'] = $mailTemplateData;
                     $mailData['messageBody'] = $messageBody;
                     $mailData['emailIds'] = $emailIds;
-                    $serviceManager = $this->getServiceLocator();
-                    $mailer = $serviceManager->get('EmailService');
+                    $mailer = $this->serviceLocator->get('EmailService');
                     $mailer->sendMail($mailData);
                     
                     $htmlViewPart = new ViewModel();
@@ -103,13 +105,54 @@ class UserController extends AbstractActionController
                 return $jsonModel;
             }
         }
-        return new ViewModel();
     }
-
+    
+    public function registerAction()
+    {
+        $request = $this->getRequest();
+        
+        if($request->isXmlHttpRequest()) {
+            $response = $this->getResponse();
+            $form = new RegisterForm();
+            if($request->getMethod() == 'GET') {
+                $view = new ViewModel(array(
+                    'form' => $form
+                ));
+                $view->setTerminal(true);
+                return $view;
+            } else {
+                $jsonModel = new JsonModel();
+                $userEmail = $request->getPost('email');
+                //$userId = $request->getPost('id');
+                $register = new User();
+                $form->setInputFilter($register->getInputFilter());
+                $form->setData($request->getPost());
+                if (!$form->isValid()) {
+                    $register->exchangeArray($form->getData());
+                    $msg = $this->getusersTable()->saveUser($register);
+                    $str = $this->mntencodeAlgo($msg);
+                    $url = $this->getBaseUrl() . "?id=" . $str;
+                    $mailTemplate = $this->serviceLocator->get('Email\Model\EmailTemplate');
+                    $mailTemplateData = $mailTemplate->getMailTemplate('clientregistration');   
+                    $messageBody = $url;
+                    $emailIds[] = $userEmail;
+                    $mailData['mailTemplateData'] = $mailTemplateData;
+                    $mailData['messageBody'] = $messageBody;
+                    $mailData['emailIds'] = $emailIds;  
+                    $mailer = $this->serviceLocator->get('EmailService');   
+                    $mailer->sendMail($mailData);   
+                    $jsonModel->setVariable('status', 1);
+                } else {
+                    $jsonModel->setVariable('status', 1);                
+                }
+                return $jsonModel;
+            }
+        }
+    }
+    
     public function getBaseUrl()
     {
-        $sm = $this->getServiceLocator();
-        $config = $sm->get('config');
+        $config = $this->serviceLocator->get('config');
         return $config['applicationSettings']['appLink'];
     }
 
@@ -133,94 +176,30 @@ class UserController extends AbstractActionController
 
     public function getAuthService($usernameType = '')
     {
-        if (! $this->authservice) {
-            $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        if (! $this->_authservice) {
+            $dbAdapter = $this->serviceLocator->get('Zend\Db\Adapter\Adapter');
             $authAdapter = new AuthAdapter($dbAdapter, 'users', $usernameType, 'password', 'MD5(?)');
             $authService = new AuthenticationService();
             $authService->setAdapter($authAdapter);
-            $this->authservice = $authService;
+            $this->_authservice = $authService;
         }
-        return $this->authservice;
-    }
-
-    public function registerAction()
-    {
-        $form = new RegisterForm();
-        $form->get('register-submit')->setValue('Sign Up');
-        $request = $this->getRequest();
-        $response = $this->getResponse();
-        
-        if ($request->isPost()) {
-            $userEmail = $request->getPost('email');
-            $userId = $request->getPost('id');
-            
-            $register = new User();
-            $form->setInputFilter($register->getInputFilter());
-            $form->setData($request->getPost()); // setting requested data to form object
-            
-            if ($form->isValid()) {
-                $register->exchangeArray($form->getData());
-                $msg = $this->getusersTable()->saveUser($register);
-                $str = $this->mntencodeAlgo($msg);
-                $url = $this->getBaseUrl() . "?id=" . $str;
-                
-                $serviceManager = $this->getServiceLocator();
-                $mailTemplate = $serviceManager->get('Email\Model\EmailTemplate');
-                $mailTemplateData = $mailTemplate->getMailTemplate('clientregistration');
-                
-                $messageBody = $url;
-                $emailIds[] = $userEmail;
-                
-                $mailData['mailTemplateData'] = $mailTemplateData;
-                $mailData['messageBody'] = $messageBody;
-                $mailData['emailIds'] = $emailIds;
-                
-                var_dump($mailData);
-                die();
-                
-                $serviceManager = $this->getServiceLocator();
-                $mailer = $serviceManager->get('EmailService');
-                
-                $mailer->sendMail($mailData);
-                
-                $response = $this->getResponse();
-                $response->setContent(JSON::encode(array(
-                    'succ' => 1
-                )));
-            } else {
-                
-                $response = $this->getResponse();
-                $response->setContent(JSON::encode(array(
-                    'succ' => 0
-                )));
-            }
-            return $response;
-        }
-        
-        $view = new ViewModel(array(
-            'form' => $form
-        ));
-        $view->setTerminal(true);
-        return $view;
+        return $this->_authservice;
     }
 
     public function getusersTable()
     {
-        if (! $this->usersTable) {
-            $serviceManager = $this->getServiceLocator();
-            $this->usersTable = $serviceManager->get('User\Model\UserTable');
+        if (! $this->_usersTable) {
+            $this->_usersTable = $this->serviceLocator->get('User\Model\UserTable');
         }
-        return $this->usersTable;
+        return $this->_usersTable;
     }
 
     public function getClientusersTable()
     {
-        if (! $this->clientUsersTable) {
-            $serviceManager = $this->getServiceLocator();
-            $this->clientUsersTable = $serviceManager->get('User\Model\ClientUserTable');
+        if (! $this->_clientUsersTable) {
+            $this->_clientUsersTable = $this->serviceLocator->get('User\Model\ClientUserTable');
         }
-        
-        return $this->clientUsersTable;
+        return $this->_clientUsersTable;
     }
 
     public function referAction()
@@ -252,22 +231,17 @@ class UserController extends AbstractActionController
         return $this->redirect()->toRoute('home');
     }
 
-    public function checkValAction()
+    public function checkUserExistsAction()
     {
-        $txtVal = $this->getRequest()->getPost('txtVal');
-        $checkVal = $this->getusersTable()->checkVal($txtVal);
-        if (! $checkVal) {
-            $response = $this->getresponse();
-            $response->setContent(JSON::encode(array(
-                'val' => 0
-            )));
+        $jsonModel = new JsonModel();
+        $user = $this->getRequest()->getPost('user');
+        $userExists = $this->getusersTable()->checkUserExists($user);
+        if (! $userExists) {
+            $jsonModel->setVariable('status', 0);
         } else {
-            $response = $this->getResponse();
-            $response->setContent(JSON::encode(array(
-                'val' => 1
-            )));
+            $jsonModel->setVariable('status', 1);
         }
-        return $response;
+        return $jsonModel;
     }
 
     public function userProfileAction()
@@ -526,7 +500,7 @@ class UserController extends AbstractActionController
             ->getAdapter()
             ->setIdentity($username)
             ->setCredential($password);
-        $result = $this->authservice->authenticate();
+        $result = $this->_authservice->authenticate();
         
         if ($result->isValid()) {
             $userData = $this->getusersTable()->getUserByUserName($username, $usernameType);

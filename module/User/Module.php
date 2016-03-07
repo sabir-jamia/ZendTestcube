@@ -37,6 +37,9 @@ class Module
                 'User\Model\UserTable' => function ($sm) {
                     $tableGateway = $sm->get('UserTableGateway');
                     $table = new UserTable($tableGateway);
+                    $config = $sm->get('config');
+                    $dbConfig = $config['db'];
+                    $table->setDbCredentails($dbConfig);
                     return $table;
                 },
                 'UserTableGateway' => function ($sm) {

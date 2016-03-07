@@ -15,31 +15,23 @@ class UserTable
 
     protected $resultSetPrototype;
 
-    private $dbUser = 'root';
+    private $_dbConfig;
+    
+    private $_adapter;
 
-    private $dbPass = 'tolexo';
-
-    private $dbHost = 'localhost';
-
-    private $db;
-
-    private $con;
+    private $_connection;
 
     public function __construct(TableGateway $tableGateway)
     {
         $this->tableGateway = $tableGateway;
-        $this->db = $this->tableGateway->getAdapter();
-        $this->con = $this->db->getDriver()->getConnection();
+        $this->_adapter = $this->tableGateway->getAdapter();
+        $this->_connection = $this->_adapter->getDriver()->getConnection();
         $this->resultSetPrototype = new ResultSet();
-        
-        $dbAdapterConfig = array(
-            'driver' => 'Pdo',
-            'dsn' => 'mysql:dbname=testcubedb;host=localhost',
-            'username' => 'root', // 'client0'.$this->clientId,
-            'password' => 'tolexo'
-        ); // 'client0'.$this->clientId,
-        
-        $this->dbAdapter12 = new Adapter($dbAdapterConfig);
+    }
+
+    public function setDbCredentails($dbConfig)
+    {
+        $this->_dbConfig = $dbConfig;
     }
 
     public function userlist()
@@ -52,8 +44,7 @@ class UserTable
 
     public function saveUser(User $register)
     {
-        $this->con->beginTransaction();
-        
+        $this->_connection->beginTransaction();
         $data = array(
             'username' => $register->username,
             'email' => $register->email,
@@ -78,21 +69,23 @@ class UserTable
                 'first_name' => $first_name,
                 'last_name' => $last_name
             );
-            $sql = new Sql($this->tableGateway->getAdapter());
+            $sql = new Sql($this->_adapter);
             $select = $sql->insert('user_profile')->values($userProfileData);
             $statement = $sql->prepareStatementForSqlObject($select);
-            $result = $this->resultSetPrototype->initialize($statement->execute());
+            $statement->execute();
             
             $stmt = "CREATE SCHEMA IF NOT EXISTS `clientdb0" . $client_id . "` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;";
             $stmt .= "use `clientdb0" . $client_id . "` ;";
             $stmt .= "CREATE USER 'client0" . $client_id . "'@'localhost' IDENTIFIED BY 'client0" . $client_id . "';";
             $stmt .= "GRANT SELECT, INSERT, UPDATE, DELETE ON clientdb0" . $client_id . ".* TO 'client0" . $client_id . "'@'localhost';";
-            $query = $this->db->query($stmt);
+            $query = $this->_adapter->query($stmt);
             $result = $query->execute()
                 ->getResource()
                 ->closeCursor();
             
-            $sqlConn = "mysql -u$this->dbUser -p$this->dbPass -h$this->dbHost clientdb0" . $client_id . " < " . dirname(__FILE__) . "/clientdb.sql";
+            $dbUser = $this->_dbConfig['username'];
+            $dbPass = $this->_dbConfig['password'];
+            $sqlConn = "mysql -u$dbUser -p$dbPass -hlocalhost clientdb0" . $client_id . " < " . dirname(__FILE__) . "/clientdb.sql";
             exec($sqlConn);
             
             $newdata = array(
@@ -103,11 +96,10 @@ class UserTable
                 'created_on' => $register->registration_date
             );
             $this->tableGateway->insert($newdata);
-            $this->con->commit();
-            
+            $this->_connection->commit();
             return $client_id;
         } catch (Exception $e) {
-            $this->con->rollback();
+            $this->_connection->rollback();
         }
     }
 
@@ -203,17 +195,17 @@ class UserTable
         }
     }
 
-    public function checkVal($txtVal)
+    public function checkUserExists($user)
     {
-        $pos = strpos($txtVal, '@');
+        $pos = strpos($user, '@');
         if ($pos === false) {
             $rowset = $this->tableGateway->select(array(
-                'username' => $txtVal
+                'username' => $user
             ));
             $row = $rowset->current();
         } else {
             $rowset = $this->tableGateway->select(array(
-                'email' => $txtVal
+                'email' => $user
             ));
             $row = $rowset->current();
         }

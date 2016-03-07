@@ -9,13 +9,14 @@ $form->prepare();
 			<div class="panel-heading">
 				<div class="panel-title">Sign Up</div>
 				<div style="float: right; font-size: 85%; position: relative; top: -10px">
-					<a id="signinlink" href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">
+					<a id="signinlink" href="/">
 						Sign In
 					</a>
 				</div>
 			</div>
 			<div class="panel-body">
 				<?php echo $this->form()->openTag($form);?>
+				<?php echo $this->formHidden($form->get('id'));?>
 					<div id="signupalert" style="display: none" class="alert alert-danger">
 						<p>Error:</p>
 						<span></span>

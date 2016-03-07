@@ -76,15 +76,16 @@ class Module
 
     public function loadConfiguration(MvcEvent $e)
     {
+        $req = $e->getRequest();
         $eventManager = $e->getApplication()->getEventManager();
         $sm = $e->getApplication()->getServiceManager();
         $controller = $e->getTarget();
         $controllerClass = get_class($controller);
         $moduleNamespace = substr($controllerClass, 0, strpos($controllerClass, '\\'));
-        
+        if ($req->isXmlHttpRequest()) {
+            return;
+        }
         $controller->layout()->modulenamespace = $moduleNamespace;
-        
-        $req = $e->getRequest();
         
         if ($req->isXmlHttpRequest()) {
             return;

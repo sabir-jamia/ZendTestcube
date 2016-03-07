@@ -1,46 +1,50 @@
 $(document).ready(function(){
 	$(document).on('click','#login-submit', function() {
-		var formData = $('#login').serialize();
-		$.ajax({
-			type: 'POST',
-			url: '/user/login',
-			data: formData,
-			success:function(data){
-				try {
-					if(data.flag=='loginsuccess') {
-						window.location.href = "/dashboard";
-					} else if(data.flag=='loginFail') {
-						$('#login-text2').html('Wrong Credentials');
-						$('#txtPassword').val('');
-					} else if(data.flag=='notconfirmed') {
-						$('#login-text2').html('Account Not Active!');
-						$('#txtPassword').val('');
+		if($('#login').valid()) {
+			var formData = $('#login').serialize();
+			$.ajax({
+				type: 'POST',
+				url: '/user/login',
+				data: formData,
+				success:function(data){
+					try {
+						if(data.flag=='loginsuccess') {
+							window.location.href = "/dashboard";
+						} else if(data.flag=='loginFail') {
+							$('#login-alert').text('Wrong Credentials');
+							$('#login-alert').show();
+						} else if(data.flag=='notconfirmed') {
+							$('#login-alert').text('Account Not Active!');
+							$('#login-alert').show();
+						}
+					} catch(e){
+						$('#content').html(data);
+						if ($('#serverUserError ul li').text() !== "") {
+							$('#serverUserError').css("display","block");
+						}
+						if ($('#serverPassError ul li').text() !== "") {
+							$('#serverPassError').css("display","block");
+						}
 					}
-				} catch(e){
-					$('#content').html(data);
-					if ($('#serverUserError ul li').text() !== "") {
-						$('#serverUserError').css("display","block");
-					}
-					if ($('#serverPassError ul li').text() !== "") {
-						$('#serverPassError').css("display","block");
-					}
-				}
-			}		
-		});
+				}		
+			});
+		}
 	});
 	
 	$(document).on('click','#register-submit',function () {
 		if($('#register').valid()) {
-			$('#loadingImage').show();
+			loaderWait('show');
     		$.ajax({
     			type: 'POST',
     			url: '/user/register',
-    			data: {emailTxt:$("#txt-email").val()},
+    			data: $('#register').serialize(),
     			dataType: 'json',
     			success:function(result) {
+    				console.log(result);
+					loaderWait('hide');
     				if(result.status==1) {
-    					$('#loadingImage').hide();
-    					$('#txt-email').parent().append('<label id="txt-email-error" class="error" for="txt-email">Please enter a valid email address.</label>');
+    					$('#signupalert').removeClass().addClass('alert alert-success');
+    					$('#signupalert').show();
     				} else if(result.status==2) {
     					$('#content').html(result.html);
     				}
@@ -50,8 +54,9 @@ $(document).ready(function(){
 	});
 	
     $(document).on('click','#forgot-password',function () {
+    	loaderWait('show');
+    	$('#txt-email-error').remove();
     	if($('#frm-forgot-password').valid()) {
-    		$('#loadingImage').show();
     		$.ajax({
     			type: 'POST',
     			url: '/user/forgotPassword',
@@ -59,13 +64,17 @@ $(document).ready(function(){
     			dataType: 'json',
     			success:function(result) {
     				if(result.status==1) {
-    					$('#loadingImage').hide();
-    					$('#txt-email').parent().append('<label id="txt-email-error" class="error" for="txt-email">Please enter a valid email address.</label>');
+    					loaderWait('hide');
+    					$('#txt-email').parent().append('<label id="txt-email-error" class="error text-danger" for="txt-email">Please enter a valid email address.</label>');
     				} else if(result.status==2) {
-    					$('#content').html(result.html);
+    					loaderWait('hide');
+    					$('#popup-content .modal-body').html(result.html);
+    					$('#forgot-password').remove();
     				}
     			}		
     		});
+    	} else {
+    		loaderWait('hide');
     	}
     });
     
@@ -80,4 +89,32 @@ $(document).ready(function(){
             }
     	});
     });
+    
+    $(document).on('click','#ancr-forgot-password',function(){
+    	$.ajax({
+    		type: 'Get',
+            dataType: 'html',
+            url: '/user/forgotPassword',
+            data: '',
+            success: function(data){
+            	$('#popup-content').html(data);
+            	$('#myModal').modal('show');
+            }
+    	});
+    });
+    
+    function loaderWait(action) {
+    	if(action == 'show') {
+    		var height = window.innerHeight/2;
+    		var width = window.innerWidth/2;
+    		$('body').append('<div class="clo-md-3 modal fade in" style="display:block;z-index:1070">'+
+    				'<img id="loadingImage" lass="img-responsive" src="/img/loading.gif"'+
+    				' style="width: 80px; margin-top:220px; margin-left:620px;" >'+
+    				'</div>');
+    		$('body').append('<div id="loader-backdrop" class="modal-backdrop fade in" style="z-index:1060;"></div>');
+        } else {
+        	$('#loadingImage').parent('div').remove();
+        	$('#loader-backdrop').remove();
+        }
+    }
 });
