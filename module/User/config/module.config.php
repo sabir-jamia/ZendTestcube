@@ -46,5 +46,10 @@ return array(
     ),
     'module_config' => array(
         'upload_location' => $_SERVER['DOCUMENT_ROOT'] . '/profilePics'
-    )
+    ),
+    'service_manager' => array(
+        'abstract_factories' => array(
+            'UserAbstractFactory' => 'User\Model\Factory\UserAbstractFactory',
+        ),
+    ),
 );

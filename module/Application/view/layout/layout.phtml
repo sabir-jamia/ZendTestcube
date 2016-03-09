@@ -3,81 +3,67 @@ use Zend\Session\Container;
 ?>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <?php echo $this->headTitle($this->translate('TestCube Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
-        <?php echo $this->headMeta()
-                        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
-                        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
-        ?>
-        <!-- Le styles -->
-        <?php 
+    <meta charset="utf-8">
+    <?php
+        echo $this->headTitle($this->translate('TestCube Application'))->setSeparator(' - ')->setAutoEscape(false);
+        echo $this->headMeta()
+                  ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+                  ->appendHttpEquiv('X-UA-Compatible', 'IE=edge');
         $theme = 'blue';
-        if(isset($themeselected)) {
-            if($themeselected['themeselected'] == 1){
+        if(isset($themeselected)) :
+            if($themeselected['themeselected'] == 1) :
                 $theme = 'red';
-            }
-            elseif ($themeselected['themeselected'] == 2) {
+            elseif ($themeselected['themeselected'] == 2) :
                 $theme = 'green';
-            }
-            elseif ($themeselected['themeselected'] == 3) {
+            elseif ($themeselected['themeselected'] == 3) :
                 $theme = 'yellow';
-            }
-        }
-        ?>
-
-        <?php  $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
-                        ->prependStylesheet($this->basePath() . '/css/themes/'.$theme.'.css')
-                        //->prependStylesheet($this->basePath() . '/css/certificate.css')
-        				->prependStylesheet($this->basePath() . '/css/bootstrap_datetimepicker.css')
-                        ->prependStylesheet($this->basePath() . '/css/category.css')
-                        ->prependStylesheet($this->basePath() . '/css/style.css')
-                        //->prependStylesheet($this->basePath() . '/css/question.css')
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
-                        ->prependStylesheet($this->basePath() . '/css/DT_bootstrap.css')
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
-        				->prependStylesheet($this->basePath() . '/css/layout.css')
-        				
-                        //->prependStylesheet($this->basePath() . '/css/category.css') ?>
-
-        <!-- Scripts -->
-
-        <?php  $this->headScript()
-        	//->prependFile($this->basePath() . '/js/certificate.js')
+            endif;
+       endif;
+       $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+            ->prependStylesheet($this->basePath() . '/css/themes/'.$theme.'.css')
+            ->prependStylesheet($this->basePath() . '/css/certificate.css')
+            ->prependStylesheet($this->basePath() . '/css/bootstrap_datetimepicker.css')
+            ->prependStylesheet($this->basePath() . '/css/category.css')
+            ->prependStylesheet($this->basePath() . '/css/style.css')
+            ->prependStylesheet($this->basePath() . '/css/question.css')
+            ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
+            ->prependStylesheet($this->basePath() . '/css/DT_bootstrap.css')
+            ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
+        	->prependStylesheet($this->basePath() . '/css/layout.css')
+        	->prependStylesheet($this->basePath() . '/css/category.css'); 
+       $this->headScript()
+            ->prependFile($this->basePath() . '/js/certificate.js')
         	->prependFile($this->basePath() . '/js/bootstrap-datetimepicker.js')
         	->prependFile($this->basePath() . '/js/moment.min.js')
             ->prependFile($this->basePath() . '/js/category.js')
             ->prependFile($this->basePath() . '/js/validationcode.js') 
             ->prependFile($this->basePath() . '/js/jquery.validate.js')
         	->prependFile($this->basePath() . '/js/script.js')
-            //->prependFile($this->basePath() . '/js/question.js')
-            //->prependFile($this->basePath() . '/js/result.js')
-            //->prependFile($this->basePath() . '/js/test.js')
+            ->prependFile($this->basePath() . '/js/question.js')
+            ->prependFile($this->basePath() . '/js/result.js')
+            ->prependFile($this->basePath() . '/js/test.js')
             ->prependFile($this->basePath() . '/js/jquery.dataTables.min.js')
             ->prependFile($this->basePath() . '/js/bootstrap.min.js')
-            ->prependFile($this->basePath() . '/js/jquery.min.js')
-            
-
+            ->prependFile($this->basePath() . '/js/jquery.min.js')      
             ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
-            ->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
-        ; ?>
-
-    
-<?php
-
-$link = isset($this->layout()->modulenamespace)?$this->layout()->modulenamespace:"Error";
-if($link == "Application" || $link == "Error" || $link = "NotLoggedIn"){
-
-echo $this->headLink();
-echo $this->headScript();
-
-	?>
-	 </head>
+            ->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',));
+       
+       $this->inlineScript()
+            ->prependFile($this->basePath('/user/user.validation.js'));
+            
+       $link = isset($this->layout()->modulenamespace)?$this->layout()->modulenamespace:"Error";
+            
+       if($link == "Application" || $link == "Error" || $link = "NotLoggedIn") :
+           echo $this->headLink();
+           echo $this->headScript();
+    ?>
+	</head>
     <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
+    	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    		<div class="container">
+    			<div class="navbar-header">
+    				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    					<span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
@@ -91,43 +77,35 @@ echo $this->headScript();
                         <li class=""><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Help') ?></a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
-
             </div>
         </nav>
-        <div class="container">
-            
-	  <div id="content">
-	  	<?php echo $this->content; ?>
-
-    </div> <!-- end of content -->
-            <hr>
+        <div class="container"> 
+	  		<div id="content">
+	  			<?php echo $this->content; ?>
+    		</div> <!-- end of content -->
+           	<hr>
             <footer id="footer">
                 <p>&copy; <?php echo date('Y') ?> by OSSCube Pvt. Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
             </footer>
-        </div> <!-- /container -->
+        </div> <!-- end of container -->
         <?php echo $this->inlineScript() ?>
     </body>
 </html>
-	
-	<?php 
-}
-else if($link == "Student"){
-
-
-echo	$this->headLink() 	->prependStylesheet($this->basePath() . '/css/countdownTimer.css')
-							->prependStylesheet($this->basePath() . '/css/student.css');
-echo $this->headScript()	->prependFile($this->basePath() . '/js/student.js')
-->appendFile($this->basePath() . '/js/countdownTimer.js')
-;
-							
-
+<?php 
+    elseif($link == "Student") :
+        echo $this->headLink()
+                  ->prependStylesheet($this->basePath() . '/css/countdownTimer.css')
+				  ->prependStylesheet($this->basePath() . '/css/student.css');
+        echo $this->headScript()
+                  ->prependFile($this->basePath() . '/js/student.js')
+                  ->appendFile($this->basePath() . '/js/countdownTimer.js');
 ?>
-	 </head>
+	</head>
     <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    		<div class="container">
+    			<div class="navbar-header">
+    				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -142,15 +120,12 @@ echo $this->headScript()	->prependFile($this->basePath() . '/js/student.js')
                         <li class=""><a href="<?php echo $this->url('student') ?>"><?php echo $this->translate('Help') ?></a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
-
             </div>
         </nav>
-        <div class="container">
-            
-	  <div id="content">
-	  	<?php echo $this->content; ?>
-
-    </div> <!-- end of content -->
+        <div class="container">  
+	  		<div id="content">
+	  			<?php echo $this->content; ?>
+    		</div> <!-- end of content -->
             <hr>
             <footer id="footer">
                 <p>&copy; <?php echo date('Y') ?> by OSSCube Pvt. Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
@@ -159,184 +134,149 @@ echo $this->headScript()	->prependFile($this->basePath() . '/js/student.js')
         <?php echo $this->inlineScript() ?>
     </body>
 </html>
-<?php }
-else{
-//$catCount = '0';
-//$quesCount = '0';
-//$quesCount = '0';
-//$testCount = '0';
-//$certiCount = '0';
-//$usrCount = '0';
-//$resCount = '0';
+<?php 
+    else:
+    //$catCount = '0';
+    //$quesCount = '0';
+    //$quesCount = '0';
+    //$testCount = '0';
+    //$certiCount = '0';
+    //$usrCount = '0';
+    //$resCount = '0';
 
+    if(isset($countData)) :
+	   (isset($countData['totalCategory']))?$catCount=$countData['totalCategory']:$catCount = '0';
+	   (isset($countData['totalQuestion']))?$quesCount=$countData['totalQuestion']:$quesCount = '0';
+	   (isset($countData['totalTest']))?$testCount=$countData['totalTest']:$testCount = '0';
+	   (isset($countData['totalCertificate']))?$certiCount=$countData['totalCertificate']:$certiCount = '0';
+	   (isset($countData['totalUsers']))?$usrCount=$countData['totalUsers']:$usrCount = '0';
+	   (isset($countData['totalResult']))?$resCount=$countData['totalResult']:$resCount = '0';
+    endif;
 
-if (isset($countData)) {
-	(isset($countData['totalCategory']))?$catCount=$countData['totalCategory']:$catCount = '0';
-	(isset($countData['totalQuestion']))?$quesCount=$countData['totalQuestion']:$quesCount = '0';
-	(isset($countData['totalTest']))?$testCount=$countData['totalTest']:$testCount = '0';
-	(isset($countData['totalCertificate']))?$certiCount=$countData['totalCertificate']:$certiCount = '0';
-	(isset($countData['totalUsers']))?$usrCount=$countData['totalUsers']:$usrCount = '0';
-	(isset($countData['totalResult']))?$resCount=$countData['totalResult']:$resCount = '0';
-}
-
-
-switch ($link){
-	case 'Category':
-			$pageinfo  = "Categories for the Test";
-			$pageicon  = "glyphicon-th";
-			break;
-	case 'Dashboard':
-			$pageinfo  = "information about all modules at one place";
-			$pageicon = "glyphicon-inbox";
-			
-			break;
-	case 'Question':
-			$pageinfo  = "Question Bank for the Test";
-			$pageicon = "glyphicon-list-alt";
-			break;
-	case 'Test':
-			$pageinfo  = "All Tests in one place";
-			$pageicon = "glyphicon-file";
-			break;
-	case 'Certificate':
-			$pageinfo  = "Certificates generated for test takers";
-			$pageicon = "glyphicon-certificate";
-			break;
-	case 'Result':
-			$pageinfo  = "Test Result";
-			$pageicon = "glyphicon-check";
-			break;
-	case 'User':
-			$pageinfo  = "User Information at one place";
-			$pageicon = "glyphicon-user";
-			break;
-		
-	default: 
-			$pageinfo  = "TestCube";
-			$pageicon = "glyphicon-inbox";
-}
-$userSession = new Container('users');
-$usrname =  isset($userSession->username)?$userSession->username:'Guest';
-	
-	echo	$this->headLink()
-				 ->prependStylesheet($this->basePath() . '/css/themes/blue.css');
-
-	echo   $this->headScript()
-            	 ->prependFile($this->basePath() . '/js/script.js')
-				 ->appendFile($this->basePath() . '/js/ticker.js');
-        ?>
-         </head>
-         <body>
-         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-         <div class="container">
-         <div class="navbar-header">
-         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-         <span class="icon-bar"></span>
-         <span class="icon-bar"></span>
-         <span class="icon-bar"></span>
-         </button>
-                             <a class="navbar-brand" href="<?php echo $this->url('home') ?>">&nbsp;<?php echo $this->translate('TestCube') ?></a>
-                         </div>
-                         <div class="collapse navbar-collapse">
-                             	     <div id="nav">
-         	     <ul class="nav-menu">
-         	     	<li class="none nav-menu-links"><a href="index.php" class="nav-menul font-small">HELP/SUPPORT</a></li>
-         	     	<li class="none nav-menu-links"><a href="index.php" class="nav-menul font-small">SETTINGS</a></li>
-         	     	<li class="none nav-menu-links">
-                     <div class="dropdown">
-                     <a id="dropdownMenu1" href="#" data-target="#" data-toggle="dropdown" class=" nav-menul nav-current font-small user-text"><span class="glyphicon glyphicon-user margin-right10 blue font-size15"></span><?php echo $usrname; ?><span class="glyphicon glyphicon-play margin-left10 text-rotate"></span></a>
-                     <ul class="dropdown-menu customDrop1" role="menu" aria-labelledby="dropdownMenu1">
-             		<li role="presentation"><a role="menuitem" tabindex="-1" href="/user/userProfile" class="textnone fontapply">Account Details</a></li>
-             		<li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="textnone fontapply">Settings</a></li>
-             		<li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="textnone fontapply">Plan info</a></li>
-             		<li role="presentation" class="divider"></li>
-             		<li role="presentation"><a role="menuitem" tabindex="-1" href="/user/logout" class="textnone fontapply">Sign Out</a></li>
-           		</ul>
-         </div></li>
-         	     </ul>
-                  
-         
-         	      </div> <!-- end of nav -->
-                         </div><!--/.nav-collapse -->
-             	
-                 </nav>
-                 
-                 <div id="dash-content" class="container">
-                 <div id="dash-left-content">
-             	<ul id="nav-menu">
-                     	<a href="/dashboard" id="ancrDash" onMouseOver="addClassCurrent('Dash');" onMouseOut="removeClassCurrent('Dash');">
-                         	<span id="icoDash" class="icon glyphicon glyphicon-inbox <?php if($link == "Dashboard" ) { echo "page-current"; } ?>"></span>
-                         	<li id="lnkDash" class="<?php if($link == "Dashboard" ) { echo "link-current"; } ?>">DASHBOARD</li>
-                         </a>
-                         <a href="/category" id="ancrCategory" 
-                         onMouseOver="addClassCurrent('Category');" onMouseOut="removeClassCurrent('Category');">
-                         	<span id="icoCategory" class="icon glyphicon glyphicon-th <?php if($link == "Category" ) { echo "page-current"; } ?>"></span>
-         
-         
-                             <li id="lnkCategory" class="<?php if($link == "Category" ) { echo "link-current"; } ?>">CATEGORIES<span class="badge badge-style <?php if($catCount > 0){ echo 'blue-background'; }?>"><?php echo $catCount?></span></li>
-         
-                         </a>
-                         <a href="/question" id="ancrQuestions" onMouseOver="addClassCurrent('Questions');" 
-                         	onMouseOut="removeClassCurrent('Questions');">
-                         	<span id="icoQuestions" class="icon glyphicon glyphicon-list-alt <?php if($link == "Question" ) { echo "page-current"; } ?>"></span>
-         
-         
-                         	<li id="lnkQuestions" class="<?php if($link == "Question" ) { echo "link-current"; } ?>">QUESTIONS<span class="badge badge-style <?php if($quesCount > 0){ echo 'blue-background'; }?>"><?php echo $quesCount?></span></li>
-         
-                         </a>
-                         <a href="/test" id="ancrTests" onMouseOver="addClassCurrent('Tests');" 
-                         	onMouseOut="removeClassCurrent('Tests');">
-                         	<span id="icoTests" class="icon glyphicon glyphicon-file <?php if($link == "Test" ) { echo "page-current"; } ?>"></span>
-         
-         
-                             <li id="lnkTests" class="<?php if($link == "Test" ) { echo "link-current"; } ?>">TESTS<span class="badge badge-style <?php if($testCount > 0){ echo 'blue-background'; }?>"><?php echo $testCount?></span></li>
-         
-                          </a>
-                         <a href="/certificate" id="ancrCertificates" onMouseOver="addClassCurrent('Certificates');" 
-                         	onMouseOut="removeClassCurrent('Certificates');">
-                         	<span id="icoCertificates" class="icon glyphicon glyphicon-certificate <?php if($link == "Certificate" ) { echo "page-current"; } ?>"></span>
-                             <li id="lnkCertificates" class="<?php if($link == "Certificate" ) { echo "link-current"; } ?>">CERTIFICATES<span class="badge badge-style <?php if($certiCount > 0){ echo 'blue-background'; }?> "><?php echo $certiCount?></span></li>
-                          </a>
-                         <a href="/result" id="ancrResulsts" onMouseOver="addClassCurrent('Results');" 
-                         	onMouseOut="removeClassCurrent('Results');">
-                         	<span id="icoResults" class="icon glyphicon glyphicon-check <?php if($link == "Result" ) { echo "page-current"; } ?>"></span>
-                         	<li id="lnkResults" class="<?php if($link == "Result" ) { echo "link-current"; } ?>">RESULTS<span class="badge badge-style <?php if($resCount > 0){ echo 'blue-background'; }?>"><?php echo $resCount?></span></li>
-                         </a>
-                         <a href="/user/userProfile" id="ancrUsers" onMouseOver="addClassCurrent('Users');" 
-                         	onMouseOut="removeClassCurrent('Users');">
-                         	<span id="icoUsers" class="icon glyphicon glyphicon-user <?php if($link == "User" ) { echo "page-current"; } ?>"></span>
-                            
-                             <li id="lnkUsers" class="<?php if($link == "User" ) { echo "link-current"; } ?>">USERS<span class="badge badge-style <?php if($usrCount > 0){ echo 'blue-background'; }?>"><?php echo $usrCount?></span></li>
-         
-                         </a>
-                     </ul><!-- end of dash-menu -->
-                     </div>
-                     
-                     <div id="dash-right-content">
-                     <div id="content-border" class="blue-background"></div>
-                     <div id="content-header">
-                     	<div id="text"><?php echo $pageinfo ?></div>
-                         <div id="heading"><span class="icon glyphicon <?php echo $pageicon;?> margin-right5"></span><span><?php echo $link?></span></div>
-                     </div> <!-- end of content header-->
-                     <div id="header-arrow" ></div>
-                     	<div class="content">
-                     		<?php echo $this->content; ?>
-                     		
-                     <div id="footer">
-                         <p>&copy; <?php echo date('Y') ?> by OSSCube Pvt. Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
-                    </div> <!-- end of foot -->
-                     	</div> <!-- end of content. -->
-                     
-                     </div>
-                     
-                     
-                     
-                 </div> <!-- /container -->
-                 
-                 <?php echo $this->inlineScript() ?>
-             </body>
-         </html>
-                  
-  <?php         
-}
+    switch ($link){
+	   case 'Category':
+	       $pageinfo  = "Categories for the Test";
+	       $pageicon  = "glyphicon-th";
+	       break;
+	   case 'Dashboard':
+		   $pageinfo  = "information about all modules at one place";
+		   $pageicon = "glyphicon-inbox";
+		   break;
+	   case 'Question':
+		   $pageinfo  = "Question Bank for the Test";
+		   $pageicon = "glyphicon-list-alt";
+		   break;
+	   case 'Test':
+	   	   $pageinfo  = "All Tests in one place";
+	   	   $pageicon = "glyphicon-file";
+	   	   break;
+	   case 'Certificate':
+	       $pageinfo  = "Certificates generated for test takers";
+	       $pageicon = "glyphicon-certificate";
+	       break;
+	   case 'Result':
+	       $pageinfo  = "Test Result";
+	       $pageicon = "glyphicon-check";
+	       break;
+	   case 'User':
+	       $pageinfo  = "User Information at one place";
+	       $pageicon = "glyphicon-user";
+	       break;
+	   default:
+		   $pageinfo  = "TestCube";
+		   $pageicon = "glyphicon-inbox";
+    }
+    $userSession = new Container('users');
+    $usrname =  isset($userSession->username)?$userSession->username:'Guest';	
+	echo $this->headLink()
+		      ->prependStylesheet($this->basePath() . '/css/themes/blue.css');
+	echo $this->headScript()
+              ->prependFile($this->basePath() . '/js/script.js')
+		      ->appendFile($this->basePath() . '/js/ticker.js');
 ?>
+	</head>
+	<body>
+		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+         	<div class="container">
+        		<div class="navbar-header">
+         			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+         				<span class="icon-bar"></span>
+         				<span class="icon-bar"></span>
+        		 		<span class="icon-bar"></span>
+         			</button>
+         			<a class="navbar-brand" href="<?php echo $this->url('home') ?>">&nbsp;<?php echo $this->translate('TestCube') ?></a>
+         		</div>
+                <div class="collapse navbar-collapse">
+                	<div id="nav">
+                		<ul class="nav-menu">
+         	     			<li class="none nav-menu-links"><a href="index.php" class="nav-menul font-small">HELP/SUPPORT</a></li>
+         	     			<li class="none nav-menu-links"><a href="index.php" class="nav-menul font-small">SETTINGS</a></li>
+         	     			<li class="none nav-menu-links">
+                     			<div class="dropdown">
+                     				<a id="dropdownMenu1" href="#" data-target="#" data-toggle="dropdown" class=" nav-menul nav-current font-small user-text"><span class="glyphicon glyphicon-user margin-right10 blue font-size15"></span><?php echo $usrname; ?><span class="glyphicon glyphicon-play margin-left10 text-rotate"></span></a>
+                     				<ul class="dropdown-menu customDrop1" role="menu" aria-labelledby="dropdownMenu1">
+             							<li role="presentation"><a role="menuitem" tabindex="-1" href="/user/userProfile" class="textnone fontapply">Account Details</a></li>
+             							<li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="textnone fontapply">Settings</a></li>
+             							<li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="textnone fontapply">Plan info</a></li>
+             							<li role="presentation" class="divider"></li>
+             							<li role="presentation"><a role="menuitem" tabindex="-1" href="/user/logout" class="textnone fontapply">Sign Out</a></li>
+           							</ul>
+         						</div>
+         					</li>
+         	     		</ul>
+         	      	</div> <!-- end of nav -->
+                </div><!--/.nav-collapse --> 
+            </div>
+        </nav>
+        <div id="dash-content" class="container">
+        	<div id="dash-left-content">
+        		<ul id="nav-menu">
+        			<a href="/dashboard" id="ancrDash" onMouseOver="addClassCurrent('Dash');" onMouseOut="removeClassCurrent('Dash');">
+        				<span id="icoDash" class="icon glyphicon glyphicon-inbox <?php if($link == "Dashboard" ) { echo "page-current"; } ?>"></span>
+                        <li id="lnkDash" class="<?php if($link == "Dashboard" ) { echo "link-current"; } ?>">DASHBOARD</li>
+                    </a>
+                    <a href="/category" id="ancrCategory" onMouseOver="addClassCurrent('Category');" onMouseOut="removeClassCurrent('Category');">
+                    	<span id="icoCategory" class="icon glyphicon glyphicon-th <?php if($link == "Category" ) { echo "page-current"; } ?>"></span>
+                        <li id="lnkCategory" class="<?php if($link == "Category" ) { echo "link-current"; } ?>">CATEGORIES<span class="badge badge-style <?php if($catCount > 0){ echo 'blue-background'; }?>"><?php echo $catCount?></span></li>    
+                    </a>
+                    <a href="/question" id="ancrQuestions" onMouseOver="addClassCurrent('Questions');" onMouseOut="removeClassCurrent('Questions');">
+                    	<span id="icoQuestions" class="icon glyphicon glyphicon-list-alt <?php if($link == "Question" ) { echo "page-current"; } ?>"></span>
+                         <li id="lnkQuestions" class="<?php if($link == "Question" ) { echo "link-current"; } ?>">QUESTIONS<span class="badge badge-style <?php if($quesCount > 0){ echo 'blue-background'; }?>"><?php echo $quesCount?></span></li>
+                    </a>
+                    <a href="/test" id="ancrTests" onMouseOver="addClassCurrent('Tests');" onMouseOut="removeClassCurrent('Tests');">
+                    	<span id="icoTests" class="icon glyphicon glyphicon-file <?php if($link == "Test" ) { echo "page-current"; } ?>"></span>
+                    	<li id="lnkTests" class="<?php if($link == "Test" ) { echo "link-current"; } ?>">TESTS<span class="badge badge-style <?php if($testCount > 0){ echo 'blue-background'; }?>"><?php echo $testCount?></span></li>
+                    </a>
+                    <a href="/certificate" id="ancrCertificates" onMouseOver="addClassCurrent('Certificates');" onMouseOut="removeClassCurrent('Certificates');">
+                    	<span id="icoCertificates" class="icon glyphicon glyphicon-certificate <?php if($link == "Certificate" ) { echo "page-current"; } ?>"></span>
+                        <li id="lnkCertificates" class="<?php if($link == "Certificate" ) { echo "link-current"; } ?>">CERTIFICATES<span class="badge badge-style <?php if($certiCount > 0){ echo 'blue-background'; }?> "><?php echo $certiCount?></span></li>
+                    </a>
+                    <a href="/result" id="ancrResulsts" onMouseOver="addClassCurrent('Results');" onMouseOut="removeClassCurrent('Results');">
+                    	<span id="icoResults" class="icon glyphicon glyphicon-check <?php if($link == "Result" ) { echo "page-current"; } ?>"></span>
+                        <li id="lnkResults" class="<?php if($link == "Result" ) { echo "link-current"; } ?>">RESULTS<span class="badge badge-style <?php if($resCount > 0){ echo 'blue-background'; }?>"><?php echo $resCount?></span></li>
+                    </a>
+                    <a href="/user/userProfile" id="ancrUsers" onMouseOver="addClassCurrent('Users');" onMouseOut="removeClassCurrent('Users');">
+                    	<span id="icoUsers" class="icon glyphicon glyphicon-user <?php if($link == "User" ) { echo "page-current"; } ?>"></span>    
+                        <li id="lnkUsers" class="<?php if($link == "User" ) { echo "link-current"; } ?>">USERS<span class="badge badge-style <?php if($usrCount > 0){ echo 'blue-background'; }?>"><?php echo $usrCount?></span></li>
+                    </a>
+                </ul><!-- end of dash-menu -->
+           </div>
+           <div id="dash-right-content">
+           		<div id="content-border" class="blue-background"></div>
+            	<div id="content-header">
+            		<div id="text"><?php echo $pageinfo ?></div>
+            		<div id="heading"><span class="icon glyphicon <?php echo $pageicon;?> margin-right5"></span><span><?php echo $link?></span></div>
+            	</div> <!-- end of content header-->
+            	<div id="header-arrow" ></div>
+            	<div class="content">
+                	<?php echo $this->content; ?>
+                    <div id="footer">
+                    	<p>&copy; <?php echo date('Y') ?> by OSSCube Pvt. Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
+                    </div> <!-- end of foot -->
+                </div> <!-- end of content. -->
+           </div>         
+       	</div> <!-- /container -->         
+        <?php echo $this->inlineScript(); ?>
+	</body>
+</html>                  
+<?php endif;?>

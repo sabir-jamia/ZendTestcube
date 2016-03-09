@@ -40,11 +40,10 @@ $(document).ready(function(){
     			data: $('#register').serialize(),
     			dataType: 'json',
     			success:function(result) {
-    				console.log(result);
 					loaderWait('hide');
     				if(result.status==1) {
-    					$('#signupalert').removeClass().addClass('alert alert-success');
-    					$('#signupalert').show();
+    					showAlertPanel('#register', 'alert-success', result.message);
+    					document.getElementById("register").reset();
     				} else if(result.status==2) {
     					$('#content').html(result.html);
     				}
@@ -74,14 +73,16 @@ $(document).ready(function(){
     			url: '/user/forgotPassword',
     			data: {emailTxt:$("#txt-email").val()},
     			dataType: 'json',
-    			success:function(result) {
+    			success: function(result) {
     				if(result.status==1) {
     					loaderWait('hide');
     					$('#txt-email').parent().append('<label id="txt-email-error" class="error text-danger" for="txt-email">Please enter a valid email address.</label>');
     				} else if(result.status==2) {
     					loaderWait('hide');
-    					$('#popup-content .modal-body').html(result.html);
-    					$('#forgot-password').remove();
+    	            	$('#myModal').modal('hide');
+    	            	$('.modal-backdrop').remove();
+    					$('#popup-content').html('');
+    					showAlertPanel('#loginbox .panel-body', 'alert-success', result.message);
     				}
     			}		
     		});
@@ -128,5 +129,15 @@ $(document).ready(function(){
         	$('#loadingImage').parent('div').remove();
         	$('#loader-backdrop').remove();
         }
+    }
+    
+    function showAlertPanel(selector, alertType, message) {
+		$(selector).prepend(
+				'<div style="display: block" class="alert '+alertType+' alert-dismissible fade in">'+
+					'<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+						'<span aria-hidden="true">&times;</span>'+
+					'</button>'+
+					'<p>'+message+'</p>'+
+				'</div>');
     }
 });

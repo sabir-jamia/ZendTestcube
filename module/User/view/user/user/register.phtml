@@ -16,27 +16,27 @@ $form->prepare();
 			</div>
 			<div class="panel-body">
 				<?php echo $this->form()->openTag($form);?>
-				<?php echo $this->formHidden($form->get('id'));?>
-					<div id="signupalert" style="display: none" class="alert alert-danger">
-						<p>Error:</p>
-						<span></span>
+					<div id="signupalert" style="display: none" class="alert alert-danger alert-dismissible fade in">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+  							<span aria-hidden="true">&times;</span>
+						</button>
 					</div>
 					<div class="form-group">
-						<?php echo $this->formLabel($form->get('user-name'));?>
+						<?php echo $this->formLabel($form->get('username'));?>
 						<div class="col-md-9">
-							<?php echo $this->formElement($form->get('user-name'));?>
+							<?php echo $this->formElement($form->get('username'));?>
 						</div>
 					</div>
 					<div class="form-group">
-						<?php echo $this->formLabel($form->get('first-name'));?>
+						<?php echo $this->formLabel($form->get('firstname'));?>
 						<div class="col-md-9">
-							<?php echo $this->formElement($form->get('first-name'));?>	
+							<?php echo $this->formElement($form->get('firstname'));?>	
 						</div>
 					</div>
 					<div class="form-group">
-						<?php echo $this->formLabel($form->get('last-name'));?>
+						<?php echo $this->formLabel($form->get('lastname'));?>
 						<div class="col-md-9">
-							<?php echo $this->formElement($form->get('last-name'));?>			
+							<?php echo $this->formElement($form->get('lastname'));?>			
 						</div>
 					</div>
 					<div class="form-group">

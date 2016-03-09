@@ -18,7 +18,7 @@ $(document).ready(function(){
 	
 	$('#register').validate({
 		rules: {
-			'user-name':{
+			'username':{
 				required : true,
             	validName : /^[a-zA-Z0-9_]*$/,
             	minlength : 5,
@@ -29,13 +29,13 @@ $(document).ready(function(){
             			data : {user :function() {return $('#user-name').val();}}
             	}
        	 	},
-        	'first-name':{
+        	'firstname':{
         		required: true,
             	validName : /^[a-zA-Z]*$/,
             	minlength :2,
             	maxlength :20
          	},
-         	'last-name':{
+         	'lastname':{
             	required: true,
             	validName : /^[a-zA-Z]*$/,
             	minlength :2,
@@ -73,7 +73,7 @@ $(document).ready(function(){
           	}
     	},
     	messages: {
-    		'user-name' : {
+    		'username' : {
     			remote : "Username already taken"
     		},
     		'email' : {

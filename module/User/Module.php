@@ -3,10 +3,6 @@ namespace User;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use User\Model\User;
-use User\Model\UserTable;
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Db\ResultSet\ResultSet;
 
 class Module
 {
@@ -25,44 +21,5 @@ class Module
                 )
             )
         );
-    }
-
-    public function onBootstrap(MvcEvent $e)
-    {}
-
-    public function getServiceConfig()
-    {
-        return array(
-            'factories' => array(
-                'User\Model\UserTable' => function ($sm) {
-                    $tableGateway = $sm->get('UserTableGateway');
-                    $table = new UserTable($tableGateway);
-                    $config = $sm->get('config');
-                    $dbConfig = $config['db'];
-                    $table->setDbCredentails($dbConfig);
-                    return $table;
-                },
-                'UserTableGateway' => function ($sm) {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new User());
-                    return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
-                },
-                // for updating user profile in client db
-                'User\Model\ClientUserTable' => function ($sm) {
-                    $tableGateway = $sm->get('ClientUserTableGateway');
-                    $table = new UserTable($tableGateway);
-                    return $table;
-                },
-                'ClientUserTableGateway' => function ($sm) {
-                    $dbAdapter = $sm->get('clientdb');
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new User());
-                    return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
-                },
-                
-            ),
-        );
-        
     }
 }

@@ -19,12 +19,7 @@ class RegisterForm extends Form
         $this->setAttribute('role', 'form');
         
         $this->add(array(
-            'name' => 'id',
-            'type' => 'Hidden'
-        ));
-        
-        $this->add(array(
-            'name' => 'user-name',
+            'name' => 'username',
             'type' => 'Text',
             'options' => array(
                 'label' => 'User Name',
@@ -34,13 +29,13 @@ class RegisterForm extends Form
             ),
             'attributes' => array(
                 'class' => 'form-control',
-                'id' => 'user-name',
+                'id' => 'username',
                 'placeholder' => 'Enter Username'
             )
         ));
         
         $this->add(array(
-            'name' => 'first-name',
+            'name' => 'firstname',
             'type' => 'Text',
             'options' => array(
                 'label' => 'First Name',
@@ -51,13 +46,13 @@ class RegisterForm extends Form
             ),
             'attributes' => array(
                 'class' => 'form-control',
-                'id' => 'first-name',
+                'id' => 'firstname',
                 'placeholder' => 'Enter Firstname'
             )
         ));
         
         $this->add(array(
-            'name' => 'last-name',
+            'name' => 'lastname',
             'type' => 'Text',
             'options' => array(
                 'label' => 'Last Name',
@@ -67,7 +62,7 @@ class RegisterForm extends Form
             ),
             'attributes' => array(
                 'class' => 'form-control',
-                'id' => 'last-name',
+                'id' => 'lastname',
                 'placeholder' => 'Enter Lastname'
             )
         ));

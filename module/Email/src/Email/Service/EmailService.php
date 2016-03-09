@@ -38,37 +38,32 @@ class EmailService implements ServiceLocatorAwareInterface
     {
         // Setup SMTP transport using LOGIN authentication
         $transport = new SmtpTransport();
-        
         $config = $this->serviceLocator->get('config');
-        
         // \Zend\Debug\Debug::dump();
         $options = new SmtpOptions($config['mail_setting']);
-        
         $transport->setOptions($options);
         $this->transport = $transport;
     }
 
-    public function sendMail($mailData, $attachment = false)
+    public function sendMail($mailTemplateName, $from, $to, $var, $bcc = array(), $attachment = false)
     {
-        $mailTemplateData = $mailData['mailTemplateData'];
-        $messageBody = $mailData['messageBody'];
-        $emailIds = $mailData['emailIds'];
-        
+        $messageBody = $var;
         $message = new Message();
-        
-        foreach ($mailTemplateData as $mailOptions) {
-            $message->setEncoding('utf-8')
-                ->addFrom($mailOptions['sender'], "TESTCube.com")
-                ->setSubject($mailOptions['subject'])
-                ->addReplyTo($mailOptions['replyto']);
-            if (! $attachment) {
-                $message->setBody($mailOptions['message'] . PHP_EOL . $messageBody);
-            } else {
-                $message->setBody($messageBody);
-            }
+        $mailTemplate = $this->serviceLocator->get('Email\Model\EmailTemplate');
+        $mailTemplateData = $mailTemplate->getMailTemplate($mailTemplateName);
+        $mailTemplateData = $mailTemplateData[0];
+        $message->setEncoding('utf-8')
+            ->addFrom($mailTemplateData['sender'], $from)
+            ->setSubject($mailTemplateData['subject'])
+            ->addReplyTo($mailTemplateData['replyto'])
+            ->addTo($to);
+        if (! $attachment) {
+            $message->setBody($mailTemplateData['message'] . PHP_EOL . $messageBody);
+        } else {
+            $message->setBody($messageBody);
         }
         
-        foreach ($emailIds as $emailId) {
+        foreach ($bcc as $emailId) {
             $message->addBcc($emailId);
         }
         

@@ -16,7 +16,7 @@ class UserTable
     protected $resultSetPrototype;
 
     private $_dbConfig;
-    
+
     private $_adapter;
 
     private $_connection;
@@ -96,6 +96,10 @@ class UserTable
                 'created_on' => $register->registration_date
             );
             $this->tableGateway->insert($newdata);
+            $query = $this->_adapter->query("use testcubedb;");
+            $result = $query->execute()
+                ->getResource()
+                ->closeCursor();
             $this->_connection->commit();
             return $client_id;
         } catch (Exception $e) {
@@ -106,7 +110,7 @@ class UserTable
     public function updatestatus($id)
     {
         $data = array(
-            'status' => 1
+            'status' => '1'
         );
         if ($this->getUserById($id)) {
             $this->tableGateway->update($data, array(
@@ -115,8 +119,6 @@ class UserTable
             return 1;
         } else {
             return 0;
-            /* throw new \Exception('user id doesnt exists'); */
-            // header("Location: http://zendtestcube.com");
         }
     }
 

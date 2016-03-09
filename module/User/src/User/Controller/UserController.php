@@ -6,8 +6,6 @@ use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use User\Form\LoginForm;
 use User\Form\RegisterForm;
-use Zend\Json\Json;
-use User\Model\User;
 use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthAdapter;
 use Zend\Authentication\AuthenticationService;
 use Zend\Session\Container;
@@ -16,15 +14,11 @@ use Zend\InputFilter\FileInput;
 use Zend\File\Transfer\Adapter\Http;
 use Zend\Filter\File\RenameUpload;
 use Zend\Session\AbstractContainer;
-// use Zend\File\Transfer\Adapter\Http;
+
 class UserController extends AbstractActionController
 {
 
-    private $_usersTable = null;
-
-    private $_clientUsersTable = null;
-
-    private $_authservice = null; 
+    private $_authservice = null;
 
     function attachScriptsAndStyleSheet()
     {
@@ -38,18 +32,22 @@ class UserController extends AbstractActionController
         $this->attachScriptsAndStyleSheet();
         $request = $this->getRequest();
         $form = new LoginForm();
-        $view = new ViewModel();
         
         if (! $request->isXmlHttpRequest()) {
-            $view->setVariable('form', $form);
-            return $view;
+            $id = $this->params()->fromQuery('id');
+            $userTable = $this->serviceLocator->get('User\Model\UserTable');
+            $confirmStatus  = $userTable->updatestatus($this->mntdecodeAlgo($id));
+            return new ViewModel(array(
+                'form' => $form,
+                'status' => $confirmStatus
+            ));
         } else {
-            $user = new User();
+            $user = $this->serviceLocator->get('User\Model\User');
             $form->setInputFilter($user->getInputFilter());
             $form->setValidationGroup('username', 'password');
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                return new JsonModel($this->authenticate($form, $view));
+                return new JsonModel($this->authenticate($form));
             } else {
                 $view->setTemplate('/user/user/login.phtml')
                     ->setTerminal(true)
@@ -58,8 +56,6 @@ class UserController extends AbstractActionController
                 ));
             }
         }
-        
-        return $view;
     }
 
     public function forgotPasswordAction()
@@ -80,26 +76,14 @@ class UserController extends AbstractActionController
                 if ($validEmailvalue == 1) { // password does not exists
                     $jsonModel->setVariable('status', 1);
                 } elseif ($validEmailvalue == 2) {
-                    $var = $this->getusersTable()->getPasswordByEmail($emailId);
-                    $mailTemplate = $this->serviceLocator->get('Email\Model\EmailTemplate');
-                    $mailTemplateData = $mailTemplate->getMailTemplate('ForgotPassword');
-                    $messageBody = "Password : " . $var;
-                    $emailIds[] = $emailId;
-                    $mailData['mailTemplateData'] = $mailTemplateData;
-                    $mailData['messageBody'] = $messageBody;
-                    $mailData['emailIds'] = $emailIds;
+                    $mailTemplate = 'ForgotPassword';
+                    $userTable = $this->serviceLocator->get('User\Model\UserTable');
+                    $var = "Password : " . $userTable->getPasswordByEmail($emailId);
                     $mailer = $this->serviceLocator->get('EmailService');
-                    $mailer->sendMail($mailData);
-                    
-                    $htmlViewPart = new ViewModel();
-                    $htmlViewPart->setTerminal(true)->setTemplate('/user/user/forgot-password-success.phtml');
-                    $html = $this->getServiceLocator()
-                        ->get('ViewRenderer')
-                        ->render($htmlViewPart);
-                    
+                    $mailer->sendMail($mailTemplate, "Admin Testcube", $emailId, $var);
                     $jsonModel = new JsonModel();
                     $jsonModel->setVariables(array(
-                        'html' => $html,
+                        'message' => 'Your password has been sent to email',
                         'status' => 2
                     ));
                 }
@@ -107,15 +91,15 @@ class UserController extends AbstractActionController
             }
         }
     }
-    
+
     public function registerAction()
     {
         $request = $this->getRequest();
         
-        if($request->isXmlHttpRequest()) {
+        if ($request->isXmlHttpRequest()) {
             $response = $this->getResponse();
             $form = new RegisterForm();
-            if($request->getMethod() == 'GET') {
+            if ($request->getMethod() == 'GET') {
                 $view = new ViewModel(array(
                     'form' => $form
                 ));
@@ -124,50 +108,47 @@ class UserController extends AbstractActionController
             } else {
                 $jsonModel = new JsonModel();
                 $userEmail = $request->getPost('email');
-                //$userId = $request->getPost('id');
-                $register = new User();
+                $register = $this->serviceLocator->get('User\Model\User');
                 $form->setInputFilter($register->getInputFilter());
                 $form->setData($request->getPost());
-                if (!$form->isValid()) {
+                if (! $form->isValid()) {
                     $register->exchangeArray($form->getData());
-                    $msg = $this->getusersTable()->saveUser($register);
+                    $userTable = $this->serviceLocator->get('User\Model\UserTable');
+                    $msg = $userTable->saveUser($register);
                     $str = $this->mntencodeAlgo($msg);
                     $url = $this->getBaseUrl() . "?id=" . $str;
-                    $mailTemplate = $this->serviceLocator->get('Email\Model\EmailTemplate');
-                    $mailTemplateData = $mailTemplate->getMailTemplate('clientregistration');   
-                    $messageBody = $url;
-                    $emailIds[] = $userEmail;
-                    $mailData['mailTemplateData'] = $mailTemplateData;
-                    $mailData['messageBody'] = $messageBody;
-                    $mailData['emailIds'] = $emailIds;  
-                    $mailer = $this->serviceLocator->get('EmailService');   
-                    $mailer->sendMail($mailData);   
-                    $jsonModel->setVariable('status', 1);
+                    $mailTemplate = 'clientregistration';
+                    $mailer = $this->serviceLocator->get('EmailService');
+                    $mailer->sendMail($mailTemplate, "Admin Testcube", $userEmail, $url);
+                    $jsonModel->setVariables(array(
+                        'status' => 1,
+                        'message' => 'Account Created! Please confirm account from link sent on your Email'
+                    ));
                 } else {
-                    $jsonModel->setVariable('status', 1);                
+                    $jsonModel->setVariable('status', 1);
                 }
                 return $jsonModel;
             }
         }
     }
-    
+
     public function checkCaptchaAction()
     {
         $captchaHiddenId = $this->params()->fromPost('captcha-hidden');
         $captcha = $this->params()->fromPost('captcha');
         $captchaInput = $captcha['input'];
-        $captchaSession = new Container('Zend_Form_Captcha_'.trim($captchaHiddenId));
+        $captchaSession = new Container('Zend_Form_Captcha_' . trim($captchaHiddenId));
         $captchaSession->setExpirationHops(100);
         $captchaIterator = $captchaSession->getIterator();
         $captchaWord = $captchaIterator['word'];
-        if($captchaWord == $captchaInput) {
+        if ($captchaWord == $captchaInput) {
             echo "true";
         } else {
             echo "false";
         }
         return $this->getResponse();
     }
-    
+
     public function getBaseUrl()
     {
         $config = $this->serviceLocator->get('config');
@@ -177,47 +158,14 @@ class UserController extends AbstractActionController
     public function checkValue($name)
     {
         $txtVal = $name;
-        $checkVal = $this->getusersTable()->isEmailexist($txtVal);
+        $userTable = $this->serviceLocator->get('User\Model\UserTable');
+        $checkVal = $userTable->isEmailexist($txtVal);
         
         if (! $checkVal) {
             return 1;
         } else {
             return 2;
         }
-    }
-
-    public function sendEmailsAction()
-    {
-        $request = $this->getRequest();
-        $response = $this->getResponse();
-    }
-
-    public function getAuthService($usernameType = '')
-    {
-        if (! $this->_authservice) {
-            $dbAdapter = $this->serviceLocator->get('Zend\Db\Adapter\Adapter');
-            $authAdapter = new AuthAdapter($dbAdapter, 'users', $usernameType, 'password', 'MD5(?)');
-            $authService = new AuthenticationService();
-            $authService->setAdapter($authAdapter);
-            $this->_authservice = $authService;
-        }
-        return $this->_authservice;
-    }
-
-    public function getusersTable()
-    {
-        if (! $this->_usersTable) {
-            $this->_usersTable = $this->serviceLocator->get('User\Model\UserTable');
-        }
-        return $this->_usersTable;
-    }
-
-    public function getClientusersTable()
-    {
-        if (! $this->_clientUsersTable) {
-            $this->_clientUsersTable = $this->serviceLocator->get('User\Model\ClientUserTable');
-        }
-        return $this->_clientUsersTable;
     }
 
     public function refreshAction()
@@ -249,7 +197,8 @@ class UserController extends AbstractActionController
     public function checkUserExistsAction()
     {
         $user = $this->params()->fromPost('user');
-        $userExists = $this->getusersTable()->checkUserExists($user);
+        $userTable = $this->serviceLocator->get('User\Model\UserTable');
+        $userExists = $userTable->checkUserExists($user);
         if (! $userExists) {
             echo "true";
         } else {
@@ -262,19 +211,24 @@ class UserController extends AbstractActionController
     {
         $userSession = new Container('users');
         $userid = $userSession->clientId;
+        $userTable = $this->serviceLocator->get('User\Model\UserTable');
         
         return new ViewModel(array(
-            'userProfile' => $this->getusersTable()->userProfile($userid),
-            'userdata' => $this->getusersTable()->userlist()
+            'userProfile' => $userTable->userProfile($userid),
+            'userdata' => $userTable->userlist()
         ));
     }
 
-    /* ------upload file module----- */
-    public function getFileUploadLocation()
+    public function getAuthService($usernameType = '')
     {
-        // Fetch Configuration from Module Config
-        $config = $this->getServiceLocator()->get('config');
-        return $config['module_config']['upload_location'];
+        if (! $this->_authservice) {
+            $dbAdapter = $this->serviceLocator->get('Zend\Db\Adapter\Adapter');
+            $authAdapter = new AuthAdapter($dbAdapter, 'users', $usernameType, 'password', 'MD5(?)');
+            $authService = new AuthenticationService();
+            $authService->setAdapter($authAdapter);
+            $this->_authservice = $authService;
+        }
+        return $this->_authservice;
     }
 
     public function generalProfileUpdateAction()
@@ -308,10 +262,11 @@ class UserController extends AbstractActionController
         // "target" => $uploadFile,
         
         $fileData = $filter->filter($files['profilePic']);
-        
-        $result = $this->getClientusersTable()->clientGeneralProfileUpdate($profileData);
+        $clientUserTable = $this->serviceLocator->get('User\Model\ClientUserTable');
+        $result = $clientuserTable->clientGeneralProfileUpdate($profileData);
         if ($result) {
-            $result = $this->getusersTable()->superGeneralProfileUpdate($profileData);
+            $userTable = $this->serviceLocator->get('User\Model\UserTable');
+            $result = $userTable->superGeneralProfileUpdate($profileData);
             if ($result) {
                 $response->setContent(JSON::encode(array(
                     'flag' => 1,
@@ -390,7 +345,8 @@ class UserController extends AbstractActionController
             )));
             return $response;
         } else {
-            $result = $this->getusersTable()->updateProfilePassword($passwordData);
+            $userTable = $this->serviceLocator->get('User\Model\UserTable');
+            $result = $userTable->updateProfilePassword($passwordData);
             $response->setContent(JSON::encode(array(
                 'flag' => 1
             )));
@@ -404,6 +360,48 @@ class UserController extends AbstractActionController
         $view->setTemplate('/user/userProfile');
         $view->setTerminal($request->isXMLHttpRequest());
         return $view;
+    }
+
+    public function listClientUserAction()
+    {
+        return new ViewModel();
+    }
+
+    public function userSettingAction()
+    {
+        $response = $this->getResponse();
+        $request = $this->getRequest();
+        $profileData = array(
+            'clientId' => $request->getPost('clientid'),
+            'selectedLanguage' => $request->getPost('profileLanguage'),
+            'themeColor' => $request->getPost('profileTheme')
+        );
+        /*
+         * $selectedLanguage = $request->getPost ( 'profileLanguage' );
+         * $themeColor = $request->getPost ( 'profileTheme' );
+         */
+        $userTable = $this->serviceLocator->get('User\Model\UserTable');
+        $result = $userTable->clientGeneralProfileSettings($profileData);
+        
+        if ($result == 1) {
+            $response->setContent(JSON::encode(array(
+                'flag' => 1
+            )));
+            return $response;
+        } else {
+            $response->setContent(JSON::encode(array(
+                'flag' => 0
+            )));
+            return $response;
+        }
+    }
+
+    /* ------upload file module----- */
+    public function getFileUploadLocation()
+    {
+        // Fetch Configuration from Module Config
+        $config = $this->getServiceLocator()->get('config');
+        return $config['module_config']['upload_location'];
     }
 
     public function mntencodeAlgo($id)
@@ -464,40 +462,7 @@ class UserController extends AbstractActionController
         return $id;
     }
 
-    public function listClientUserAction()
-    {
-        return new ViewModel();
-    }
-
-    public function userSettingAction()
-    {
-        $response = $this->getResponse();
-        $request = $this->getRequest();
-        $profileData = array(
-            'clientId' => $request->getPost('clientid'),
-            'selectedLanguage' => $request->getPost('profileLanguage'),
-            'themeColor' => $request->getPost('profileTheme')
-        );
-        /*
-         * $selectedLanguage = $request->getPost ( 'profileLanguage' );
-         * $themeColor = $request->getPost ( 'profileTheme' );
-         */
-        $result = $this->getusersTable()->clientGeneralProfileSettings($profileData);
-        
-        if ($result == 1) {
-            $response->setContent(JSON::encode(array(
-                'flag' => 1
-            )));
-            return $response;
-        } else {
-            $response->setContent(JSON::encode(array(
-                'flag' => 0
-            )));
-            return $response;
-        }
-    }
-
-    public function authenticate($form, $viewModel)
+    public function authenticate($form)
     {
         $request = $this->getRequest();
         $username = trim($request->getPost('username'), " ");
@@ -517,7 +482,8 @@ class UserController extends AbstractActionController
         $result = $this->_authservice->authenticate();
         
         if ($result->isValid()) {
-            $userData = $this->getusersTable()->getUserByUserName($username, $usernameType);
+            $userTable = $this->serviceLocator->get('User\Model\UserTable');
+            $userData = $userTable->getUserByUserName($username, $usernameType);
             if ($userData == 'notconfirmed') {
                 $response['flag'] = 'notconfirmed';
             } else {
