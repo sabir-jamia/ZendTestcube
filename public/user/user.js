@@ -11,20 +11,12 @@ $(document).ready(function(){
 						if(data.flag=='loginsuccess') {
 							window.location.href = "/dashboard";
 						} else if(data.flag=='loginFail') {
-							$('#login-alert').text('Wrong Credentials');
-							$('#login-alert').show();
+							showAlertPanel('#loginbox .panel-body', 'alert-danger', 'Wrong Credentials!');
 						} else if(data.flag=='notconfirmed') {
-							$('#login-alert').text('Account Not Active!');
-							$('#login-alert').show();
+							showAlertPanel('#loginbox .panel-body', 'alert-danger', 'Account Not Active!');
 						}
 					} catch(e){
-						$('#content').html(data);
-						if ($('#serverUserError ul li').text() !== "") {
-							$('#serverUserError').css("display","block");
-						}
-						if ($('#serverPassError ul li').text() !== "") {
-							$('#serverPassError').css("display","block");
-						}
+						alert("Server error");
 					}
 				}		
 			});
@@ -116,7 +108,7 @@ $(document).ready(function(){
     	});
     });
     
-    function loaderWait(action) {
+    var loaderWait = function (action) {
     	if(action == 'show') {
     		var height = window.innerHeight/2;
     		var width = window.innerWidth/2;
@@ -131,7 +123,7 @@ $(document).ready(function(){
         }
     }
     
-    function showAlertPanel(selector, alertType, message) {
+    var showAlertPanel = function (selector, alertType, message) {
 		$(selector).prepend(
 				'<div style="display: block" class="alert '+alertType+' alert-dismissible fade in">'+
 					'<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+

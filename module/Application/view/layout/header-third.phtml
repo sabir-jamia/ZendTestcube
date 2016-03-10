@@ -1,0 +1,47 @@
+<?php $usrname = $this->username;?>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target=".navbar-collapse">
+				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="<?php echo $this->url('home') ?>">&nbsp;<?php echo $this->translate('TestCube') ?></a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<div id="nav">
+				<ul class="nav-menu">
+					<li class="none nav-menu-links"><a href="index.php"
+						class="nav-menul font-small">HELP/SUPPORT</a></li>
+					<li class="none nav-menu-links"><a href="index.php"
+						class="nav-menul font-small">SETTINGS</a></li>
+					<li class="none nav-menu-links">
+						<div class="dropdown">
+							<a id="dropdownMenu1" href="#" data-target="#"
+								data-toggle="dropdown"
+								class=" nav-menul nav-current font-small user-text"><span
+								class="glyphicon glyphicon-user margin-right10 blue font-size15"></span><?php echo $usrname; ?><span
+								class="glyphicon glyphicon-play margin-left10 text-rotate"></span></a>
+							<ul class="dropdown-menu customDrop1" role="menu"
+								aria-labelledby="dropdownMenu1">
+								<li role="presentation"><a role="menuitem" tabindex="-1"
+									href="/user/userProfile" class="textnone fontapply">Account
+										Details</a></li>
+								<li role="presentation"><a role="menuitem" tabindex="-1"
+									href="#" class="textnone fontapply">Settings</a></li>
+								<li role="presentation"><a role="menuitem" tabindex="-1"
+									href="#" class="textnone fontapply">Plan info</a></li>
+								<li role="presentation" class="divider"></li>
+								<li role="presentation"><a role="menuitem" tabindex="-1"
+									href="/user/logout" class="textnone fontapply">Sign Out</a></li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<!-- end of nav -->
+		</div>
+		<!--/.nav-collapse -->
+	</div>
+</nav>

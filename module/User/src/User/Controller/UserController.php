@@ -52,8 +52,8 @@ class UserController extends AbstractActionController
                 $view->setTemplate('/user/user/login.phtml')
                     ->setTerminal(true)
                     ->setVariables(array(
-                    'form' => $form
-                ));
+                        'form' => $form
+                    ));
             }
         }
     }

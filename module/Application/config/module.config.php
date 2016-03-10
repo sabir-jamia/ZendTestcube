@@ -49,7 +49,13 @@ return array(
         'not_found_template' => 'error/404',
         'exception_template' => 'error/index',
         'template_map' => array(
+            'layout/head' => __DIR__ . '/../view/layout/head.phtml',
             'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
+            'layout/header-first' => __DIR__ . '/../view/layout/header-first.phtml',
+            'layout/header-second' => __DIR__ . '/../view/layout/header-second.phtml',
+            'layout/header-third' => __DIR__ . '/../view/layout/header-third.phtml',
+            'layout/dash-menu' => __DIR__ . '/../view/layout/dash-menu.phtml',
+            'layout/footer' => __DIR__ . '/../view/layout/footer.phtml',
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
             'error/404' => __DIR__ . '/../view/error/404.phtml',
             'error/index' => __DIR__ . '/../view/error/index.phtml'

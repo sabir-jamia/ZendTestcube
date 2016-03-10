@@ -1,13 +1,8 @@
 <?php
 $form = $this->form;
 $form->prepare();
-$message = "";
-$display = "display: none";
-$class = "alert-danger";
 if(isset($status) && $status == 1) : 
     $message = "Account Confirmed!";
-    $display = "display: block";
-    $class = "alert-success";
 endif;
 ?>
 <div id="popup-content" ></div>
@@ -23,12 +18,14 @@ endif;
 				</div>
 			</div>
 			<div style="padding-top: 30px" class="panel-body">
-				<div style="<?php echo $display;?>" id="login-alert" class="alert <?php echo $class;?> alert-dismissible fade in col-sm-12">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  					<span aria-hidden="true">&times;</span>
-				</button>
-				<p><?php echo $message;?></p>
+				<?php if(isset($status) && $status == 1) :?>
+				<div style="display: block" class="alert alert-success alert-dismissible fade in col-sm-12">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+  						<span aria-hidden="true">&times;</span>
+					</button>
+					<p><?php echo $message;?></p>
 				</div>
+				<?php endif;?>
 				<?php echo $this->form()->openTag($form);?>
 					<div style="margin-bottom: 25px" class="input-group">
 						<span class="input-group-addon"> 
@@ -71,7 +68,7 @@ endif;
 				</div>
 				<?php echo $this->form()->closeTag($form);?>
 				<?php 
-//echo $this->inlineScript()->prependFile($this->basePath('/user/user.validation.js'));
+                 echo $this->inlineScript()->prependFile($this->basePath('/user/user.validation.js'));
 ?>
 			</div>
 		</div>

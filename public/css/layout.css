@@ -840,11 +840,11 @@ cursor: pointer;
 
 #dash-content #dash-right-content
 {
-	    float: left;
+	float: left;
     left: 225px;
     min-height: 670px;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
     position: relative;
     top: 8px;
     width: 83%;

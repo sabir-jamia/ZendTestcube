@@ -1,11 +1,9 @@
-
 <?php
 return array(
     'controllers' => array(
         'invokables' => array(
             'Dashboard\Controller\Dashboard' => 'Dashboard\Controller\DashboardController'
         )
-        
     ),
     'router' => array(
         'routes' => array(
@@ -25,7 +23,6 @@ return array(
                 )
             )
         )
-        
     ),
     'view_manager' => array(
         'template_path_stack' => array(
@@ -33,4 +30,3 @@ return array(
         )
     )
 );
-
