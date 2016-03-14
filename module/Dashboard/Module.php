@@ -28,23 +28,4 @@ class Module
             ),
         );
     }
-
-    public function getServiceConfig() {
-        return array (
-            'factories' => array (
-
-                //for test,Result and link table
-                'Dashboard\Model\RecentDetails' => function ($sm) {
-                    $dbAdapter = $sm->get ('clientdb');
-                    $table = new RecentDetails($dbAdapter);
-                    return $table;
-                },
-                'Dashboard\Model\DashUpdates' => function ($sm) {
-                	$dbAdapter = $sm->get ( 'clientdb' );
-                	$resultSetPrototype = new  DashUpdates($dbAdapter);
-                	return $resultSetPrototype;
-                },
-            )
-        );
-    }
 }

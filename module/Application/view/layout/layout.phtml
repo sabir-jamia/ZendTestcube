@@ -43,7 +43,6 @@ $link = isset($this->layout()->modulenamespace)?$this->layout()->modulenamespace
 </html>
 <?php 
     else:
-    
     switch ($link){
 	   case 'Category':
 	       $pageinfo  = "Categories for the Test";
@@ -88,22 +87,24 @@ $link = isset($this->layout()->modulenamespace)?$this->layout()->modulenamespace
 	</head>
 	<body>
 		<?php echo $this->partial('layout/header-third', array('username' => $usrname));?>
-		<?php echo $this->partial('layout/dash-menu', array('link' => $link, 'countData' => $this->countData));?>
-           <div id="dash-right-content">
-           		<div id="content-border" class="blue-background"></div>
-            	<div id="content-header">
-            		<div id="text"><?php echo $pageinfo ?></div>
-            		<div id="heading"><span class="icon glyphicon <?php echo $pageicon;?> margin-right5"></span><span><?php echo $link?></span></div>
-            	</div> <!-- end of content header-->
-            	<div id="header-arrow" ></div>
-            	<div class="content">
-                	<?php echo $this->content; ?>
-                    <div id="footer">
-                    	<p>&copy; <?php echo date('Y') ?> by OSSCube Pvt. Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
-                    </div> <!-- end of foot -->
-                </div> <!-- end of content. -->
-           </div>         
-       	</div> <!-- /container -->
+		<div id="dash-content" class="container">
+			<?php echo $this->partial('layout/dash-menu', array('link' => $link, 'countData' => $this->countData));?>
+        		<div id="dash-right-content">
+        			<div id="content-border" class="blue-background"></div>
+            		<div id="content-header">
+            			<div id="text"><?php echo $pageinfo ?></div>
+            			<div id="heading">
+            				<span class="icon glyphicon <?php echo $pageicon;?> margin-right5"></span>
+            				<span><?php echo $link?></span>
+            			</div>
+            		</div> <!-- end of content header-->
+            		<div id="header-arrow" ></div>
+            		<div class="content">
+                		<?php echo $this->content; ?>
+         			</div>         
+       			</div>
+       	</div>
+       	<?php echo $this->partial('layout/footer');?>
 	</body>
 </html>                  
 <?php endif;?>

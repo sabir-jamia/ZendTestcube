@@ -17,71 +17,6 @@
 	width: 430px;
 }
 
-.pagination {
-    height: 36px;
-    margin: 18px 0;
-    padding-top: 8px;
-}
-.pagination ul {
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 3px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    float: left;
-    margin: 0;
-}
-.pagination li {
-    display: inline;
-}
-.pagination a {
-    border-right: 1px solid rgba(0, 0, 0, 0.15);
-    color: #3473A9;
-    float: left;
-    line-height: 34px;
-    padding: 0 14px;
-    text-decoration: none;
-}
-.pagination a:hover, .pagination .active a {
-    background-color: #F1F1F1;
-}
-.pagination .disabled a, .pagination .disabled a:hover {
-    background-color: rgba(0, 0, 0, 0);
-    color: #BFBFBF;
-}
-.pagination .next a {
-    border: 0 none;
-}
-.pager {
-    list-style: none outside none;
-    margin: 20px 0;
-    padding-left: 0;
-    text-align: center;
-}
-.pager li {
-    display: inline;
-}
-.pager li > a, .pager li > span {
-    background-color: #FFFFFF;
-    border: 1px solid #DDDDDD;
-    border-radius: 15px;
-    display: inline-block;
-    padding: 5px 14px;
-}
-.pager li > a:hover, .pager li > a:focus {
-    background-color: #EEEEEE;
-    text-decoration: none;
-}
-.pager .next > a, .pager .next > span {
-    float: right;
-}
-.pager .previous > a, .pager .previous > span {
-    float: left;
-}
-.pager .disabled > a, .pager .disabled > a:hover, .pager .disabled > a:focus, .pager .disabled > span {
-    background-color: #FFFFFF;
-    color: #999999;
-    cursor: not-allowed;
-}
-
 #btnOk
 {
     margin-top: 45px;
@@ -97,11 +32,6 @@
      font-size: 12px;
     margin-left: 0;
     margin-top: 10px;
-}
-
-#errorsDiv{
-	margin-top: 10px;
-	margin-left: 50px;
 }
 
 #txtLink

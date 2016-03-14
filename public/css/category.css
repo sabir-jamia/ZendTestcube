@@ -1,13 +1,12 @@
-
 #btnCategoryCreate
 	{
-    border-radius: 0;
+    /*border-radius: 0;
     float: right;
     margin-top: 6px;
     min-width: 100px;
     padding: 5px 10px;
     text-align: center;
-
+*/
 	}
 
 .CategoryTable{
@@ -110,4 +109,3 @@
         background: #FFF;
         color:#666;
 }
-

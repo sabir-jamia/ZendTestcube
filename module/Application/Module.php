@@ -82,39 +82,25 @@ class Module
         $controller = $e->getTarget();
         $controllerClass = get_class($controller);
         $moduleNamespace = substr($controllerClass, 0, strpos($controllerClass, '\\'));
-        if ($req->isXmlHttpRequest()) {
-            return;
-        }
-        $controller->layout()->modulenamespace = $moduleNamespace;
         
         if ($req->isXmlHttpRequest()) {
             return;
         }
         $userSession = new Container('users');
-        
-        if ($moduleNamespace == 'Application') {
-            if ($userSession->offsetExists('id')) {
-                $controller->plugin('redirect')->toRoute('dashboard');
-            }
-        } else {
-            $userSession = new Container('users');
-            if ($userSession->OffSetExists('clientId')) {
+        if ($moduleNamespace != 'Student') {
+            if($userSession->offsetExists('username')) {
                 $userid = $userSession->clientId;
                 $selectedtheme = $sm->get('Application\Model\ApplicationTable')->fetchtheme($userid);
                 $countData = $sm->get('Application\Model\ApplicationTable')->fetchCounts();
                 $controller->layout()->themeselected = $selectedtheme[0];
                 $controller->layout()->countData = $countData[0];
-            }
-            if (! $userSession->offsetExists('id') && $moduleNamespace == "Student") {
-                return;
-                // \Zend\Debug\Debug::dump($controller) ;
-                // die("kill");
-                // $controller->plugin('redirect')->toRoute('student');
-                // $this->redirect()->toRoute('student');
-            } elseif (! $userSession->offsetExists('id')) {
+                if($e->getRouteMatch()->getMatchedRouteName() == 'home') {
+                    $controller-> plugin('redirect')->toRoute('dashboard');
+                }
+            } else {
                 $moduleNamespace = "NotLoggedIn";
-                //$controller->plugin('redirect')->toRoute('home');
             }
         }
+        $controller->layout()->modulenamespace = $moduleNamespace;
     }
 }

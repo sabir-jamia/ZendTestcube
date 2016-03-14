@@ -10,36 +10,35 @@
     endif;
     $link = $this->link
 ?>
-<div id="dash-content" class="container">
-	<div id="dash-left-content">
-		<ul id="nav-menu">
-    		<a href="/dashboard" id="ancrDash" onMouseOver="addClassCurrent('Dash');" onMouseOut="removeClassCurrent('Dash');">
-    			<span id="icoDash" class="icon glyphicon glyphicon-inbox <?php if($link == "Dashboard" ) { echo "page-current"; } ?>"></span>
-                <li id="lnkDash" class="<?php if($link == "Dashboard" ) { echo "link-current"; } ?>">DASHBOARD</li>
-            </a>
-            <a href="/category" id="ancrCategory" onMouseOver="addClassCurrent('Category');" onMouseOut="removeClassCurrent('Category');">
-            	<span id="icoCategory" class="icon glyphicon glyphicon-th <?php if($link == "Category" ) { echo "page-current"; } ?>"></span>
-                <li id="lnkCategory" class="<?php if($link == "Category" ) { echo "link-current"; } ?>">CATEGORIES<span class="badge badge-style <?php if($catCount > 0){ echo 'blue-background'; }?>"><?php echo $catCount?></span></li>    
-           	</a>
-            <a href="/question" id="ancrQuestions" onMouseOver="addClassCurrent('Questions');" onMouseOut="removeClassCurrent('Questions');">
-            	<span id="icoQuestions" class="icon glyphicon glyphicon-list-alt <?php if($link == "Question" ) { echo "page-current"; } ?>"></span>
-                <li id="lnkQuestions" class="<?php if($link == "Question" ) { echo "link-current"; } ?>">QUESTIONS<span class="badge badge-style <?php if($quesCount > 0){ echo 'blue-background'; }?>"><?php echo $quesCount?></span></li>
-            </a>
-            <a href="/test" id="ancrTests" onMouseOver="addClassCurrent('Tests');" onMouseOut="removeClassCurrent('Tests');">
-            	<span id="icoTests" class="icon glyphicon glyphicon-file <?php if($link == "Test" ) { echo "page-current"; } ?>"></span>
-            	<li id="lnkTests" class="<?php if($link == "Test" ) { echo "link-current"; } ?>">TESTS<span class="badge badge-style <?php if($testCount > 0){ echo 'blue-background'; }?>"><?php echo $testCount?></span></li>
-            </a>
-            <a href="/certificate" id="ancrCertificates" onMouseOver="addClassCurrent('Certificates');" onMouseOut="removeClassCurrent('Certificates');">
-               	<span id="icoCertificates" class="icon glyphicon glyphicon-certificate <?php if($link == "Certificate" ) { echo "page-current"; } ?>"></span>
-                <li id="lnkCertificates" class="<?php if($link == "Certificate" ) { echo "link-current"; } ?>">CERTIFICATES<span class="badge badge-style <?php if($certiCount > 0){ echo 'blue-background'; }?> "><?php echo $certiCount?></span></li>
-            </a>
-            <a href="/result" id="ancrResulsts" onMouseOver="addClassCurrent('Results');" onMouseOut="removeClassCurrent('Results');">
-            	<span id="icoResults" class="icon glyphicon glyphicon-check <?php if($link == "Result" ) { echo "page-current"; } ?>"></span>
-                <li id="lnkResults" class="<?php if($link == "Result" ) { echo "link-current"; } ?>">RESULTS<span class="badge badge-style <?php if($resCount > 0){ echo 'blue-background'; }?>"><?php echo $resCount?></span></li>
-            </a>
-            <a href="/user/userProfile" id="ancrUsers" onMouseOver="addClassCurrent('Users');" onMouseOut="removeClassCurrent('Users');">
-                <span id="icoUsers" class="icon glyphicon glyphicon-user <?php if($link == "User" ) { echo "page-current"; } ?>"></span>    
-                <li id="lnkUsers" class="<?php if($link == "User" ) { echo "link-current"; } ?>">USERS<span class="badge badge-style <?php if($usrCount > 0){ echo 'blue-background'; }?>"><?php echo $usrCount?></span></li>
-            </a>
-        </ul><!-- end of dash-menu -->
+<div id="dash-left-content">
+	<ul id="nav-menu">
+		<a href="/dashboard" id="ancrDash" onMouseOver="addClassCurrent('Dash');" onMouseOut="removeClassCurrent('Dash');">
+		<span id="icoDash" class="icon glyphicon glyphicon-inbox <?php if($link == "Dashboard" ) { echo "page-current"; } ?>"></span>
+        <li id="lnkDash" class="<?php if($link == "Dashboard" ) { echo "link-current"; } ?>">DASHBOARD</li>
+    </a>
+    <a href="/category" id="ancrCategory" onMouseOver="addClassCurrent('Category');" onMouseOut="removeClassCurrent('Category');">
+    	<span id="icoCategory" class="icon glyphicon glyphicon-th <?php if($link == "Category" ) { echo "page-current"; } ?>"></span>
+        <li id="lnkCategory" class="<?php if($link == "Category" ) { echo "link-current"; } ?>">CATEGORIES<span class="badge badge-style <?php if($catCount > 0){ echo 'blue-background'; }?>"><?php echo $catCount?></span></li>    
+   	</a>
+    <a href="/question" id="ancrQuestions" onMouseOver="addClassCurrent('Questions');" onMouseOut="removeClassCurrent('Questions');">
+    	<span id="icoQuestions" class="icon glyphicon glyphicon-list-alt <?php if($link == "Question" ) { echo "page-current"; } ?>"></span>
+        <li id="lnkQuestions" class="<?php if($link == "Question" ) { echo "link-current"; } ?>">QUESTIONS<span class="badge badge-style <?php if($quesCount > 0){ echo 'blue-background'; }?>"><?php echo $quesCount?></span></li>
+    </a>
+    <a href="/test" id="ancrTests" onMouseOver="addClassCurrent('Tests');" onMouseOut="removeClassCurrent('Tests');">
+    	<span id="icoTests" class="icon glyphicon glyphicon-file <?php if($link == "Test" ) { echo "page-current"; } ?>"></span>
+    	<li id="lnkTests" class="<?php if($link == "Test" ) { echo "link-current"; } ?>">TESTS<span class="badge badge-style <?php if($testCount > 0){ echo 'blue-background'; }?>"><?php echo $testCount?></span></li>
+    </a>
+    <a href="/certificate" id="ancrCertificates" onMouseOver="addClassCurrent('Certificates');" onMouseOut="removeClassCurrent('Certificates');">
+       	<span id="icoCertificates" class="icon glyphicon glyphicon-certificate <?php if($link == "Certificate" ) { echo "page-current"; } ?>"></span>
+        <li id="lnkCertificates" class="<?php if($link == "Certificate" ) { echo "link-current"; } ?>">CERTIFICATES<span class="badge badge-style <?php if($certiCount > 0){ echo 'blue-background'; }?> "><?php echo $certiCount?></span></li>
+    </a>
+    <a href="/result" id="ancrResulsts" onMouseOver="addClassCurrent('Results');" onMouseOut="removeClassCurrent('Results');">
+    	<span id="icoResults" class="icon glyphicon glyphicon-check <?php if($link == "Result" ) { echo "page-current"; } ?>"></span>
+        <li id="lnkResults" class="<?php if($link == "Result" ) { echo "link-current"; } ?>">RESULTS<span class="badge badge-style <?php if($resCount > 0){ echo 'blue-background'; }?>"><?php echo $resCount?></span></li>
+    </a>
+    <a href="/user/userProfile" id="ancrUsers" onMouseOver="addClassCurrent('Users');" onMouseOut="removeClassCurrent('Users');">
+        <span id="icoUsers" class="icon glyphicon glyphicon-user <?php if($link == "User" ) { echo "page-current"; } ?>"></span>    
+        <li id="lnkUsers" class="<?php if($link == "User" ) { echo "link-current"; } ?>">USERS<span class="badge badge-style <?php if($usrCount > 0){ echo 'blue-background'; }?>"><?php echo $usrCount?></span></li>
+    </a>
+</ul><!-- end of dash-menu -->
    </div>

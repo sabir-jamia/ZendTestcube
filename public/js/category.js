@@ -1,32 +1,67 @@
-/* ========================================================================
- * Author : Manish
- * Module : Category
- * Date	  : 01-07-2014
- * site   : zendtestcube.com
- * ======================================================================== */
-
-/*category */
-
-$(function() {
-
-	/* add Category Modal */
-	$("#btnCategoryCreate").click(function(e) {
-		$('#myModalLabel').html("Add new Category");
-
-		$.ajax({
+$(document).ready(function(){
+	$(document).on('click','#create-category', function() {
+		loaderWait('show');
+    	$.ajax({
 			url : "/category/add",
 			success : function(result) {
-				$("#modal-body").html(result);
-
+				$("#popup-content").html(result);
+				loaderWait('hide');
+				$('#myModal').modal('show');
+			}
+		});
+	});
+	
+	$(document).on('click','#submit-category', function() {
+		$.ajax({
+			url : "/category/add",
+			type : 'post',
+			data : $('#add-category').serialize(),
+			dataType : 'json',
+			success : function(result) {
+				if (result.status == 0) {
+					$('#myModal').modal('hide');
+					window.location.href = "/category";
+				} else if (result.status == 1) {
+					alert('sgahsghj');
+				} else if (result.status == 2) {
+					$('#errCat').html('Category already taken').css('color', 'red');
+				}
 			}
 		});
 	});
 
+	var prevSelectedVlue = $("#tbl-select-value option:selected").val();
+	$(document).on('change', '#tbl-select-value', function() {
+		var selectedValue = this.value;
+		var offset = parseInt(prevSelectedVlue);
+		
+		if(prevSelectedVlue < selectedValue) {
+			limit = selectedValue - prevSelectedVlue;		
+			$.ajax({
+				url : "/category/fetch",
+				type : 'get',
+				data : {limit:limit, offset:offset},
+				dataType : 'json',
+				success : function(result) {
+					addRows(result);
+				}
+			});
+			updatePagination('remove', selectedValue);
+		} else {
+			removeRows(selectedValue);
+			updatePagination('add', selectedValue);
+		}
+		prevSelectedVlue = selectedValue;
+	});
+	
+	$(document).on('click', '#tbl-pagination li:first-child', function() {
+	});
+
+	$(document).on('click', '#tbl-pagination li:last-child', function() {
+	});
 
 	$(document).on('click', '#deleteCategory', function() {
-
 		var catid = $("#deleteCategory").val();
-
 		$.ajax({
 			type : "POST",
 			url : "/category/deleteCategory",
@@ -43,22 +78,11 @@ $(function() {
 		});
 
 	});
-
-	/*document.ready finished */
-
 });
 
-
-
-
-
-
 /* Edit Category Modal */
-
 function editCat(catId){
-	
 	$('#myModalLabel').html("Edit Category");
-	
 	$.ajax({
 		url : "/category/edit",
 		data : {catid : catId},
@@ -69,11 +93,8 @@ function editCat(catId){
 }
 
 /* Delete Category Modal */
-
-// calling the delete confirmation box
 function deleteCat(catId) {
 	$('#myModalLabel').html("Delete Category");
-
 	var name = $("#deleteCat"+catId).data('name');
 	$.ajax({
 		url : "/category/delete",
@@ -86,78 +107,7 @@ function deleteCat(catId) {
 	});
 }
 
-$(document).on('click','#btnAddCategory',
-		function() {
-
-			if (validatecatname() == 1) {
-
-				$('#myModal').modal('show');
-
-				return 0;
-			}
-
-			else if (validatecatname() == 0) {
-				var catname = $('#txtCategoryName').val();
-				var catid = 0;
-				$.ajax({
-					url : "/category/add",
-					type : 'POST',
-					data : {
-						name : catname,
-						id : catid
-					},
-					dataType : 'json',
-
-					success : function(result) {
-						if (result.status == 0) {
-
-							$('#myModal').modal('hide');
-
-							window.location.assign("category")
-						}
-
-						else if (result.status == 1) {
-							alert('sgahsghj');
-						} else if (result.status == 2) {
-							$('#errCat').html('Category already taken').css(
-									'color', 'red');
-						}
-
-					}
-				});
-			}
-
-		});
-
-/*
-                 var catname = "#" + catname;
-                 var catnameVal = $(catname).val().trim();
-
-         $.ajax({
-
-                 type: 'POST',
-                 data: {txtVal:catnameVal},
-                 dataType: 'json',
-                 url: '/category/checkVal',
-
-                 success:function(data){
-                         if(data.val === 0){
-                         return 0;
-                         
-                     } else {
-                         $('#errCat').html('Category already taken').css('color','red');
-                        
-                        return 1;
-                     }
-                 }
-
-             });
-
-
- */
-
 /*reload category list */
-
 function reloadcatlist() {
 	$.ajax({
 		url : "/category/list",
@@ -169,7 +119,6 @@ function reloadcatlist() {
 }
 
 /* multiple delete   */
-
 $(document).ready(function() {
 	$('#chkAll').click(function() {
 		$(':checkbox[name=deleteall]').prop('checked', this.checked);
@@ -177,17 +126,9 @@ $(document).ready(function() {
 });
 
 $(document).on('click', '#deletebtn', function() {
-	//alert('working');
-
-
 var atLeastOneIsChecked = $('input[name="deleteall"]:checked').length;
-
-
-
-
 	if(atLeastOneIsChecked > 0)
 	{
-		
 		$('#myModalLabel').html("Delete All Categories");
 
 	$.ajax({
@@ -199,56 +140,14 @@ var atLeastOneIsChecked = $('input[name="deleteall"]:checked').length;
 	});
 
 	}
-
 	else
 	{
-		
 	$('#myModalLabel').html("Delete All Categories");
 	$("#modal-body").html('You havent selected any checkbox');
-		
-	
 	}
-
-
-	
-
-	/*$.ajax({
-	        
-	        type: "POST",
-	        data: "",
-
-	        url: base_url +'index.php?controller=category&function=deleteMulCatName', //the script to call to get data          
-
-	        //data: "", //you can insert url argumnets here to pass to api.php for example "id=5&parent=6"
-	        dataType: 'html',
-	       
-	        
-	        beforeSend: function() {
-	
-	        },
-	        success: function(response) {
-	            $('#myModalLabel').html("Delete Category");
-	            $('#modal-body').html(response);
-	              
-	       
-	        },
-	        complete: function() {
-	
-	        },
-	        error: function() {
-	            
-	        }
-	    });*/
-
 });
 
-
-
-
-
-
 // opening multiple delete window
-
 function deleting() {
 	var j = 0;
 	var boxes = document.getElementsByClassName('chk');
@@ -275,25 +174,6 @@ function deleting() {
 	});
 
 }
-
-
-
-
-
-/*$("#delmulcat").click(function(){
- var id=$(".form-control").attr('id');
-
- alert(id);
-
- $.ajax({
- url : "/category/deleteall",
- success : function(result) {
- $("#myModal").html(result);
-
- }
- });
-
- });*/
 
 $(document).on('click','#savechanges',
 		function() {
@@ -371,3 +251,67 @@ function validateeditcatname() {
 	}
 	return 0;
 }
+
+
+var loaderWait = function (action) {
+	if(action == 'show') {
+		var height = window.innerHeight/2;
+		var width = window.innerWidth/2;
+		$('body').append('<div class="clo-md-3 modal fade in" style="display:block;z-index:1070">'+
+				'<img id="loadingImage" lass="img-responsive" src="/img/loading.gif"'+
+				' style="width: 80px; margin-top:220px; margin-left:620px;" >'+
+				'</div>');
+		$('body').append('<div id="loader-backdrop" class="modal-backdrop fade in" style="z-index:1060;"></div>');
+    } else {
+    	$('#loadingImage').parent('div').remove();
+    	$('#loader-backdrop').remove();
+    }
+};
+
+var addRows = function(rowData) {
+	var row = "";
+	$.each(rowData, function(key, value) {
+		row = '<tr>'+
+				'<td>'+
+					'<input type="checkbox" id="newchk" name="deleteall" value="'+value.id+'">'+
+				'</td>'+
+				'<td>'+
+					'<a id="'+value.id+'" class="viewQuestion" href="9" title="Select the category to add questions">'+
+						value.name+
+					'</a>'+
+				'</td>'+
+				'<td>'+
+					'<a style="cursor:pointer;" href="/category/1" class="col-sm-3">'+
+						'<span aria-hidden="true" class="glyphicon glyphicon-remove"></span>'+
+						'</a>' +
+						'<a style="cursor:pointer;" href="/category/2" class="col-sm-3">'+
+							'<span aria-hidden="true" class="glyphicon glyphicon-edit"></span>'+
+						'</a>'+
+						'<a style="cursor:pointer;" href="/category/3" class="col-sm-3">'+
+							'<span aria-hidden="true" class="glyphicon glyphicon-eye-open"></span>'+
+						'</a>'+
+				'</td>'+
+			'</tr>';
+		$('#example tbody').append(row);
+	});
+};
+
+var removeRows = function(limit) {
+	limit = limit -1;
+	$("#example tbody tr:gt("+limit+")").remove();
+};
+
+var updatePagination = function(addOrRemove, selectedValue) {
+	var rowCount = parseInt($('#row-count').val());
+	var pageCount = Math.ceil(rowCount / selectedValue);
+	var currentPageCount = $('#tbl-pagination li').length - 1;
+	
+	if(addOrRemove == 'add') {
+		var page;
+		for(var i=currentPageCount;i <= pageCount;i++) {
+			$('<li><a href="#">'+i+'</a></li>').insertBefore('#tbl-pagination li:last-child');
+		}
+	} else {
+		$('#tbl-pagination li:gt('+pageCount+'):not(:last-child)').remove();
+	}
+};

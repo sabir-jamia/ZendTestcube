@@ -28,5 +28,10 @@ return array(
         'template_path_stack' => array(
             __DIR__ . '/../view'
         )
-    )
+    ),
+    'service_manager' => array(
+        'abstract_factories' => array(
+            'DashboardAbstractFactory' => 'Dashboard\Model\Factory\DashboardAbstractFactory',
+        ),
+    ),
 );

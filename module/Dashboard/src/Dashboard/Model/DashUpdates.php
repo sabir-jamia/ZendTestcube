@@ -88,15 +88,14 @@ class DashUpdates
         $sql = new Sql($this->adapter);
         $select = $select = $sql->select()
             ->from(array(
-            'users' => 'users'
-        ))
+                'users' => 'users'
+            ))
             ->where(array(
-            'email' => $useremail
-        ));
+                'email' => $useremail
+           ));
         
         $statement = $sql->prepareStatementForSqlObject($select);
         $result = $this->resultSetPrototype->initialize($statement->execute());
-        
         $row = $result->current();
         
         if (! $row) {
@@ -104,7 +103,7 @@ class DashUpdates
         }
         return $row;
     }
-
+    
     public function time_elapsed_string($datetime, $full = false)
     {
         $date = ($datetime instanceof \DateTime ? $datetime : new \DateTime($datetime));

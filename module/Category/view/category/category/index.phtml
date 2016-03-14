@@ -1,278 +1,110 @@
-<?php
-
-ini_set('display_errors', 1);
+<?php 
 $title = 'Category';
 $this->headTitle($title);
-
-
-//<!DOCTYPE HTML>
+$pageCount = ($rowCount) / $defaultSelect;
 ?>
-
-
-        <div class="row-mid">
-            <div id="table-content">
-                   <div id="d-table-menu">
-            <a class="deletebtn" id="multiDeleteCatbtn" data-toggle="modal" data-target="#myModal" title="Delete Selected Category" href="#"></a>
-            
-            <a id="btnCategoryCreate" href="#" data-toggle="modal" data-target="#myModal" class="btn fontapply">+ NEW CATEGORY</a>
-            
-              </div>
-            
-              <form name="categoryform">
-            <table cellpadding="0" cellspacing="0" border="0" class="CategoryTable table-bordered" id="example">
-              <thead>
-                <tr>
-                    <th><input type="checkbox" id="chkAll" /></th>
+<input type="hidden"/ value='<?php echo $rowCount;?>' id="row-count">
+<div class="row">
+	<div class="col-sm-4 form-horizontal">
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="tbl-select-value">
+    			Show
+    		</label>
+    		<div class="col-sm-4">
+    			<select name="tbl-select-value" id="tbl-select-value" class="form-control input-sm">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="8">8</option>
+				</select> 
+    		</div>
+    		<label class="control-label col-sm-2" for="tbl-select-value">
+    			entries
+    		</label>
+  		</div>
+  	</div>
+	<div class="col-sm-4">
+		<button id="create-category" type="button" class="btn btn-primary col-sm-offset-3">
+			+New category
+		</button>
+	</div>
+		<div class="col-sm-4 form-horizontal">
+			<div class="form-group">
+				<label class="control-label col-sm-3" for="tbl-select-value">
+    				Search:
+    			</label>
+    			<div class="col-sm-9">	
+					<input type="search" class="form-control input-sm">
+				</div>
+			</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+        <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        	<thead>
+        		<tr>
+        			<th><input type="checkbox" id="chkAll" /></th>
                     <th>Category</th>
                     <th class="action">Actions</th>
-                </tr>
-              </thead>
-               
-              <tbody>
-                
-                <?php $s="../question?catques="?>
-            <?php  foreach ($categories as $category){ ?>
-
-                <tr>
-                    <td><input type="checkbox" value="<?php  echo $this->escapehtml($category->id);?>" name="deleteall" class= "chk" id="newchk" ></td>
-                     <td>
-                     
-                     <a title='Select the category to add questions' href='<?php echo $s.$category->id;?>' class="viewQuestion" id="<?php echo $category->id;?>">
-                     <?php  echo $this->escapehtml($category->name);?></a></td>
-                    <td>
-                    <a href="#" data-toggle="modal" data-target="#myModal">
-                    <div class="delete-btn" id="deleteCat<?php  echo $this->escapehtml($category->id);?>" 
-                    data-name='<?php echo $this->escapehtml($category->name); ?>' 
-                    onclick="deleteCat(<?php echo $this->escapehtml($category->id); ?>)" ></div></a>
-
-                 <a href="#" data-toggle="modal" data-target="#myModal">
-                 <div class="edit-btn" id="editCat<?php  echo $this->escapehtml($category->id);?>" 
-                    onclick="editCat(<?php  echo $this->escapehtml($category->id);?>)"
-                 	data-name="<?php  echo $this->escapehtml($category->name);?>"></div></a>
-                  <a href="#"><div class="view-btn"  id="<?php  echo $this->escapehtml($category->id);?>"></div></a>  
-
-               </td>
-           </tr>
-                  <div class="div-details" id="details<?php  echo $this->escapehtml($category->id);?>">
-                  <div class="Quesdetails-left">
-                                                          Created By : <strong><?php echo $this->escapehtml($category->createdBy); ?></strong><br>
-                                                          Created On : <strong><?php $date = date_create($category->created_on); echo date_format($date,'Y-m-d H:i:s'); ?></strong><br>
-                                  </div>
-                                  <div class="Quesdetails-right margin-top0 ">
-                                                                  Updated By : <strong><?php  echo $category->updated_by!=""?$this->escapehtml($category->updatedBy):'Not applicable'; ?></strong><br>
-                                                                  Updated On : <strong><?php $date = date_create($category->updated_on); echo $category->updated_by!=""?date_format($date,'Y-m-d H:i:s'):'Not applicable'; ?></strong><br>
-                                  </div>
-                </div> <!-- end of div-details -->
-
-                <?php } ?> 
-            </tbody>
-           </table>
-           </form> 
-          </div>
+               </tr>
+        	</thead>
+        	<tbody>
+        	<?php foreach ($categories as $category):?>
+        		<tr>
+        			<td>
+        				<input type="checkbox" value="<?php echo $this->escapehtml($category['id']);?>" 
+        				name="deleteall" id="newchk" >
+        			</td>
+        			<td>
+        			   	<a title='Select the category to add questions' href='<?php echo $category['id'];?>' 
+        			   		class="viewQuestion" id="<?php echo $category['id'];?>">
+        			   		<?php  echo $this->escapehtml($category['name']);?>
+        			   	</a>
+        			</td>
+        			<td>
+        				<a class="col-sm-3" href="/category/1" style="cursor:pointer;">
+        					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        				</a>
+                    	<a class="col-sm-3" href="/category/2" style="cursor:pointer;">
+                    		<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    	</a>
+                    	<a class="col-sm-3" href="/category/3" style="cursor:pointer;">
+                    		<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                    	</a>
+                    </td>
+        		</tr>
+        	<?php endforeach;?>
+        	</tbody>
+        </table>
     </div>
-
-            <!-- Modal -->
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                  </div>
-                  <div id="modal-body" class="modal-body">
-                
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-    
-    <script type="text/javascript">
-
-        /* Formating function for row details */
-        function fnFormatDetails ( oTable, nTr, ele )
-        {
-            var elemnt = "#details"+ele;
-            var aData = oTable.fnGetData( nTr );
-            var sOut    =  $(elemnt).html();
-            return sOut;
-        }
-
-
-    
-    /* API method to get paging information */
-$.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
-{
-    return {
-        "iStart":         oSettings._iDisplayStart,
-        "iEnd":           oSettings.fnDisplayEnd(),
-        "iLength":        oSettings._iDisplayLength,
-        "iTotal":         oSettings.fnRecordsTotal(),
-        "iFilteredTotal": oSettings.fnRecordsDisplay(),
-        "iPage":          oSettings._iDisplayLength === -1 ?
-            0 : Math.ceil( oSettings._iDisplayStart / oSettings._iDisplayLength ),
-        "iTotalPages":    oSettings._iDisplayLength === -1 ?
-            0 : Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
-    };
-}
- 
-/* Bootstrap style pagination control */
-$.extend( $.fn.dataTableExt.oPagination, {
-    "bootstrap": {
-        "fnInit": function( oSettings, nPaging, fnDraw ) {
-            var oLang = oSettings.oLanguage.oPaginate;
-            var fnClickHandler = function ( e ) {
-                e.preventDefault();
-                if ( oSettings.oApi._fnPageChange(oSettings, e.data.action) ) {
-                    fnDraw( oSettings );
-                }
-            };
- 
-            $(nPaging).addClass('pagination').append(
-                '<ul>'+
-                    '<li class="prev disabled"><a href="#">&larr; '+oLang.sPrevious+'</a></li>'+
-                    '<li class="next disabled"><a href="#">'+oLang.sNext+' &rarr; </a></li>'+
-                '</ul>'
-            );
-            var els = $('a', nPaging);
-            $(els[0]).bind( 'click.DT', { action: "previous" }, fnClickHandler );
-            $(els[1]).bind( 'click.DT', { action: "next" }, fnClickHandler );
-        },
- 
-        "fnUpdate": function ( oSettings, fnDraw ) {
-            var iListLength = 5;
-            var oPaging = oSettings.oInstance.fnPagingInfo();
-            var an = oSettings.aanFeatures.p;
-            var i, j, sClass, iStart, iEnd, iHalf=Math.floor(iListLength/2);
- 
-            if ( oPaging.iTotalPages < iListLength) {
-                iStart = 1;
-                iEnd = oPaging.iTotalPages;
-            }
-            else if ( oPaging.iPage <= iHalf ) {
-                iStart = 1;
-                iEnd = iListLength;
-            } else if ( oPaging.iPage >= (oPaging.iTotalPages-iHalf) ) {
-                iStart = oPaging.iTotalPages - iListLength + 1;
-                iEnd = oPaging.iTotalPages;
-            } else {
-                iStart = oPaging.iPage - iHalf + 1;
-                iEnd = iStart + iListLength - 1;
-            }
- 
-            for ( i=0, iLen=an.length ; i<iLen ; i++ ) {
-                // Remove the middle elements
-                $('li:gt(0)', an[i]).filter(':not(:last)').remove();
- 
-                // Add the new list items and their event handlers
-                for ( j=iStart ; j<=iEnd ; j++ ) {
-                    sClass = (j==oPaging.iPage+1) ? 'class="active"' : '';
-                    $('<li '+sClass+'><a href="#">'+j+'</a></li>')
-                        .insertBefore( $('li:last', an[i])[0] )
-                        .bind('click', function (e) {
-                            e.preventDefault();
-                            oSettings._iDisplayStart = (parseInt($('a', this).text(),10)-1) * oPaging.iLength;
-                            fnDraw( oSettings );
-                        } );
-                }
- 
-                // Add / remove disabled classes from the static elements
-                if ( oPaging.iPage === 0 ) {
-                    $('li:first', an[i]).addClass('disabled');
-                } else {
-                    $('li:first', an[i]).removeClass('disabled');
-                }
- 
-                if ( oPaging.iPage === oPaging.iTotalPages-1 || oPaging.iTotalPages === 0 ) {
-                    $('li:last', an[i]).addClass('disabled');
-                } else {
-                    $('li:last', an[i]).removeClass('disabled');
-                }
-            }
-        }
-    }
-} );
-
-$(document).ready(function() {
-
-            
-    var oTable = $('#example').dataTable( {
-        "bLengthChange": false,
-        "bFilter": true,
-        "bInfo": true,
-        "bAutoWidth": false,
-        "sPaginationType": "bootstrap",
-        "aoColumnDefs": [   //Initialse DataTables, with no sorting on the 'checkbox' column
-            { "bSortable": false, "aTargets": [ 0 ] }
-        ],
-        "aaSorting": [[1, 'asc']]
-        } );
-    /* Add event listener for opening and closing details
-     * Note that the indicator for showing which row is open is not controlled by DataTables,
-     * rather it is done here
-     */
-
-
-
-    //used to send category id to the viewCategory function in category controller
-   // $('.view-btn, .hide-btn').click(function () {
-     $(document).on('click','.view-btn, .hide-btn',
-        function() {
-       
-         if ($(this).attr("class") == "view-btn") {
-
-                $(this).removeClass("view-btn");
-                $(this).addClass("hide-btn");
- 
-        }
-        else{
-            $(this).removeClass("hide-btn");
-            $(this).addClass("view-btn");
-        }
- 
-         var ele = $(this).attr('id');
-        var nTr = $(this).parents('tr')[0];
-
-        if ( oTable.fnIsOpen(nTr) )
-        {
-            /* This row is already open - close it */
-            this.src = "../examples_support/details_open.png";
-            oTable.fnClose( nTr );
-        }
-        else
-        {
-            /* Open this row */
-            this.src = "../examples_support/details_close.png";
-            oTable.fnOpen( nTr, fnFormatDetails(oTable, nTr,ele), 'details' );
-        }
-    });
-     
-});
-
-$.fn.dataTableExt.oStdClasses["sFilter"] = "Dfilter";
-$('#example_wrapper').css("margin-top","50px");
-</script>
-<script>
-
-
-function addClassCurrent(element)
-{
-    var el="#ico"+element;
-    $(el).addClass("current");
-}
-
-function removeClassCurrent(element)
-{
-    var el="#ico"+element;
-    $(el).removeClass("current");
-}
-$('#footer').css("padding-top","30px");
-
-
-$(".chk").click(function() {
-document.getElementById("chkAll").checked = false;
-});
-
-
-</script>
+</div>
+<div class="row">
+		<div class="dataTables_info" id="example_info" role="status" aria-live="polite">
+			Showing 1 to 1 of 1 entries
+		</div>
+</div>
+<div class="row">
+	<div class="col-md-offset-5">
+		<nav id="tbl-pagination">
+			<ul class="pagination">
+    			<li class="disabled">
+      				<a href="#" aria-label="Previous">
+        				<span aria-hidden="true">&laquo;</span>
+      				</a>
+    			</li>
+    			<?php for ($i=$pageCount; $i--; $i >=0) :?>
+    				<?php $page = $pageCount - $i;?>
+    				<li <?php if($selectedPage == $page): echo 'class="active"';endif;?>>
+    					<a href="#"><?php echo $page;?></a>
+    				</li>
+    			<?php endfor;?>
+    			<li class="disabled">
+      				<a href="#" aria-label="Next">
+        				<span aria-hidden="true">&raquo;</span>
+      				</a>
+    			</li>
+  			</ul>
+		</nav>
+	</div>
+</div>
