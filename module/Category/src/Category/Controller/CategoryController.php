@@ -28,7 +28,7 @@ class CategoryController extends AbstractActionController
             'selectedPage' => $selectedPage
         ));
     }
-
+    
     public function addAction()
     {
         $request = $this->getRequest();
@@ -69,6 +69,21 @@ class CategoryController extends AbstractActionController
         }
     }
 
+    public function deleteCategoryAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $id = (int) $this->params()->fromQuery('id', 0);
+            $userSession = new Container('users');
+            $userid = $userSession->clientId;
+            $categoryTable = $this->serviceLocator->get('CategoryFactory');
+            $categoryTable->deleteCategory($id, $userid);
+            //$this->getQuestionTable()->deleteQuestionUsingCatId($id, $userid);
+            return new JsonModel(array(
+                'status' => 1
+            ));
+        }
+    }
+    
     public function editAction()
     {
         $request = $this->getRequest();
@@ -187,25 +202,6 @@ class CategoryController extends AbstractActionController
         $viewmodel = new ViewModel();
         $viewmodel->setTerminal(true);
         return $viewmodel;
-    }
-	
-	/*deleting category from database */
-	public function deleteCategoryAction()
-	{
-		$request = $this->getRequest ();
-		if ($request->isPost ()) {
-            $id = (int) $request->getPost('id');
-            $userSession = new Container('users');
-            $userid = $userSession->id;
-            $categoryTable = $this->serviceLocator->get('Category\Model\CategoryTable');
-            $categoryTable->deleteCategory($id, $userid);
-            $this->getQuestionTable()->deleteQuestionUsingCatId($id, $userid);
-            $response = $this->getResponse();
-            $response->setContent(Json::encode(array(
-                'status' => 0
-            )));
-            return $response;
-        }
     }
     
     public function fetchAction()

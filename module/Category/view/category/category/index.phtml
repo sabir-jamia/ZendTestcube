@@ -1,9 +1,9 @@
 <?php 
 $title = 'Category';
 $this->headTitle($title);
-$pageCount = ($rowCount) / $defaultSelect;
+$pageCount = $rowCount / $defaultSelect;
 ?>
-<input type="hidden"/ value='<?php echo $rowCount;?>' id="row-count">
+<input type="hidden" value='<?php echo $rowCount;?>' id="row-count">
 <div class="row">
 	<div class="col-sm-4 form-horizontal">
 		<div class="form-group">
@@ -63,7 +63,7 @@ $pageCount = ($rowCount) / $defaultSelect;
         			   	</a>
         			</td>
         			<td>
-        				<a class="col-sm-3" href="/category/1" style="cursor:pointer;">
+        				<a class="col-sm-3" onclick="deleteCategory(this, '<?php echo $category['id']?>')" style="cursor:pointer;">
         					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         				</a>
                     	<a class="col-sm-3" href="/category/2" style="cursor:pointer;">

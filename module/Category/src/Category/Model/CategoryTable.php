@@ -99,10 +99,9 @@ class CategoryTable
 
     public function deleteCategory($id, $deletedBy)
     {
-        $one = 1;
         $data = array(
             'updated_by' => $deletedBy,
-            'status' => $one
+            'status' => '0'
         );
         $this->tableGateway->update($data, array(
             'id' => $id
@@ -163,11 +162,14 @@ class CategoryTable
 	public function countRow() 
 	{
 	    $sql = new Sql($this->tableGateway->getAdapter());
+	    $where = new Where();
+	    $where = $where->equalTo('status', '1');
 	    $select = $sql->select()
 	               ->from('category')
 	               ->columns(array(
 	                   'count' => new \Zend\Db\Sql\Expression("COUNT(id)")
-	               ));
+	               ))
+	               ->where($where);
 	   $statement = $sql->prepareStatementForSqlObject($select);
 	   $result = $this->resultSetPrototype->initialize($statement->execute())
 	   ->toArray();

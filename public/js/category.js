@@ -33,50 +33,38 @@ $(document).ready(function(){
 	var prevSelectedVlue = $("#tbl-select-value option:selected").val();
 	$(document).on('change', '#tbl-select-value', function() {
 		var selectedValue = this.value;
-		var offset = parseInt(prevSelectedVlue);
+		var selectedPage = $('#tbl-pagination li.active').find('a').text().trim();
+		var offset = (selectedPage - 1) * selectedValue;
+		var rowCount = parseInt($('#row-count').val());
 		
 		if(prevSelectedVlue < selectedValue) {
-			limit = selectedValue - prevSelectedVlue;		
-			$.ajax({
-				url : "/category/fetch",
-				type : 'get',
-				data : {limit:limit, offset:offset},
-				dataType : 'json',
-				success : function(result) {
-					addRows(result);
-				}
-			});
 			updatePagination('remove', selectedValue);
-		} else {
-			removeRows(selectedValue);
+		} else if(prevSelectedVlue > selectedValue) {
 			updatePagination('add', selectedValue);
 		}
+		
+		if(offset > rowCount) {
+			var lastLi = $('#tbl-pagination li:nth-last-child(2)');
+			offset = parseInt(lastLi.find('a').text().trim());
+			offset = (offset - 1) * selectedValue;
+			lastLi.addClass('active');
+			populateTable(selectedValue, offset);
+		} else if(prevSelectedVlue != selectedValue) {
+			populateTable(selectedValue, offset);
+		}
+	
 		prevSelectedVlue = selectedValue;
+	});
+	
+	$('#tbl-pagination li').on('click', function(){
+		var self = this;
+		pagination(self);
 	});
 	
 	$(document).on('click', '#tbl-pagination li:first-child', function() {
 	});
 
 	$(document).on('click', '#tbl-pagination li:last-child', function() {
-	});
-
-	$(document).on('click', '#deleteCategory', function() {
-		var catid = $("#deleteCategory").val();
-		$.ajax({
-			type : "POST",
-			url : "/category/deleteCategory",
-			data : {id : catid},
-			success : function(result) {
-				$('#myModal').modal('hide');
-				$.ajax({
-					url : "/category/list",
-					success : function(result) {
-						window.location.reload();
-					}
-				});
-			}
-		});
-
 	});
 });
 
@@ -281,7 +269,7 @@ var addRows = function(rowData) {
 					'</a>'+
 				'</td>'+
 				'<td>'+
-					'<a style="cursor:pointer;" href="/category/1" class="col-sm-3">'+
+					'<a style="cursor:pointer;" onclick="deleteCategory(this,'+value.id+')" class="col-sm-3">'+
 						'<span aria-hidden="true" class="glyphicon glyphicon-remove"></span>'+
 						'</a>' +
 						'<a style="cursor:pointer;" href="/category/2" class="col-sm-3">'+
@@ -314,4 +302,58 @@ var updatePagination = function(addOrRemove, selectedValue) {
 	} else {
 		$('#tbl-pagination li:gt('+pageCount+'):not(:last-child)').remove();
 	}
+	$('#tbl-pagination li').on('click', function(){
+		var self = this;
+		pagination(self);
+	});
 };
+
+var pagination = function(self) {
+	var rowCount = parseInt($('#row-count').val());
+	
+	if($(self).find('a').attr('aria-label') != 'Previous' && 
+		$(self).find('a').attr('aria-label') != 'Next') {
+		var selectedPage = $(self).find('a').text().trim();
+		var previousPage = $('#tbl-pagination li.active').text().trim();
+		var selectedValue = $("#tbl-select-value option:selected").val(); 
+		
+		if(offset > rowCount) {
+			var lastLi = $('#tbl-pagination li:nth-last-child(2)');
+			offset = lastLi.find('a').text().trim();
+			lastLi.addClass('active');
+			populateTable(selectedValue, offset);
+		} else if(selectedPage != previousPage) {
+			var offset = (selectedPage - 1) * selectedValue;
+			populateTable(selectedValue, offset);
+		}	
+		$('#tbl-pagination li.active').removeClass('active');
+		$(self).addClass('active');
+	}
+};
+
+var populateTable = function(limit, offset) {
+	$.ajax({
+		url : "/category/fetch",
+		type : 'get',
+		data : {limit:limit, offset:offset},
+		dataType : 'json',
+		success : function(result) {
+			$("#example tbody tr").remove();
+			addRows(result);
+		}
+	});	
+};
+
+var deleteCategory = function(self,id) {
+	$.ajax({
+		url : "/category/deleteCategory",
+		type : 'get',
+		data : {id : id},
+		dataType : 'json',
+		success : function(result) {
+			if(result.status == 1) {
+				$(self).parent().parent().remove();
+			}
+		}
+	});		
+}
