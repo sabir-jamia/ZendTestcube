@@ -29,6 +29,10 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
+	$(document).on('click', '#confirm-delete', function() {
+		deleteCategory(this, $('#confirm-delete').data('id'), 'post');
+	});
 
 	var prevSelectedVlue = $("#tbl-select-value option:selected").val();
 	$(document).on('change', '#tbl-select-value', function() {
@@ -57,8 +61,7 @@ $(document).ready(function(){
 	});
 	
 	$('#tbl-pagination li').on('click', function(){
-		var self = this;
-		pagination(self);
+		pagination(this);
 	});
 	
 	$(document).on('click', '#tbl-pagination li:first-child', function() {
@@ -303,8 +306,7 @@ var updatePagination = function(addOrRemove, selectedValue) {
 		$('#tbl-pagination li:gt('+pageCount+'):not(:last-child)').remove();
 	}
 	$('#tbl-pagination li').on('click', function(){
-		var self = this;
-		pagination(self);
+		pagination(this);
 	});
 };
 
@@ -344,14 +346,22 @@ var populateTable = function(limit, offset) {
 	});	
 };
 
-var deleteCategory = function(self,id) {
+var deleteCategory = function(self, id, type) {
+	
+	if(typeof type == "undefined") {
+		type = "get";
+	}
 	$.ajax({
 		url : "/category/deleteCategory",
-		type : 'get',
+		type : type,
 		data : {id : id},
 		dataType : 'json',
 		success : function(result) {
-			if(result.status == 1) {
+			
+			if(result.html) {
+				$("#popup-content").html(result.html);
+				$('#myModal').modal('show');
+			} else {
 				$(self).parent().parent().remove();
 			}
 		}

@@ -71,16 +71,35 @@ class CategoryController extends AbstractActionController
 
     public function deleteCategoryAction()
     {
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $id = (int) $this->params()->fromQuery('id', 0);
-            $userSession = new Container('users');
-            $userid = $userSession->clientId;
-            $categoryTable = $this->serviceLocator->get('CategoryFactory');
-            $categoryTable->deleteCategory($id, $userid);
-            //$this->getQuestionTable()->deleteQuestionUsingCatId($id, $userid);
-            return new JsonModel(array(
-                'status' => 1
-            ));
+        $request = $this->getRequest();
+        $jsonModel = new JsonModel();
+        
+        if ($request->isXmlHttpRequest()) {
+            
+            if ($request->isGet()) {
+                $id = (int) $this->params()->fromQuery('id', 0);
+                $htmlViewPart = new ViewModel();
+                $htmlViewPart->setTerminal(true)
+                    ->setTemplate('category/delete-category.phtml')
+                    ->setVariables(array(
+                    'id' => $id
+                ));
+                $htmlOutput = $this->getServiceLocator()
+                    ->get('viewrenderer')
+                    ->render($htmlViewPart);
+                $jsonModel->setVariables(array(
+                    'html' => $htmlOutput
+                ));
+                return $jsonModel;
+            } elseif ($request->isPost()) {
+                $id = (int) $this->params()->fromPost('id', 0);
+                $userSession = new Container('users');
+                $userid = $userSession->clientId;
+                //$categoryTable = $this->serviceLocator->get('CategoryFactory');
+                //$categoryTable->deleteCategory($id, $userid);
+                // $this->getQuestionTable()->deleteQuestionUsingCatId($id, $userid);
+                return $jsonModel->setVariable('status', 1);
+            }
         }
     }
     
@@ -175,13 +194,6 @@ class CategoryController extends AbstractActionController
 	{
         $categoryTable = $this->serviceLocator->get('CategoryFactory');
         return $categoryTable->isCategoryExists($categoryId, $categoryName);
-    }
-    
-	public function deleteAction() 
-	{
-        $viewmodel = new ViewModel();
-        $viewmodel->setTerminal(true);
-        return $viewmodel;
     }
     
 	public function deleteallAction()

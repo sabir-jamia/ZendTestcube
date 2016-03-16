@@ -1,0 +1,19 @@
+<div class="modal fade" id="myModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
+				<h4 class="modal-title">Delete category</h4>
+			</div>
+			<div class="modal-body form-horizontal">
+			<h4 class="text-center">Are you sure want to delete?</h4>
+			<p class="text-center text-danger">All the questions of this Category will also be deleted</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button id="confirm-delete" type="button" data-id="<?php echo $id;?>" class="btn btn-default" data-dismiss="modal">Confirm</button>
+			</div>
+		</div>
+	</div>
+</div>
