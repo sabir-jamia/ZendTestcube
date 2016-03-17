@@ -8,11 +8,11 @@
 			</div>
 			<div class="modal-body form-horizontal">
 			<h4 class="text-center">Are you sure want to delete?</h4>
-			<p class="text-center text-danger">All the questions of this Category will also be deleted</p>
+			<p class="text-center text-danger"><?php echo $message;?></p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button id="confirm-delete" type="button" data-id="<?php echo $id;?>" class="btn btn-default" data-dismiss="modal">Confirm</button>
+				<button id="confirm-delete" type="button" data-id="<?php echo $id;?>" class="btn btn-primary" data-dismiss="modal">Confirm</button>
 			</div>
 		</div>
 	</div>

@@ -1,37 +1,20 @@
 $(document).ready(function(){
 	$(document).on('click','#create-category', function() {
-		loaderWait('show');
-    	$.ajax({
-			url : "/category/add",
-			success : function(result) {
-				$("#popup-content").html(result);
-				loaderWait('hide');
-				$('#myModal').modal('show');
-			}
-		});
+		createCategory();
 	});
 	
 	$(document).on('click','#submit-category', function() {
-		$.ajax({
-			url : "/category/add",
-			type : 'post',
-			data : $('#add-category').serialize(),
-			dataType : 'json',
-			success : function(result) {
-				if (result.status == 0) {
-					$('#myModal').modal('hide');
-					window.location.href = "/category";
-				} else if (result.status == 1) {
-					alert('sgahsghj');
-				} else if (result.status == 2) {
-					$('#errCat').html('Category already taken').css('color', 'red');
-				}
-			}
-		});
+		createCategory($('#add-category').serialize(), 'post');
 	});
 	
 	$(document).on('click', '#confirm-delete', function() {
-		deleteCategory(this, $('#confirm-delete').data('id'), 'post');
+		var ids = $('#confirm-delete').data('id').toString();
+		
+		if(ids.split(",").length == 1) {
+			deleteCategory(this, ids, 'post');
+		} else {
+			deletSelected(ids, 'post');
+		}
 	});
 
 	var prevSelectedVlue = $("#tbl-select-value option:selected").val();
@@ -69,156 +52,66 @@ $(document).ready(function(){
 
 	$(document).on('click', '#tbl-pagination li:last-child', function() {
 	});
-});
-
-/* Edit Category Modal */
-function editCat(catId){
-	$('#myModalLabel').html("Edit Category");
-	$.ajax({
-		url : "/category/edit",
-		data : {catid : catId},
-		success : function(result) {
-			$("#modal-body").html(result);
-		}
+	
+	$('#chkAll').click(function() {	
+		var checkAllChecked = $('#chkAll:checked').length;
+		if(checkAllChecked) {
+			$(':checkbox[name=deleteall]').prop('checked', true);
+		} else {
+			$(':checkbox[name=deleteall]').prop('checked', false);
+		}	
+		showHideMultiDelete();
 	});
-}
-
-/* Delete Category Modal */
-function deleteCat(catId) {
-	$('#myModalLabel').html("Delete Category");
-	var name = $("#deleteCat"+catId).data('name');
-	$.ajax({
-		url : "/category/delete",
-		data : {catid : catId,catname : name},
-		success : function(result) {
-
-			$("#modal-body").html(result);
-
-		}
+	
+	$(document).on('click', 'input[name="deleteall"]', function() {
+		showHideMultiDelete();
 	});
-}
-
-/*reload category list */
-function reloadcatlist() {
-	$.ajax({
-		url : "/category/list",
-		success : function(result) {
-			$("#catlist").html(result);
-
+	
+	$(document).on('click', '#multi-delete', function() {
+		var atLeastOneIsChecked = $('input[name="deleteall"]:checked').length;
+		var j = 0;
+		
+		if(atLeastOneIsChecked > 0) {
+			var boxes = $('input[name="deleteall"]:checked');
+			var box = new Array();
+			$.each(boxes, function(key, value){
+				box[key] = $(value).val();
+			});
+			deletSelected(box.join());
 		}
-	});
-}
-
-/* multiple delete   */
-$(document).ready(function() {
-	$('#chkAll').click(function() {
-		$(':checkbox[name=deleteall]').prop('checked', this.checked);
 	});
 });
 
-$(document).on('click', '#deletebtn', function() {
-var atLeastOneIsChecked = $('input[name="deleteall"]:checked').length;
-	if(atLeastOneIsChecked > 0)
-	{
-		$('#myModalLabel').html("Delete All Categories");
-
-	$.ajax({
-		url : "/category/deleteall",
-		success : function(result) {
-			$("#modal-body").html(result);
-
-		}
-	});
-
-	}
-	else
-	{
-	$('#myModalLabel').html("Delete All Categories");
-	$("#modal-body").html('You havent selected any checkbox');
-	}
-});
-
-// opening multiple delete window
-function deleting() {
-	var j = 0;
-	var boxes = document.getElementsByClassName('chk');
-	var box = new Array();
-
-	for ( var i = 0; i < boxes.length; i++) {
-		if (boxes[i].checked) {
-			box[j] = boxes[i].value;
-			j++;
-		}
-	}
-	var str = box.join();
-
-	$.ajax({
-		url : "/category/deleteSelected",
-		data : {
-			id : str
-		},
-		success : function(result) {
-			window.location.assign("category");
-			//alert("successful");
-
-		}
-	});
-
-}
-
-$(document).on('click','#savechanges',
-		function() {
-
-			if (validateeditcatname() == 1) {
-
-				$('#myModal').modal('show');
-
-				return 0;
+$(document).on('click','#savechanges', function() {
+	if (validateeditcatname() == 1) {
+		$('#myModal').modal('show');
+		return 0;
+	} else if (validateeditcatname() == 0) {
+		var catname = $('#txtCategoryName').val();
+		var catid = $('#hide').val();
+		var catname = catname.trim();
+		$.ajax({
+			url : "/category/edit",
+			type : 'POST',
+			data : {
+				name : catname,
+				id : catid
+			},
+			dataType : 'json',
+			success : function(result) {
+				if (result.status == 0) {
+					$('#myModal').modal('hide');
+					window.location.assign("category")
+				} else if (result.status == 1) {
+						$('#errCatEdit').html('Category already taken or same name').css('color', 'red');
+				}
 			}
-
-			else if (validateeditcatname() == 0) {
-
-				var catname = $('#txtCategoryName').val();
-				var catid = $('#hide').val();
-				var catname = catname.trim();
-
-				$.ajax({
-					url : "/category/edit",
-					type : 'POST',
-					data : {
-						name : catname,
-						id : catid
-					},
-					dataType : 'json',
-
-					success : function(result) {
-						if (result.status == 0) {
-
-							$('#myModal').modal('hide');
-
-							window.location.assign("category")
-						}
-
-						else if (result.status == 1) {
-							$('#errCatEdit').html(
-									'Category already taken or same name').css(
-									'color', 'red');
-						}
-						//  $('#myModal').modal('hide');
-
-						// window.location.assign("category")
-
-					}
-				});
-			}
-
 		});
+	}
+});
 
 function validatecatname() {
-
 	var catname = 'txtCategoryName';
-	
-	//alert(isNull(catname));
 	if (isNull(catname) === 0) {
 		$('#errCat').html('Please Enter Category Name').css('color', 'red');
 		return 1;
@@ -230,9 +123,7 @@ function validatecatname() {
 }
 
 function validateeditcatname() {
-
 	var catname = 'txtCategoryName';
-	//alert(isNull(catname));
 	if (isNull(catname) === 0) {
 		$('#errCatEdit').html('Please Enter Category Name').css('color', 'red');
 		return 1;
@@ -242,7 +133,6 @@ function validateeditcatname() {
 	}
 	return 0;
 }
-
 
 var loaderWait = function (action) {
 	if(action == 'show') {
@@ -275,10 +165,10 @@ var addRows = function(rowData) {
 					'<a style="cursor:pointer;" onclick="deleteCategory(this,'+value.id+')" class="col-sm-3">'+
 						'<span aria-hidden="true" class="glyphicon glyphicon-remove"></span>'+
 						'</a>' +
-						'<a style="cursor:pointer;" href="/category/2" class="col-sm-3">'+
+						'<a style="cursor:pointer;" onclick="createCategory('+value.id+')" class="col-sm-3">'+
 							'<span aria-hidden="true" class="glyphicon glyphicon-edit"></span>'+
 						'</a>'+
-						'<a style="cursor:pointer;" href="/category/3" class="col-sm-3">'+
+						'<a style="cursor:pointer;" href="/category/viewCategory/'+value.id+'" class="col-sm-3">'+
 							'<span aria-hidden="true" class="glyphicon glyphicon-eye-open"></span>'+
 						'</a>'+
 				'</td>'+
@@ -346,8 +236,45 @@ var populateTable = function(limit, offset) {
 	});	
 };
 
-var deleteCategory = function(self, id, type) {
+//create and update category
+var createCategory = function(data, type) {
 	
+	if (typeof type == "undefined") {
+		type = "get";
+	}
+	
+	if(typeof data == "undefined") {
+		data = "";
+	}
+	
+	if(type == "get" && data) {
+			data = {id : data};
+	}
+	$.ajax({
+		url : "/category/addCategory",
+		type : type,
+		data : data,
+		dataType : 'json',
+		success : function(result) {
+			
+			if(result.html) {
+				$("#popup-content").html(result.html);
+				$('#myModal').modal('show');
+			} else {
+				$('#myModal').modal('hide');
+				
+				if (result.status == 1) {
+					window.location.href = "/category";
+				} else if (result.status == 2) {
+					$('#errCat').html('Some error occured').css('color', 'red');
+				}
+			}
+		}
+	});		
+};
+
+var deleteCategory = function(self, id, type) {
+
 	if(typeof type == "undefined") {
 		type = "get";
 	}
@@ -366,4 +293,36 @@ var deleteCategory = function(self, id, type) {
 			}
 		}
 	});		
-}
+};
+
+var deletSelected = function(str, type) {
+	
+	if(typeof type == "undefined") {
+		type = "get";
+	}
+	$.ajax({
+		url : "/category/deleteSelected",
+		type : type,
+		dataType : 'json',
+		data : { ids : str },
+		success : function(result) {
+			if(result.html) {
+				$("#popup-content").html(result.html);
+				$('#myModal').modal('show');
+			} else if(result.status = 1){
+				$('#myModal').modal('hide');
+				window.location.href = "/category";
+			}
+		}
+	});
+};
+
+var showHideMultiDelete = function() {
+	var numOfChecked = $('input[name="deleteall"]:checked').length;
+	
+	if(numOfChecked) {
+		$('#multi-delete').show();	
+	} else {
+		$('#multi-delete').hide();	
+	}
+};

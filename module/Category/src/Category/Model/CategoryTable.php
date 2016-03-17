@@ -49,14 +49,13 @@ class CategoryTable
             $select->offset((int)$offset);
         }
         
-        //print_r($sql->getSqlStringForSqlObject($select));die;
         $statement = $sql->prepareStatementForSqlObject($select);
         $resultSet = $this->resultSetPrototype->initialize($statement->execute());
         return $resultSet->toArray();
     }
 
-    public function getCategoryId($id)
-    {
+   public function getCategoryById($id = 0)
+   {
         $id = (int) $id;
         $rowset = $this->tableGateway->select(array(
             'id' => $id
@@ -69,6 +68,14 @@ class CategoryTable
         return $row;
     }
 
+    /**
+     * @desc updat and save category
+     * 
+     * @param Category $category
+     * @param unknown $userid
+     * @throws \Exception
+     */
+    
     public function saveCategory(Category $category, $userid)
     {
         $date = date('Y-m-d H:i:s');
@@ -81,7 +88,7 @@ class CategoryTable
                 'status' => '1'
             );
             $this->tableGateway->insert($data);
-        } elseif (!empty($this->getCategoryId($id))) {
+        } else {
             $data = array(
                 'id' => $category->id,
                 'name' => $category->name,
@@ -90,10 +97,8 @@ class CategoryTable
                 'status' => '1'
             );
             $this->tableGateway->update($data, array(
-                'id' => $id
+                'id' => $category->id
             ));
-        } else {
-            throw new \Exception('Category id doesnt exists');
         }
     }
 
@@ -108,23 +113,39 @@ class CategoryTable
         ));
     }
 
-    public function deleteallCategory($id, $deletedBy)
+    public function deleteAllCategory($ids, $deletedBy)
     {
-        $one = 1;
-        $data = array(
-            'updated_by' => $deletedBy,
-            'status' => $one
-        );
+        $idsArr = explode(",", $ids);
+        $n = sizeof($idsArr);
         
-        $id = explode(",", $id);
-        // print_r($id);
-        
-        $n = sizeof($id);
-        // print_r($id);
-        for ($i = 0; $i < $n; $i ++)
-            $this->tableGateway->update($data, array(
-                'id' => $id
-            ));
+        for ($i = 0; $i < $n; $i ++) {
+            $this->deleteCategory($idsArr[$i], $deletedBy);
+        }
+    }
+    
+    public function fetch($id)
+    {
+        $sql = new Sql($this->tableGateway->getAdapter());
+        $select = $sql->select()
+        ->from(array(
+            'categoryTabl' => 'category'
+        ))
+        ->join(array(
+            'usersTabl' => 'users'
+        ),
+            'created_by = usersTabl.id',
+            array(
+                'createdBy' => new \Zend\Db\Sql\Expression("CONCAT(usersTabl.first_name,' ',usersTabl.last_name)"),
+                'updatedBy' => new \Zend\Db\Sql\Expression("CONCAT(usersTabl.first_name,' ',usersTabl.last_name)")
+            ))
+            ->where(array(
+                'categoryTabl.status' => '1',
+                'categoryTabl.id' => $id
+            ));    
+    
+        $statement = $sql->prepareStatementForSqlObject($select);
+        $resultSet = $this->resultSetPrototype->initialize($statement->execute())->toArray();
+        return $resultSet[0];
     }
 
     public function isCategoryExists($categoryId, $categoryName)
