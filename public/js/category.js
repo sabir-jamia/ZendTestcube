@@ -30,7 +30,7 @@ $(document).ready(function(){
 			updatePagination('add', selectedValue);
 		}
 		
-		if(offset > rowCount) {
+		if(offset >= rowCount) {
 			var lastLi = $('#tbl-pagination li:nth-last-child(2)');
 			offset = parseInt(lastLi.find('a').text().trim());
 			offset = (offset - 1) * selectedValue;

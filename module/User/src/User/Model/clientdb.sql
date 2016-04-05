@@ -31,7 +31,7 @@ CREATE TABLE `activity` (
   `created_when` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `created_by` (`created_by`),
-  CONSTRAINT `activity_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`)
+  CONSTRAINT `activity_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`testcube_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -87,12 +87,12 @@ CREATE TABLE `category` (
   `created_on` datetime NOT NULL,
   `updated_by` int(11) DEFAULT NULL,
   `updated_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `status` tinyint(1) DEFAULT '0',
+    
   PRIMARY KEY (`id`),
   KEY `fk_cat_updatedby` (`updated_by`),
   KEY `fk_cat_createdby` (`created_by`),
-  CONSTRAINT `fk_cat_createdby` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_cat_updatedby` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `fk_cat_createdby` FOREIGN KEY (`created_by`) REFERENCES `users` (`testcube_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `fk_cat_updatedby` FOREIGN KEY (`updated_by`) REFERENCES `users` (`testcube_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -371,6 +371,7 @@ CREATE TABLE `result` (
   `duration` int(11) NOT NULL,
   `date_started` datetime DEFAULT NULL,
   `date_finished` datetime DEFAULT NULL,
+  `status` enum('0','1') DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `fk_link_assigned_dates_id` (`link_assign_dates_id`),
   KEY `fk_student_id` (`student_id`),

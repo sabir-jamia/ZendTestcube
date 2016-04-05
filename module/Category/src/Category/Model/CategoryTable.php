@@ -32,7 +32,7 @@ class CategoryTable
             ->join(array(
                 'usersTabl' => 'users'
             ),
-                'created_by = usersTabl.id', 
+                'created_by = usersTabl.testcube_id', 
                 array(
                     'createdBy' => new \Zend\Db\Sql\Expression("CONCAT(usersTabl.first_name,' ',usersTabl.last_name)"),
                     'updatedBy' => new \Zend\Db\Sql\Expression("CONCAT(usersTabl.first_name,' ',usersTabl.last_name)")
@@ -133,7 +133,7 @@ class CategoryTable
         ->join(array(
             'usersTabl' => 'users'
         ),
-            'created_by = usersTabl.id',
+            'created_by = usersTabl.testcube_id',
             array(
                 'createdBy' => new \Zend\Db\Sql\Expression("CONCAT(usersTabl.first_name,' ',usersTabl.last_name)"),
                 'updatedBy' => new \Zend\Db\Sql\Expression("CONCAT(usersTabl.first_name,' ',usersTabl.last_name)")

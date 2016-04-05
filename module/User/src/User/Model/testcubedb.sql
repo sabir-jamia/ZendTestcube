@@ -74,7 +74,7 @@ CREATE TABLE `user_profile` (
   `first_name` varchar(100) NOT NULL,
   `last_name` varchar(100) DEFAULT NULL,
   `contact` bigint(10) DEFAULT NULL,
-  `photo` varchar(250) NOT NULL,
+  `photo` varchar(250) NULL,
   `language` varchar(2) NOT NULL DEFAULT 'en',
   `theme` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
