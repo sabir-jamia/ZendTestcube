@@ -1,10 +1,7 @@
 <?php
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+namespace Rest\Service;
 
-interface RestServiceInterface extends ServiceLocatorAwareInterface
-{
-	public function get() 
-	{
-		
-	}
+interface RestServiceInterface
+{	
+	public function callRestApi($functionName, $data = array());	
 }
