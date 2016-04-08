@@ -97,7 +97,7 @@ CREATE TABLE `users` (
   `password` varchar(100) DEFAULT NULL,
   `registration_date` datetime NOT NULL,
   `client_id` int(11) DEFAULT NULL,
-  `status` enum('0','1') DEFAULT '0',
+  `status` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`)
