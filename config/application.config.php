@@ -12,7 +12,7 @@ return array(
         'Email',
         'Dashboard',
         'Category',
-    	'Rest'
+    	'RestClient'
     ),
     
     'module_listener_options' => array(

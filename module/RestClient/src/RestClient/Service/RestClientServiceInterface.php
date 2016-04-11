@@ -1,7 +1,7 @@
 <?php
-namespace Rest\Service;
+namespace RestClient\Service;
 
-interface RestServiceInterface
+interface RestClientServiceInterface
 {	
 	public function callRestApi($functionName, $data = array());	
 }

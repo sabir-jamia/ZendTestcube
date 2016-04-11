@@ -1,5 +1,5 @@
 <?php
-namespace Rest;
+namespace RestClient;
 
 //use Zend\Mvc\ModuleRouteListener;
 //use Zend\Mvc\MvcEvent;

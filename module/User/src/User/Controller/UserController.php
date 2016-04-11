@@ -483,13 +483,12 @@ class UserController extends AbstractActionController
             $usernameType = 'username';
         }
         
-        $restService = $this->sm->get('RestServiceFactory');
-        $restService->callRestApi("authenticateUser", array(
+        $restService = $this->sm->get('RestClient');
+        $result = $restService->callRestApi("authenticateUser", array(
         		"username" => $username,
-        		"userType" => $usernameType,
-        		"module" => "user"
+        		"userType" => $usernameType
 		));
-        
+        // to do today
         if ($result->isValid()) {
             $userTable = $this->sm->get('User\Model\UserTable');
             $userData = $userTable->getUserByUserName($username, $usernameType);
