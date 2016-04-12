@@ -46,11 +46,11 @@ final class Client implements ClientInterface
         return $this->doRequest($path);
     }
     
-    public function post(array $data = array())
+    public function post(array $data = array(), $path)
     {
         $this->zendClient->setMethod('POST')
                          ->setRawBody(Json::encode($data));
-        return $this->doRequest();
+        return $this->doRequest($path);
     }
     
     public function put(array $data = array())

@@ -119,20 +119,30 @@ class UserController extends AbstractActionController
                 $userEmail = $request->getPost('email');
                 $register = $this->sm->get('User\Model\User');
                 $form->setInputFilter($register->getInputFilter());
-                $form->setData($request->getPost());
+                $postData = $request->getPost();
+                $form->setData($postData);
                 if (! $form->isValid()) {
                     $register->exchangeArray($form->getData());
-                    $userTable = $this->sm->get('User\Model\UserTable');
-                    $msg = $userTable->saveUser($register);
-                    $str = $this->mntencodeAlgo($msg);
-                    $url = $this->getBaseUrl() . "?id=" . $str;
-                    $mailTemplate = 'clientregistration';
-                    $mailer = $this->sm->get('EmailService');
-                    $mailer->sendMail($mailTemplate, "Admin Testcube", $userEmail, $url);
-                    $jsonModel->setVariables(array(
-                        'status' => 1,
-                        'message' => 'Account Created! Please confirm account from link sent on your Email'
-                    ));
+                    $restService = $this->sm->get('RestClient');
+                    $userDataArr =  get_object_vars($postData);
+                    unset($userDataArr['confirm-password'], $userDataArr['captcha']);
+                    $result = $restService->callRestApi("register", $userDataArr); 
+                    if($result->status = "success") {
+                        $str = $this->mntencodeAlgo($result->data->clientId);
+                        $url = $this->getBaseUrl() . "?id=" . $str; 
+                        $mailTemplate = 'clientregistration';
+                        $mailer = $this->sm->get('EmailService');
+                        $mailer->sendMail($mailTemplate, "Admin Testcube", $userEmail, $url);
+                        $jsonModel->setVariables(array(
+                            'status' => 1,
+                            'message' => 'Account created! Please confirm account from link sent on your Email'
+                        ));
+                    } else {
+                        $jsonModel->setVariables(array(
+                            'status' => 0,
+                            'message' => 'Account not created! Some error occurred'
+                        ));
+                    }
                 } else {
                     $jsonModel->setVariable('status', 1);
                 }
@@ -484,28 +494,24 @@ class UserController extends AbstractActionController
         }
         
         $restService = $this->sm->get('RestClient');
-        $result = $restService->callRestApi("authenticateUser", array(
-        		"username" => $username,
-        		"userType" => $usernameType
-		));
-        // to do today
-        if ($result->isValid()) {
-            $userTable = $this->sm->get('User\Model\UserTable');
-            $userData = $userTable->getUserByUserName($username, $usernameType);
-            if ($userData == 'notconfirmed') {
-                $response['flag'] = 'notconfirmed';
-            } else {
+        $result = $restService->callRestApi("authenticate", array(
+            "username" => $username,
+            "userType" => $usernameType
+        ));
+        if ($result->status == "success" && ! empty($result->data) && ! empty($result->data->id) && $result->data->password == $password) {
+            if ($result->data->status == 1) {
                 $userSession = new Container('users');
-                $userSession->clientId = $userData->getClientId();
-                $userSession->usernameType = $usernameType;
-                $userSession->username = $userData->getUserName();
-                $userSession->email = $userData->getEmail();
-                $response['flag'] = 'loginsuccess';
-            }
+                    $userSession->clientId = $result->data->clientId;
+                    $userSession->usernameType = $usernameType;
+                    $userSession->username = $result->data->username;
+                    $userSession->email = $result->data->email;
+                    $response['flag'] = 'loginsuccess';
+                } else {
+                    $response['flag'] = 'notconfirmed';
+                }
         } else {
             $response['flag'] = 'loginFail';
         }
-        
         return $response;
     }
 }

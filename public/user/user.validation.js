@@ -26,7 +26,7 @@ $(document).ready(function(){
             	remote : {
             			url : '/user/checkUserExists',
             			type : 'post',
-            			data : {user :function() {return $('#user-name').val();}}
+            			data : {user :function() {return $('#username').val();}}
             	}
        	 	},
         	'firstname':{

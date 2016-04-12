@@ -17,10 +17,9 @@ class Rest
     
 	public function callUserModule($functionName, $data)
 	{
-		unset($data['module']);
 		$zendClient = $this->sm->get('Client');
 		switch ($functionName) {
-			case "authenticateUser" :
+			case "authenticate" :
 				$queryParams = "";
 				
 				if($data['userType'] == 'username') {
@@ -30,6 +29,8 @@ class Rest
 				}
 				return $zendClient->get(array(), $this->path."api/v1/users".$queryParams);
 				break;
+			case "register" :
+			    return $zendClient->post($data, $this->path."api/v1/users");
 			default:
 				echo "default";
 		}

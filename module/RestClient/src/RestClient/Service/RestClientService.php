@@ -17,8 +17,8 @@ class RestClientService implements RestClientServiceInterface
 	
 	public function callRestApi($functionName, $data = array()) 
 	{
-		$modelFunc = 'call'.ucfirst($this->moduleName).'Module';
-		return $this->sm->get('RestModel')->$modelFunc($functionName, $data);
+		$moduleFunc = 'call'.ucfirst($this->moduleName).'Module';
+		return $this->sm->get('RestModel')->$moduleFunc($functionName, $data);
 	}
 	
 	public function setModuleName($moduleName)

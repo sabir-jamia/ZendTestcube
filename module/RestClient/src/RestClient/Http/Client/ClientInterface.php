@@ -21,7 +21,7 @@ interface ClientInterface
      *
      * @return Response
      */
-    public function post(array $data);
+    public function post(array $data, $path);
     
     /**
      * Sends a PUT request

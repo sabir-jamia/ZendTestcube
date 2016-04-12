@@ -124,6 +124,7 @@ $(document).ready(function(){
     }
     
     var showAlertPanel = function (selector, alertType, message) {
+    	$(selector + ' .alert').remove();
 		$(selector).prepend(
 				'<div style="display: block" class="alert '+alertType+' alert-dismissible fade in">'+
 					'<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
