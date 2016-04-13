@@ -18,7 +18,7 @@ $(document).ready(function(){
 	
 	$('#register').validate({
 		rules: {
-			'username':{
+			'userName':{
 				required : true,
             	validName : /^[a-zA-Z0-9_]*$/,
             	minlength : 5,
@@ -26,16 +26,16 @@ $(document).ready(function(){
             	remote : {
             			url : '/user/checkUserExists',
             			type : 'post',
-            			data : {user :function() {return $('#username').val();}}
+            			data : {'user' :function() {return $('#username').val();}}
             	}
        	 	},
-        	'firstname':{
+        	'firstName':{
         		required: true,
             	validName : /^[a-zA-Z]*$/,
             	minlength :2,
             	maxlength :20
          	},
-         	'lastname':{
+         	'lastName':{
             	required: true,
             	validName : /^[a-zA-Z]*$/,
             	minlength :2,
@@ -49,7 +49,7 @@ $(document).ready(function(){
             	remote : {
         			url : '/user/checkUserExists',
         			type : 'post',
-        			data : {user :function() {return $('#email').val();}}
+        			data : {'user' :function() {return $('#email').val();}}
             	}
          	},
          	'password':{
@@ -57,7 +57,7 @@ $(document).ready(function(){
             	minlength :5,
             	maxlength :150
          	},
-         	'confirm-password':{
+         	'confirmPassword':{
             	required: true,
             	minlength :5,
             	maxlength :150,
@@ -68,12 +68,12 @@ $(document).ready(function(){
           		remote : {
         			url : '/user/checkCaptcha',
         			type : 'post',
-        			data : {'captcha-hidden':function() {return $('#captcha-hidden').val();}}
+        			data : {'captchaHidden':function() {return $('#captcha-hidden').val();}}
             	}
           	}
     	},
     	messages: {
-    		'username' : {
+    		'userName' : {
     			remote : "Username already taken"
     		},
     		'email' : {
@@ -101,7 +101,7 @@ $(document).ready(function(){
 	
 	$('#login').validate({ // initialize the plugin
 		rules: {
-			'username':{
+			'userName':{
 				required: true,
 				maxlength :20
    	 		},

@@ -50,20 +50,7 @@ class UserController extends AbstractActionController
                 'status' => $confirmStatus
             ));
         } else {
-            $user = $this->sm->get('User\Model\User');
-            $form->setInputFilter($user->getInputFilter());
-            $form->setValidationGroup('username', 'password');
-            $form->setData($request->getPost());
-            if ($form->isValid()) {
-                return new JsonModel($this->authenticate($form));
-            } else {
-            	$view = new ViewModel();
-                $view->setTemplate('/user/user/login.phtml')
-                    ->setTerminal(true)
-                    ->setVariables(array(
-                        'form' => $form
-                    ));
-            }
+            return new JsonModel($this->authenticate($form));
         }
     }
 
@@ -117,34 +104,26 @@ class UserController extends AbstractActionController
             } else {
                 $jsonModel = new JsonModel();
                 $userEmail = $request->getPost('email');
-                $register = $this->sm->get('User\Model\User');
-                $form->setInputFilter($register->getInputFilter());
                 $postData = $request->getPost();
-                $form->setData($postData);
-                if (! $form->isValid()) {
-                    $register->exchangeArray($form->getData());
-                    $restService = $this->sm->get('RestClient');
-                    $userDataArr =  get_object_vars($postData);
-                    unset($userDataArr['confirm-password'], $userDataArr['captcha']);
-                    $result = $restService->callRestApi("register", $userDataArr); 
-                    if($result->status = "success") {
-                        $str = $this->mntencodeAlgo($result->data->clientId);
-                        $url = $this->getBaseUrl() . "?id=" . $str; 
-                        $mailTemplate = 'clientregistration';
-                        $mailer = $this->sm->get('EmailService');
-                        $mailer->sendMail($mailTemplate, "Admin Testcube", $userEmail, $url);
-                        $jsonModel->setVariables(array(
-                            'status' => 1,
-                            'message' => 'Account created! Please confirm account from link sent on your Email'
-                        ));
-                    } else {
-                        $jsonModel->setVariables(array(
-                            'status' => 0,
-                            'message' => 'Account not created! Some error occurred'
-                        ));
-                    }
+                $restService = $this->sm->get('RestClient');
+                $userDataArr = get_object_vars($postData);
+                unset($userDataArr['confirmPassword'], $userDataArr['captcha']);
+                $result = $restService->callRestApi("register", $userDataArr);
+                if ($result->status = "success") {
+                    $str = $this->mntencodeAlgo($result->data->clientId);
+                    $url = $this->getBaseUrl() . "?id=" . $str;
+                    $mailTemplate = 'clientregistration';
+                    $mailer = $this->sm->get('EmailService');
+                    $mailer->sendMail($mailTemplate, "Admin Testcube", $userEmail, $url);
+                    $jsonModel->setVariables(array(
+                        'status' => 1,
+                        'message' => 'Account created! Please confirm account from link sent on your Email'
+                    ));
                 } else {
-                    $jsonModel->setVariable('status', 1);
+                    $jsonModel->setVariables(array(
+                        'status' => 0,
+                        'message' => 'Account not created! Some error occurred'
+                    ));
                 }
                 return $jsonModel;
             }
@@ -153,7 +132,7 @@ class UserController extends AbstractActionController
 
     public function checkCaptchaAction()
     {
-        $captchaHiddenId = $this->params()->fromPost('captcha-hidden');
+        $captchaHiddenId = $this->params()->fromPost('captchaHidden');
         $captcha = $this->params()->fromPost('captcha');
         $captchaInput = $captcha['input'];
         $captchaSession = new Container('Zend_Form_Captcha_' . trim($captchaHiddenId));
@@ -439,7 +418,7 @@ class UserController extends AbstractActionController
             "9" => 'y'
         );
         $str = '';
-        while ($id > 1) {
+        while ($id > 0) {
             
             $num = intval($id % 10);
             $id = intval($id / 10);
@@ -483,7 +462,7 @@ class UserController extends AbstractActionController
     public function authenticate($form)
     {
         $request = $this->getRequest();
-        $username = trim($request->getPost('username'), " ");
+        $username = trim($request->getPost('userName'), " ");
         $password = $this->request->getPost('password');
         $response = array();
         
@@ -495,15 +474,16 @@ class UserController extends AbstractActionController
         
         $restService = $this->sm->get('RestClient');
         $result = $restService->callRestApi("authenticate", array(
-            "username" => $username,
+            "userName" => $username,
             "userType" => $usernameType
         ));
+        print_r($result);die;
         if ($result->status == "success" && ! empty($result->data) && ! empty($result->data->id) && $result->data->password == $password) {
             if ($result->data->status == 1) {
                 $userSession = new Container('users');
                     $userSession->clientId = $result->data->clientId;
                     $userSession->usernameType = $usernameType;
-                    $userSession->username = $result->data->username;
+                    $userSession->userName = $result->data->username;
                     $userSession->email = $result->data->email;
                     $response['flag'] = 'loginsuccess';
                 } else {

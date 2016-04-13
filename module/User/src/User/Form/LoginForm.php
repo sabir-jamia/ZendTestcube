@@ -17,7 +17,7 @@ class LoginForm extends Form
         $this->setAttribute('class', 'form-horizontal');
         
         $this->add(array(
-            'name' => 'username',
+            'name' => 'userName',
             'type' => 'Text',
             'attributes' => array(
                 'class' => 'form-control',
@@ -43,7 +43,7 @@ class LoginForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'login-submit',
+            'name' => 'loginSubmit',
             'type' => 'Submit',
             'attributes' => array(
                 'value' => 'Login',

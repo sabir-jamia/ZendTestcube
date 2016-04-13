@@ -4,7 +4,6 @@ namespace User\Form;
 use Zend\Form\Form;
 use Zend\Form\Element\Captcha;
 use Zend\Captcha\Image as CaptchaImage;
-use Zend\Form\Element\Input;
 
 class RegisterForm extends Form
 {
@@ -19,7 +18,7 @@ class RegisterForm extends Form
         $this->setAttribute('role', 'form');
         
         $this->add(array(
-            'name' => 'username',
+            'name' => 'userName',
             'type' => 'Text',
             'options' => array(
                 'label' => 'User Name',
@@ -35,7 +34,7 @@ class RegisterForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'firstname',
+            'name' => 'firstName',
             'type' => 'Text',
             'options' => array(
                 'label' => 'First Name',
@@ -52,7 +51,7 @@ class RegisterForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'lastname',
+            'name' => 'lastName',
             'type' => 'Text',
             'options' => array(
                 'label' => 'Last Name',
@@ -100,7 +99,7 @@ class RegisterForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'confirm-password',
+            'name' => 'confirmPassword',
             'type' => 'password',
             'options' => array(
                 'label' => 'Confirm Password',
@@ -144,7 +143,7 @@ class RegisterForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'refreshcaptcha',
+            'name' => 'refreshCaptcha',
             'type' => 'button',
             'attributes' => array(
                 'value' => 'Refresh',
@@ -153,7 +152,7 @@ class RegisterForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'register-submit',
+            'name' => 'registerSubmit',
             'type' => 'submit',
             'attributes' => array(
                 'value' => 'Sign Up',
