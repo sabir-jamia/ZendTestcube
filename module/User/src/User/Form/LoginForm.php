@@ -17,7 +17,7 @@ class LoginForm extends Form
         $this->setAttribute('class', 'form-horizontal');
         
         $this->add(array(
-            'name' => 'userName',
+            'name' => 'username',
             'type' => 'Text',
             'attributes' => array(
                 'class' => 'form-control',

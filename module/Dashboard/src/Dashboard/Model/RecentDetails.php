@@ -101,7 +101,7 @@ class RecentDetails
             'stuEmail' => 'email'
         ))
             ->where(array(
-            'r.status' => '0'
+            'r.status' => 0
         ))
             ->order("r.date_finished DESC")
             ->limit(3);

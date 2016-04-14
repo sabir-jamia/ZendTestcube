@@ -352,6 +352,7 @@ CREATE TABLE `result` (
   `duration` int(11) NOT NULL,
   `date_started` datetime DEFAULT NULL,
   `date_finished` datetime DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 1,
   PRIMARY KEY (`id`),
   KEY `fk_link_assigned_dates_id` (`link_assign_dates_id`),
   KEY `fk_student_id` (`student_id`),

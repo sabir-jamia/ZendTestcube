@@ -18,7 +18,7 @@ $(document).ready(function(){
 	
 	$('#register').validate({
 		rules: {
-			'userName':{
+			'username':{
 				required : true,
             	validName : /^[a-zA-Z0-9_]*$/,
             	minlength : 5,
@@ -73,7 +73,7 @@ $(document).ready(function(){
           	}
     	},
     	messages: {
-    		'userName' : {
+    		'username' : {
     			remote : "Username already taken"
     		},
     		'email' : {

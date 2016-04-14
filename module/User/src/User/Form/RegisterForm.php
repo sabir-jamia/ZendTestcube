@@ -18,7 +18,7 @@ class RegisterForm extends Form
         $this->setAttribute('role', 'form');
         
         $this->add(array(
-            'name' => 'userName',
+            'name' => 'username',
             'type' => 'Text',
             'options' => array(
                 'label' => 'User Name',

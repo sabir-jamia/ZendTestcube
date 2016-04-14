@@ -88,7 +88,7 @@ class Module
         }
         $userSession = new Container('users');
         if ($moduleNamespace != 'Student') {
-            if($userSession->offsetExists('username')) {
+            if($userSession->offsetExists('clientId')) {
                 $userid = $userSession->clientId;
                 $selectedtheme = $sm->get('Application\Model\ApplicationTable')->fetchtheme($userid);
                 $countData = $sm->get('Application\Model\ApplicationTable')->fetchCounts();

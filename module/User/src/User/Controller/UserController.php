@@ -7,14 +7,9 @@ use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use User\Form\LoginForm;
 use User\Form\RegisterForm;
-use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthAdapter;
-use Zend\Authentication\AuthenticationService;
 use Zend\Session\Container;
 use Zend\Form\Element\File;
-use Zend\InputFilter\FileInput;
-use Zend\File\Transfer\Adapter\Http;
 use Zend\Filter\File\RenameUpload;
-use Zend\Session\AbstractContainer;
 
 class UserController extends AbstractActionController
 {
@@ -50,7 +45,7 @@ class UserController extends AbstractActionController
                 'status' => $confirmStatus
             ));
         } else {
-            return new JsonModel($this->authenticate($form));
+            return new JsonModel($this->authenticate());
         }
     }
 
@@ -107,6 +102,7 @@ class UserController extends AbstractActionController
                 $postData = $request->getPost();
                 $restService = $this->sm->get('RestClient');
                 $userDataArr = get_object_vars($postData);
+                $userDataArr['password'] = md5($userDataArr['password']);
                 unset($userDataArr['confirmPassword'], $userDataArr['captcha']);
                 $result = $restService->callRestApi("register", $userDataArr);
                 if ($result->status = "success") {
@@ -184,7 +180,6 @@ class UserController extends AbstractActionController
         $userSession = new Container('users');
         $usernameType = $userSession->usernameType;
         if (isset($usernameType) && ! empty($usernameType)) {
-            $this->getAuthService($usernameType)->clearIdentity();
             $userSession->offsetUnset('id');
             $userSession->offsetUnset('usernameType');
             $userSession->offsetUnset('clientId');
@@ -194,10 +189,10 @@ class UserController extends AbstractActionController
 
     public function checkUserExistsAction()
     {
-        $user = $this->params()->fromPost('user');
-        $userTable = $this->sm->get('User\Model\UserTable');
-        $userExists = $userTable->checkUserExists($user);
-        if (! $userExists) {
+        $restService = $this->sm->get('RestClient');
+        $username = $this->params()->fromPost('user');
+        $user = $this->getUser($username);
+        if (empty($user)) {
             echo "true";
         } else {
             echo "false";
@@ -216,19 +211,7 @@ class UserController extends AbstractActionController
             'userdata' => $userTable->userlist()
         ));
     }
-
-    public function getAuthService($usernameType = '')
-    {
-        if (! $this->_authservice) {
-            $dbAdapter = $this->sm->get('Zend\Db\Adapter\Adapter');
-            $authAdapter = new AuthAdapter($dbAdapter, 'users', $usernameType, 'password', 'MD5(?)');
-            $authService = new AuthenticationService();
-            $authService->setAdapter($authAdapter);
-            $this->_authservice = $authService;
-        }
-        return $this->_authservice;
-    }
-
+    
     public function generalProfileUpdateAction()
     {
         $userSession = new Container('users');
@@ -459,39 +442,50 @@ class UserController extends AbstractActionController
         return $id;
     }
 
-    public function authenticate($form)
+    public function authenticate()
     {
         $request = $this->getRequest();
-        $username = trim($request->getPost('userName'), " ");
+        $username = trim($request->getPost('username'));
         $password = $this->request->getPost('password');
         $response = array();
-        
-        if (strpos($username, '@')) {
-            $usernameType = 'email';
-        } else {
-            $usernameType = 'username';
-        }
-        
-        $restService = $this->sm->get('RestClient');
-        $result = $restService->callRestApi("authenticate", array(
-            "userName" => $username,
-            "userType" => $usernameType
-        ));
-        print_r($result);die;
-        if ($result->status == "success" && ! empty($result->data) && ! empty($result->data->id) && $result->data->password == $password) {
-            if ($result->data->status == 1) {
+        $user = $this->getUser($username);
+        if (! empty($user) && ! empty($user->id) && $user->password == md5($password)) {
+            if ($user->status == 1) {
                 $userSession = new Container('users');
-                    $userSession->clientId = $result->data->clientId;
-                    $userSession->usernameType = $usernameType;
-                    $userSession->userName = $result->data->username;
-                    $userSession->email = $result->data->email;
-                    $response['flag'] = 'loginsuccess';
-                } else {
-                    $response['flag'] = 'notconfirmed';
-                }
+                $userSession->clientId = $user->clientId;
+                $userSession->usernameType = $this->getUserType($username);
+                $userSession->username = $user->username;
+                $userSession->email = $user->email;
+                $response['flag'] = 'loginsuccess';
+            } else {
+                $response['flag'] = 'notconfirmed';
+            }
         } else {
             $response['flag'] = 'loginFail';
         }
         return $response;
+    }
+    
+    public function getUserType($username)
+    {
+        if (strpos($username, '@')) {
+            return 'email';
+        } else {
+            return 'username';
+        }
+    }
+    
+    public function getUser($username)
+    {
+        $restService = $this->sm->get('RestClient');
+        $result = $restService->callRestApi("getUser", array(
+            "username" => $username,
+            "userType" => $this->getUserType($username)
+        ));
+        if ($result->status == "success" && ! empty($result->data)) {
+            return $result->data;
+        } else {
+            return null;
+        }
     }
 }
