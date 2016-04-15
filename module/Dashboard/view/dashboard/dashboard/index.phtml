@@ -206,4 +206,15 @@
     </script>
 <script>
 $('#footer').css("padding-top","30px");
+$(document).on('click','#user-profile',function(){
+	$.ajax({
+		type: 'Get',
+        dataType: 'html',
+        url: '/user/userProfile',
+        data: '',
+        success: function(data){
+        	$('#content').html(data);
+        }
+	});
+});
 </script>

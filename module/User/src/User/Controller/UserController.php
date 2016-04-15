@@ -202,14 +202,19 @@ class UserController extends AbstractActionController
 
     public function userProfileAction()
     {
-        $userSession = new Container('users');
-        $userid = $userSession->clientId;
-        $userTable = $this->sm->get('User\Model\UserTable');
-        
-        return new ViewModel(array(
-            'userProfile' => $userTable->userProfile($userid),
-            'userdata' => $userTable->userlist()
-        ));
+        //$this->attachScriptsAndStyleSheet();
+        $request = $this->request;
+        if ($request->isXmlHttpRequest() && $request->getMethod() == "GET") {
+            $userSession = new Container('users');
+            $userid = $userSession->clientId;
+            $userTable = $this->sm->get('User\Model\UserTable');
+            $viewModel = new ViewModel();
+            $viewModel->setTerminal(true)->setVariables(array(
+                'userProfile' => $userTable->userProfile($userid),
+                'userdata' => $userTable->userlist()
+            ));
+            return $viewModel;
+        }
     }
     
     public function generalProfileUpdateAction()

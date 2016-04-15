@@ -222,7 +222,6 @@ class UserTable
     public function userProfile($userid)
     {
         $user_id = (int) $userid;
-        
         $where = new Where();
         $where->equalTo('usersTabl.id', $user_id);
         

@@ -1283,7 +1283,7 @@ margin:3px 0;
     background-color: #F7F7F7;
     float: left;
     height: 650px;
-    width: 25%;
+    width: 27%;
     margin-right: 20px;
 }
 
@@ -1292,7 +1292,6 @@ margin:3px 0;
     float: left;
     height: 570px;
     width: 70%;
-    font-family: OpenSans;
 }
 
 #right_pane a
@@ -1345,44 +1344,6 @@ margin:3px 0;
     padding: 10px 20px 8px;
     text-decoration: none;
 }
-
-#proText
-{
-    color: #3473A9;
-    font-size: 21px;
-    margin-bottom: 21px;
-    text-align: center;
-}
-
-#generalContent
-{
-    width:400px;
-}
-
-#generalContent p
-{
-    font-size: 16px;
-    float: right;
-}
-
-#generalContent2
-{
-    width:470px;
-}
-
-
-#generalContent2 p
-{
-    font-size: 16px;
-    float: right;
-}
-.proSave
-{
-    margin-left: 80px;
-    margin-top: 141px;
-    width: 96px;
-}
-        
 
 /*-------------------->> Settings Page styles <<------------------------*/
 

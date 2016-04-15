@@ -107,7 +107,7 @@ $(document).ready(function(){
             }
     	});
     });
-    
+        
     var loaderWait = function (action) {
     	if(action == 'show') {
     		var height = window.innerHeight/2;
