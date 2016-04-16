@@ -64,40 +64,40 @@ if(isset($userProfile[0]) && !empty($userProfile[0])){
             <div class="tab-content">
             	<div class="tab-pane active" id="home">
             		<div id="generalContent">
-            			<form id="updateProfileForm" class="form-horizontal" enctype="multipart/form-data"  method="POST" >   
-                            <input id="clientId" type="hidden" class="form-control" value="<?php echo $clientid;?>"/>
+            			<form id="update-profile" class="form-horizontal" enctype="multipart/form-data"  method="POST" >   
+                            <input id="client-id" type="hidden" class="form-control" value="<?php echo $clientid;?>"/>
                             <div class="form-group">
-                            	<label for="" class="col-sm-2 control-label">Email</label>
+                            	<label for="email" class="col-sm-2 control-label">Email</label>
                             	<div class="col-sm-10">
-                            		<input type="text" class="form-control" value="<?php echo $email;?>" disabled="disable"/>
+                            		<input type="text" class="form-control" id="email" value="<?php echo $email;?>" disabled="disable"/>
                             	</div>
                             </div>
                             <div class="form-group">
-                            	<label for="" class="col-sm-2 control-label">Username</label>
+                            	<label for="username" class="col-sm-2 control-label">Username</label>
                             	<div class="col-sm-10">
-                            		<input type="text" class="form-control" value="<?php echo $username;?>" disabled="disable" />
+                            		<input type="text" class="form-control" id="username" value="<?php echo $username;?>" disabled="disable" />
                             	</div>
                             </div>
                             <div class="form-group">
-                            	<label for="" class="col-sm-2 control-label">First Name</label>
+                            	<label for="firstName" class="col-sm-2 control-label">First Name</label>
                             	<div class="col-sm-10">
-                             		<input type="text" name="profileFirstName" class="form-control" value="<?php echo ucfirst($firstName); ?>" id="txtFname" required />
+                             		<input type="text" name="firstName" id="first-name" class="form-control" value="<?php echo ucfirst($firstName); ?>" id="txtFname" required />
                              	</div>
                             </div>
                             <div class="form-group">
-                            	<label for="" class="col-sm-2 control-label">Last Name</label>
+                            	<label for="lastName" class="col-sm-2 control-label">Last Name</label>
                              	<div class="col-sm-10">
-                             		<input type="text" name="profileLastName" class="form-control"  value="<?php echo ucfirst($lastName); ?>" id="txtLname"/></p>
+                             		<input type="text" name="lastName" id="last-name" class="form-control"  value="<?php echo ucfirst($lastName); ?>" id="txtLname"/></p>
                              	</div>
                             </div>
                             <div class="form-group">
-                            	<label for="" class="col-sm-2 control-label">Phone</label>
+                            	<label for="contact" class="col-sm-2 control-label">Phone</label>
                             	<div class="col-sm-10">
-                            		<input type="text" name="profileContact" class="form-control" value="<?php if($contact) { echo $contact;} ?>" id="txtContact" max-length="10"/></p>
+                            		<input type="text" name="contact" id="contact" class="form-control" value="<?php if($contact) { echo $contact;} ?>" id="txtContact" max-length="10"/></p>
                             	</div>
                             </div>
                             <div class="form-group">
-                            	<label for="" class="col-sm-2 control-label">Upload</label>
+                            	<label for="image-upload" class="col-sm-2 control-label">Upload</label>
                             	<div class="col-sm-10">
                             		<span class="btn btn-primary btn-file">
     									Browse <input type="file" id="image-upload" name="profilePic">
@@ -284,11 +284,16 @@ if(isset($userProfile[0]) && !empty($userProfile[0])){
 	</div>  
 <script>
 var files;
-$(document).on('click', '.btn-file :file', function() {
-	var profilePic=$('#imageUpload').val();
-    var formData = new FormData(this);
+$(document).on('click', '#profile-save', function() {    
+    var formData = new FormData();
+    formData.append('file', $('#image-upload')[0].files[0]);
+    var otherData = $('#update-profile').serializeArray();
+    $.each(otherData, function(key, input){
+        formData.append(input.name, input.value); 
+    });
+
     $.ajax({
-        url: '/user/generalProfileUpdate/',
+        url: '/user/generalProfileUpdate',
         type: 'POST',
         data:  formData,
         mimeType:"multipart/form-data",
@@ -296,7 +301,7 @@ $(document).on('click', '.btn-file :file', function() {
         cache: false,
         processData:false,
         success: function(response, textStatus, jqXHR) {
-            window.location.assign("userProfile");
+            /*window.location.assign("userProfile");
             try {
                 response = $.parseJSON(response);
                 if(response.status == true) {
@@ -307,11 +312,10 @@ $(document).on('click', '.btn-file :file', function() {
                 }
             } catch (Exception) {
                 $("#newfamilyconnectionform_div").html(response);
-            }
+            }*/
         },
         error: function(jqXHR, textStatus, errorThrown) {}
     });
-    e.preventDefault(); //Prevent Default action.
 });
 /*         $("#btnSave").click(function(){
            var oldPassword = $("#oldPassword").val();
@@ -530,7 +534,6 @@ $(document).on('change', '.btn-file :file', function() {
     var numFiles = input.get(0).files ? input.get(0).files.length : 1;
 	var label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
 	$('#file-name').text(label);
-	
 });
 </script>
 <style>

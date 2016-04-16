@@ -216,54 +216,46 @@ class UserController extends AbstractActionController
             return $viewModel;
         }
     }
-    
+
     public function generalProfileUpdateAction()
     {
         $userSession = new Container('users');
         $clientId = $userSession->clientId;
-        $request = $this->getRequest();
-        $userData = $this->getRequest()->getPost('userData', null);
-        
-        $response = $this->getResponse();
-        $files = $request->getFiles();
-        $uploadFile = $this->getFileUploadLocation();
-        
-        $random = (rand(10, 1000));
-        
-        $fileName = $_FILES['profilePic']['name'] . $random;
+        $request = $this->request;
+        $response = $this->response;
+        $userData = $this->params()->fromPost();
+        $file = $this->params()->fromFiles('file', '');
+        $uploadFileLocation = $this->getFileUploadLocation();
+        $random = rand(10, 1000);
+        $fileName = $file['name'] . $random;
         $profileData = array(
             'clientId' => $clientId,
-            'profileFirstName' => $request->getPost('profileFirstName'),
-            'profileLastName' => $request->getPost('profileLastName'),
-            'profileContact' => $request->getPost('profileContact'),
+            'profileFirstName' => $userData['firstName'],
+            'profileLastName' => $userData['lastName'],
+            'profileContact' => $userData['contact'],
             'profilePic' => $fileName,
-            'uploadLocation' => $uploadFile,
+            'uploadLocation' => $uploadFileLocation,
             'random' => $random
         );
         $filter = new \Zend\Filter\File\RenameUpload(array(
-            "target" => $uploadFile . '/' . $fileName
+            "target" => $uploadFileLocation . '/' . $fileName
         ));
-        // "randomize" =>'true',
-        // "target" => $uploadFile,
-        
-        $fileData = $filter->filter($files['profilePic']);
+        $fileData = $filter->filter($file['name']);
         $clientUserTable = $this->sm->get('User\Model\ClientUserTable');
-        $result = $clientuserTable->clientGeneralProfileUpdate($profileData);
-        if ($result) {
+        $result = $clientUserTable->clientGeneralProfileUpdate($profileData);
+        if (! empty($result)) {
             $userTable = $this->sm->get('User\Model\UserTable');
             $result = $userTable->superGeneralProfileUpdate($profileData);
+            $jsonModel = new JsonModel();
             if ($result) {
-                $response->setContent(JSON::encode(array(
+                $jsonModel->setVariables(array(
                     'flag' => 1,
                     'profilePic' => $profileData['profilePic']
-                )));
-                return $response;
+                ));
             } else {
-                $response->setContent(JSON::encode(array(
-                    'flag' => 0
-                )));
-                return $response;
+                $jsonModel->setVariable('flag', 0);
             }
+            return $jsonModel;
         }
         
         $view = new ViewModel();
@@ -271,7 +263,7 @@ class UserController extends AbstractActionController
         $view->setTerminal($request->isXMLHttpRequest());
         return $view;
     }
-
+    
     public function verifyOldPasswordAction()
     {
         $response = $this->getResponse();
@@ -381,10 +373,8 @@ class UserController extends AbstractActionController
         }
     }
 
-    /* ------upload file module----- */
     public function getFileUploadLocation()
     {
-        // Fetch Configuration from Module Config
         $config = $this->sm->get('config');
         return $config['module_config']['upload_location'];
     }

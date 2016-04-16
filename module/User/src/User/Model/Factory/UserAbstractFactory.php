@@ -28,6 +28,9 @@ class UserAbstractFactory implements AbstractFactoryInterface
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
         $parts = explode("\\", $requestedName);
+        if($parts[2] == 'ClientUserTable') {
+            $requestedName = 'User\Model\UserTable';
+        }
         return class_exists($requestedName) && count($parts) == 3 && $parts[0] == 'User' && $parts[1] == 'Model';
     }
 
@@ -48,7 +51,7 @@ class UserAbstractFactory implements AbstractFactoryInterface
             $resultSetPrototype = new ResultSet();
             $resultSetPrototype->setArrayObjectPrototype(new User());
             $tableGateway = new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
-            $table = ($parts[2] == 'UserTable') ? new UserTable($tableGateway) : new ClientUserTable($tableGateway);
+            $table = new UserTable($tableGateway);
             $config = $serviceLocator->get('config');
             $dbConfig = $config['db'];
             $table->setDbCredentails($dbConfig);
