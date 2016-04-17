@@ -101,7 +101,7 @@ $(document).ready(function(){
 	
 	$('#login').validate({ // initialize the plugin
 		rules: {
-			'userName':{
+			'username':{
 				required: true,
 				maxlength :20
    	 		},

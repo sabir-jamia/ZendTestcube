@@ -21,8 +21,8 @@ if(isset($userProfile[0]) && !empty($userProfile[0])){
 	<div id="left_pane">
 		<div id="left_top">
 			<div id="user-pic">
-				<img class="profilePicSetting" id="profilePic" 
-					src="<?php echo $photoPath; ?>"></img>
+				<img class="profilePicSetting" id="profile-pic" 
+					src="<?php echo "profilepics/".$photoPath; ?>"></img>
 			</div>
         </div>
         <div id="left_bottom">
@@ -102,7 +102,7 @@ if(isset($userProfile[0]) && !empty($userProfile[0])){
                             		<span class="btn btn-primary btn-file">
     									Browse <input type="file" id="image-upload" name="profilePic">
 									</span>
-									<span id="file-name">No File selected...</span>
+									<span id="file-name"><?php  echo $photoPath;?></span>
                             	</div>
                             </div>
                             <div class="form-group">
@@ -283,7 +283,6 @@ if(isset($userProfile[0]) && !empty($userProfile[0])){
    		</div>
 	</div>  
 <script>
-var files;
 $(document).on('click', '#profile-save', function() {    
     var formData = new FormData();
     formData.append('file', $('#image-upload')[0].files[0]);
@@ -300,21 +299,16 @@ $(document).on('click', '#profile-save', function() {
         contentType: false,
         cache: false,
         processData:false,
-        success: function(response, textStatus, jqXHR) {
-            /*window.location.assign("userProfile");
-            try {
-                response = $.parseJSON(response);
-                if(response.status == true) {
-                    familyConnectionList(); // calling function to list family connection
-                } else {
-                    $('#newfamilyconnectionform_div').modal('hide');
-                    // alert(response.message);
-                }
-            } catch (Exception) {
-                $("#newfamilyconnectionform_div").html(response);
-            }*/
-        },
-        error: function(jqXHR, textStatus, errorThrown) {}
+        success: function(response, textStatus, xhr) {
+            var ct = xhr.getResponseHeader('Content-Type') || "";
+            if(ct.indexOf('json') > -1) {
+            	response = JSON.parse(response)
+            }
+            console.log(response);
+            if(response.flag == 1) {
+            	$("#profile-pic").attr("src", response.profilePic);
+            }
+        }
     });
 });
 /*         $("#btnSave").click(function(){

@@ -45,7 +45,7 @@ return array (
 				) 
 		),
 		'module_config' => array (
-				'upload_location' => $_SERVER ['DOCUMENT_ROOT'] . '/profilePics' 
+				'upload_location' => $_SERVER ['DOCUMENT_ROOT'] . '/profilepics' 
 		),
 		'service_manager' => [
 				'abstract_factories' => [

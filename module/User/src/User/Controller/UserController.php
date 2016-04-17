@@ -202,7 +202,6 @@ class UserController extends AbstractActionController
 
     public function userProfileAction()
     {
-        //$this->attachScriptsAndStyleSheet();
         $request = $this->request;
         if ($request->isXmlHttpRequest() && $request->getMethod() == "GET") {
             $userSession = new Container('users');
@@ -219,49 +218,52 @@ class UserController extends AbstractActionController
 
     public function generalProfileUpdateAction()
     {
-        $userSession = new Container('users');
-        $clientId = $userSession->clientId;
         $request = $this->request;
-        $response = $this->response;
-        $userData = $this->params()->fromPost();
-        $file = $this->params()->fromFiles('file', '');
-        $uploadFileLocation = $this->getFileUploadLocation();
-        $random = rand(10, 1000);
-        $fileName = $file['name'] . $random;
-        $profileData = array(
-            'clientId' => $clientId,
-            'profileFirstName' => $userData['firstName'],
-            'profileLastName' => $userData['lastName'],
-            'profileContact' => $userData['contact'],
-            'profilePic' => $fileName,
-            'uploadLocation' => $uploadFileLocation,
-            'random' => $random
-        );
-        $filter = new \Zend\Filter\File\RenameUpload(array(
-            "target" => $uploadFileLocation . '/' . $fileName
-        ));
-        $fileData = $filter->filter($file['name']);
-        $clientUserTable = $this->sm->get('User\Model\ClientUserTable');
-        $result = $clientUserTable->clientGeneralProfileUpdate($profileData);
-        if (! empty($result)) {
-            $userTable = $this->sm->get('User\Model\UserTable');
-            $result = $userTable->superGeneralProfileUpdate($profileData);
-            $jsonModel = new JsonModel();
-            if ($result) {
-                $jsonModel->setVariables(array(
-                    'flag' => 1,
-                    'profilePic' => $profileData['profilePic']
+        if ($request->isXmlHttpRequest()) {
+            if($request->getMethod() == "POST") {
+                $userSession = new Container('users');
+                $clientId = $userSession->clientId;
+                $userData = $this->params()->fromPost();
+                $file = $this->params()->fromFiles('file', '');
+                $uploadFileLocation = $this->getFileUploadLocation();
+                $random = rand(10, 1000);
+                $fileName = $file['name'] . $random;
+                $profileData = array(
+                    'clientId' => $clientId,
+                    'profileFirstName' => $userData['firstName'],
+                    'profileLastName' => $userData['lastName'],
+                    'profileContact' => $userData['contact'],
+                    'profilePic' => $fileName,
+                    'uploadLocation' => $uploadFileLocation,
+                    'random' => $random
+                );
+                $filter = new \Zend\Filter\File\RenameUpload(array(
+                    "target" => $uploadFileLocation . '/' . $fileName
                 ));
-            } else {
-                $jsonModel->setVariable('flag', 0);
+                $fileData = $filter->filter($file['tmp_name']);
+                $clientUserTable = $this->sm->get('User\Model\ClientUserTable');
+                $result = $clientUserTable->clientGeneralProfileUpdate($profileData);
+                if (! empty($result)) {
+                    $userTable = $this->sm->get('User\Model\UserTable');
+                    $result = $userTable->superGeneralProfileUpdate($profileData);
+                    $jsonModel = new JsonModel();
+                    if ($result) {
+                        $jsonModel->setVariables(array(
+                            'flag' => 1,
+                            'profilePic' => "profilepics/".$profileData['profilePic']
+                        ));
+                    } else {
+                        $jsonModel->setVariable('flag', 0);
+                    }
+                    return $jsonModel;
+                }
+            } elseif ($request->getMethod() == "GET") {
+                $view = new ViewModel();
+                $view->setTemplate('/user/userProfile');
+                $view->setTerminal($request->isXMLHttpRequest());
+                return $view;
             }
-            return $jsonModel;
         }
-        
-        $view = new ViewModel();
-        $view->setTemplate('/user/userProfile');
-        $view->setTerminal($request->isXMLHttpRequest());
-        return $view;
     }
     
     public function verifyOldPasswordAction()
